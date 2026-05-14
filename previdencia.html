@@ -1,0 +1,1471 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FinMatch – Previdência Privada</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0A2540;--navy-mid:#0f3460;
+  --green:#22C55E;--green-light:#86efac;--green-dark:#16a34a;
+  --white:#fff;--off:#F0F4F8;--g100:#e8edf3;--g300:#94a3b8;--g500:#64748b;
+  --radius:16px;--radius-sm:8px;--red:#dc2626;--amber:#f59e0b;--purple:#7c3aed;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--off);color:var(--navy);overflow-x:hidden}
+h1,h2,h3,h4{font-family:'Syne',sans-serif}
+
+/* ── NAV ── */
+nav{position:sticky;top:0;z-index:300;display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:60px;background:rgba(10,37,64,0.97);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,0.07)}
+.nav-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.3rem;color:#fff}
+.nav-logo span{color:var(--green)}
+.nav-bc{display:flex;align-items:center;gap:8px;font-size:0.82rem;color:rgba(255,255,255,0.5)}
+.nav-bc .sep{color:rgba(255,255,255,0.2)}
+.nav-bc .active{color:var(--green-light);font-weight:600}
+.nav-back{color:rgba(255,255,255,0.65);font-size:0.85rem;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);padding:6px 14px;border-radius:20px;text-decoration:none;transition:all 0.2s}
+.nav-back:hover{color:#fff;background:rgba(255,255,255,0.14)}
+
+/* ── INNER NAV ── */
+.inner-nav{position:sticky;top:60px;z-index:199;background:rgba(255,255,255,0.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--g100);padding:0 32px;display:flex;align-items:center;justify-content:space-between;height:46px;overflow-x:auto}
+.inner-nav-links{display:flex;gap:2px;white-space:nowrap}
+.inl{padding:5px 12px;border-radius:20px;font-size:0.78rem;font-weight:600;color:var(--g500);cursor:pointer;border:none;background:none;transition:all 0.2s;white-space:nowrap}
+.inl:hover,.inl.active{color:var(--navy);background:var(--g100)}
+.ipbar{width:90px;height:3px;background:var(--g100);border-radius:3px;overflow:hidden;flex-shrink:0}
+.ipfill{height:100%;background:var(--green);border-radius:3px;transition:width 0.3s}
+
+/* ── HERO ── */
+.hero{background:linear-gradient(135deg,#050e1f 0%,#0A2540 60%,#0f3460 100%);padding:56px 40px 48px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 50% 60% at 30% 50%,rgba(34,197,94,0.1) 0%,transparent 70%);pointer-events:none}
+.hero-grid{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.025) 1px,transparent 1px);background-size:50px 50px}
+.hero-layout{display:grid;grid-template-columns:1fr 360px;gap:40px;align-items:center;position:relative}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.3);color:var(--green-light);border-radius:30px;padding:5px 14px;font-size:0.78rem;font-weight:600;margin-bottom:20px}
+.hero h1{font-size:clamp(1.8rem,3.5vw,3rem);font-weight:800;color:#fff;line-height:1.15}
+.hero h1 span{color:var(--green)}
+.hero-sub{color:rgba(255,255,255,0.6);font-size:1rem;margin-top:14px;max-width:520px;line-height:1.7}
+.hero-pills{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
+.pill{padding:6px 16px;border-radius:20px;font-size:0.8rem;font-weight:600;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.75);cursor:pointer;transition:all 0.2s}
+.pill.active{background:rgba(34,197,94,0.2);border-color:rgba(34,197,94,0.4);color:var(--green-light)}
+.data-stamp{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.5);border-radius:20px;padding:4px 12px;font-size:0.75rem;margin-top:16px}
+.data-stamp .dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+/* Hero inst cards */
+.hero-inst-col{display:flex;flex-direction:column;gap:11px}
+.hero-inst-card{border-radius:13px;padding:15px 18px;cursor:pointer;transition:all 0.25s;border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;gap:14px}
+.hero-inst-card:hover{transform:translateY(-2px) scale(1.02);box-shadow:0 16px 32px rgba(0,0,0,0.3)}
+.hic-logo{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:800;color:#fff;flex-shrink:0}
+.hic-info{flex:1}
+.hic-nome{font-size:0.88rem;font-weight:700;color:#fff;margin-bottom:2px}
+.hic-desc{font-size:0.7rem;color:rgba(255,255,255,0.5)}
+.hic-badge{font-size:0.65rem;font-weight:700;padding:2px 8px;border-radius:20px;background:rgba(255,255,255,0.15);color:rgba(255,255,255,0.85);white-space:nowrap}
+
+/* ── SECTIONS ── */
+.section{padding:64px 40px}
+.section.white{background:#fff}
+.section.gray{background:var(--off)}
+.section.dark-grad{background:linear-gradient(135deg,#050e1f 0%,#0A2540 60%,#0f3460 100%)}
+.sec-tag{font-size:0.73rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--green-dark);margin-bottom:10px}
+.sec-tag.light{color:var(--green-light)}
+.sec-title{font-size:clamp(1.5rem,2.5vw,2.2rem);font-weight:800;line-height:1.2;color:var(--navy)}
+.sec-title.light{color:#fff}
+.sec-desc{color:var(--g500);font-size:0.95rem;line-height:1.7;margin-top:10px;max-width:640px}
+.sec-desc.light{color:rgba(255,255,255,0.6)}
+.sec-header{margin-bottom:36px}
+
+/* ── NEWS ── */
+.news-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+.news-card{background:#fff;border:1px solid var(--g100);border-radius:var(--radius);overflow:hidden;transition:all 0.3s;cursor:pointer}
+.news-card:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(10,37,64,0.1)}
+.news-img{height:130px;display:flex;align-items:center;justify-content:center;font-size:2.5rem}
+.news-body{padding:20px}
+.news-tag{display:inline-block;font-size:0.72rem;font-weight:700;padding:3px 10px;border-radius:20px;margin-bottom:10px;background:rgba(34,197,94,0.12);color:var(--green-dark)}
+.news-card h3{font-size:0.95rem;font-weight:700;margin-bottom:8px;line-height:1.4}
+.news-card p{font-size:0.82rem;color:var(--g500);line-height:1.55}
+.news-meta{display:flex;align-items:center;justify-content:space-between;margin-top:14px;padding-top:14px;border-top:1px solid var(--g100);font-size:0.75rem;color:var(--g300)}
+.news-source{font-weight:600;color:var(--navy)}
+
+/* ── ALERTAS ── */
+.alerts-section{background:var(--navy);padding:48px 40px}
+.alerts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:28px}
+.alert-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius);padding:20px;display:flex;gap:16px;align-items:flex-start;transition:all 0.2s;cursor:pointer}
+.alert-card:hover{background:rgba(255,255,255,0.07);transform:translateY(-2px)}
+.alert-icon{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.alert-icon.up{background:rgba(34,197,94,0.2);color:var(--green-light)}
+.alert-icon.warn{background:rgba(245,158,11,0.2);color:#fcd34d}
+.alert-icon.info{background:rgba(99,102,241,0.2);color:#a5b4fc}
+.alert-icon.danger{background:rgba(239,68,68,0.2);color:#fca5a5}
+.alert-body{flex:1}
+.alert-title{font-size:0.88rem;font-weight:700;color:#fff;margin-bottom:4px;line-height:1.4}
+.alert-sub{font-size:0.78rem;color:rgba(255,255,255,0.55);line-height:1.5;margin-bottom:10px}
+.alert-footer{display:flex;align-items:center;justify-content:space-between}
+.alert-badge{font-size:0.68rem;font-weight:700;padding:2px 8px;border-radius:20px}
+.alert-badge.hot{background:rgba(239,68,68,0.2);color:#fca5a5}
+.alert-badge.new{background:rgba(34,197,94,0.2);color:#86efac}
+.alert-badge.info{background:rgba(99,102,241,0.2);color:#a5b4fc}
+.alert-cta-btn{font-size:0.75rem;font-weight:700;color:var(--green-light);background:none;border:none;cursor:pointer;transition:color 0.2s}
+.alert-cta-btn:hover{color:#fff}
+
+/* ── QUIZ ── */
+.quiz-section{background:linear-gradient(135deg,#050e1f 0%,#0A2540 60%,#0f3460 100%);padding:72px 40px;position:relative;overflow:hidden}
+.quiz-section::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 80% 50%,rgba(34,197,94,0.07) 0%,transparent 70%);pointer-events:none}
+.quiz-inner{max-width:680px;margin:0 auto;position:relative}
+.quiz-progress{display:flex;gap:8px;margin-bottom:32px}
+.quiz-step{flex:1;height:4px;border-radius:4px;background:rgba(255,255,255,0.12);transition:all 0.4s}
+.quiz-step.done{background:var(--green)}
+.quiz-step.active{background:rgba(34,197,94,0.5)}
+.quiz-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:36px 40px}
+.quiz-q{font-size:1.15rem;font-weight:700;color:#fff;margin-bottom:8px;line-height:1.4}
+.quiz-hint{font-size:0.85rem;color:rgba(255,255,255,0.45);margin-bottom:28px}
+.quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.quiz-opt{background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.12);border-radius:var(--radius-sm);padding:14px 18px;cursor:pointer;transition:all 0.2s;color:rgba(255,255,255,0.8);font-size:0.88rem;font-weight:600;text-align:left}
+.quiz-opt:hover{background:rgba(34,197,94,0.12);border-color:rgba(34,197,94,0.4);color:#fff}
+.quiz-opt.selected{background:rgba(34,197,94,0.2);border-color:var(--green);color:#fff}
+.quiz-opt .opt-icon{display:block;font-size:1.4rem;margin-bottom:8px}
+.quiz-nav{display:flex;gap:12px;margin-top:24px;justify-content:flex-end}
+.quiz-btn{padding:10px 24px;border-radius:30px;font-family:'Syne',sans-serif;font-size:0.88rem;font-weight:700;cursor:pointer;transition:all 0.2s;border:none}
+.quiz-btn.sec{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.7)}
+.quiz-btn.sec:hover{background:rgba(255,255,255,0.14);color:#fff}
+.quiz-btn.pri{background:var(--green);color:var(--navy)}
+.quiz-btn.pri:hover{background:#28d968;transform:translateY(-1px)}
+.quiz-btn:disabled{opacity:0.4;cursor:not-allowed;transform:none}
+.quiz-result{display:none;text-align:center;padding:8px 0}
+.quiz-result.show{display:block}
+.result-icon{font-size:3rem;margin-bottom:16px}
+.result-title{font-size:1.4rem;font-weight:800;color:#fff;margin-bottom:10px}
+.result-desc{color:rgba(255,255,255,0.6);font-size:0.92rem;line-height:1.7;margin-bottom:24px;text-align:left}
+.result-tags{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.result-tag{background:rgba(34,197,94,0.18);border:1px solid rgba(34,197,94,0.35);color:var(--green-light);border-radius:20px;padding:5px 14px;font-size:0.8rem;font-weight:600}
+.result-tag.bad{background:rgba(239,68,68,0.15);border-color:rgba(239,68,68,0.3);color:#fca5a5}
+
+/* ── FILTROS + TABELA ── */
+.filter-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:24px;align-items:center}
+.filter-btn{padding:7px 16px;border-radius:20px;font-size:0.82rem;font-weight:600;cursor:pointer;border:1px solid var(--g100);background:#fff;color:var(--g500);transition:all 0.2s}
+.filter-btn.active,.filter-btn:hover{background:var(--navy);border-color:var(--navy);color:#fff}
+.search-box{padding:8px 16px;border-radius:20px;border:1px solid var(--g100);font-family:'DM Sans',sans-serif;font-size:0.85rem;outline:none;background:#fff;color:var(--navy);min-width:200px}
+.search-box:focus{border-color:var(--green)}
+.sort-select{padding:8px 14px;border-radius:20px;border:1px solid var(--g100);font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:600;outline:none;background:#fff;color:var(--g500);cursor:pointer}
+.compare-bar{background:var(--navy);border-radius:var(--radius);padding:14px 20px;margin-bottom:16px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;border:1px solid rgba(255,255,255,0.08)}
+.compare-bar-label{color:rgba(255,255,255,0.6);font-size:0.82rem;flex-shrink:0}
+.compare-chips{display:flex;gap:8px;flex:1;flex-wrap:wrap}
+.compare-chip{background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.3);color:var(--green-light);border-radius:20px;padding:4px 12px;font-size:0.78rem;font-weight:600;display:flex;align-items:center;gap:6px}
+.compare-chip-rm{cursor:pointer;opacity:0.7}
+.compare-chip-rm:hover{opacity:1}
+.compare-placeholder{color:rgba(255,255,255,0.25);font-size:0.82rem;font-style:italic}
+.compare-go-btn{background:var(--green);color:var(--navy);border:none;border-radius:20px;padding:7px 18px;font-family:'Syne',sans-serif;font-size:0.82rem;font-weight:700;cursor:pointer;white-space:nowrap;transition:all 0.2s}
+.compare-go-btn:hover{background:#28d968;transform:translateY(-1px)}
+.compare-go-btn:disabled{opacity:0.4;cursor:not-allowed;transform:none}
+.add-compare-btn{font-size:0.72rem;font-weight:700;color:var(--g300);cursor:pointer;background:none;border:1px dashed var(--g300);border-radius:20px;padding:2px 8px;transition:all 0.2s;white-space:nowrap}
+.add-compare-btn:hover{color:var(--navy);border-color:var(--navy)}
+.add-compare-btn.active{color:var(--green-dark);border-color:var(--green)}
+.table-wrap{background:#fff;border-radius:var(--radius);border:1px solid var(--g100);overflow:hidden;box-shadow:0 2px 16px rgba(10,37,64,0.06)}
+.comp-table{width:100%;border-collapse:collapse;font-size:0.83rem}
+.comp-table th{background:var(--navy);color:#fff;padding:13px 14px;text-align:left;font-family:'Syne',sans-serif;font-size:0.76rem;font-weight:600;white-space:nowrap;cursor:pointer;user-select:none;transition:background 0.2s}
+.comp-table th:hover{background:#1a3f6b}
+.comp-table th:not(:first-child){text-align:center}
+.comp-table td{padding:12px 14px;border-bottom:1px solid var(--g100);color:var(--g500);vertical-align:middle}
+.comp-table td:not(:first-child){text-align:center}
+.comp-table tr:last-child td{border-bottom:none}
+.comp-table tr:hover td{background:rgba(34,197,94,0.03)}
+.inst-name{font-weight:700;color:var(--navy);font-size:0.88rem}
+.inst-sub{font-size:0.7rem;color:var(--g300);margin-top:1px}
+.inst-logo{width:36px;height:36px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:800;color:#fff;margin-right:10px;flex-shrink:0;vertical-align:middle}
+.cell-val{font-weight:700;color:var(--navy);font-size:0.88rem}
+.cell-val.green{color:var(--green-dark)}
+.cell-val.red{color:var(--red)}
+.cell-val.amber{color:#b45309}
+.badge-tipo{display:inline-block;font-size:0.7rem;font-weight:700;padding:3px 9px;border-radius:20px}
+.badge-pgbl{background:#ede9fe;color:#5b21b6}
+.badge-vgbl{background:#dbeafe;color:#1e40af}
+.badge-ambos{background:#dcfce7;color:#15803d}
+.star-row{display:flex;gap:2px;justify-content:center}
+.star{color:#f59e0b;font-size:0.82rem}
+.star.empty{color:var(--g100)}
+.rec-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(34,197,94,0.12);color:var(--green-dark);font-size:0.7rem;font-weight:700;padding:2px 8px;border-radius:20px}
+.pag-row{display:flex;align-items:center;justify-content:space-between;margin-top:20px;flex-wrap:wrap;gap:12px}
+.pag-info{font-size:0.83rem;color:var(--g500)}
+.pag-btns{display:flex;gap:6px}
+.pag-btn{padding:6px 14px;border-radius:8px;border:1px solid var(--g100);background:#fff;font-size:0.82rem;font-weight:600;cursor:pointer;color:var(--g500);transition:all 0.2s}
+.pag-btn.active,.pag-btn:hover{background:var(--navy);color:#fff;border-color:var(--navy)}
+
+/* ── HISTÓRICO RENTABILIDADE ── */
+.hist-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.hist-card{border:1.5px solid var(--g100);border-radius:var(--radius);padding:20px;background:#fff;transition:all 0.25s;cursor:pointer}
+.hist-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(10,37,64,0.08)}
+.hist-card.top{border-color:rgba(34,197,94,0.4);background:rgba(34,197,94,0.03)}
+.hist-card.mid{border-color:rgba(245,158,11,0.35);background:rgba(245,158,11,0.03)}
+.hist-card.low{border-color:rgba(220,38,38,0.3);background:rgba(220,38,38,0.03)}
+.hist-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.hist-name{font-size:0.88rem;font-weight:700;color:var(--navy)}
+.hist-badge{font-size:0.68rem;font-weight:700;padding:2px 9px;border-radius:20px}
+.hist-badge.top{background:rgba(34,197,94,0.15);color:var(--green-dark)}
+.hist-badge.mid{background:rgba(245,158,11,0.15);color:#92400e}
+.hist-badge.low{background:rgba(220,38,38,0.12);color:var(--red)}
+.hist-chart{display:flex;align-items:flex-end;gap:5px;height:52px;margin-bottom:8px}
+.hist-bar{flex:1;border-radius:3px 3px 0 0;display:flex;align-items:flex-start;justify-content:center;padding-top:3px;font-size:0.58rem;font-weight:700;color:rgba(255,255,255,0.9)}
+.hist-anos{display:flex;gap:5px}
+.hist-ano{flex:1;font-size:0.58rem;color:var(--g300);text-align:center}
+.hist-media-row{display:flex;justify-content:space-between;align-items:center;margin-top:10px;padding-top:10px;border-top:1px solid var(--g100);font-size:0.8rem}
+.hist-cdi-ref{font-size:0.72rem;color:var(--g300);margin-top:4px}
+
+/* ── RAIO-X DA INSTITUIÇÃO ── */
+.raiox-inner{display:grid;grid-template-columns:260px 1fr;gap:32px;align-items:start}
+.raiox-sel{background:var(--off);border-radius:var(--radius);padding:20px}
+.raiox-op{display:flex;align-items:center;gap:10px;padding:10px;border-radius:var(--radius-sm);cursor:pointer;transition:all 0.2s;margin-bottom:4px}
+.raiox-op:hover{background:var(--g100)}
+.raiox-op.active{background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2)}
+.raiox-op-logo{width:32px;height:32px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:0.6rem;font-weight:800;color:#fff;flex-shrink:0}
+.raiox-op-name{font-size:0.85rem;font-weight:600;color:var(--navy)}
+.raiox-op-tipo{font-size:0.7rem;color:var(--g300)}
+.raiox-detail{background:#fff;border-radius:var(--radius);border:1px solid var(--g100);padding:24px}
+.raiox-stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
+.raiox-stat{background:var(--off);border-radius:var(--radius-sm);padding:14px;text-align:center}
+.raiox-stat-val{font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;color:var(--navy)}
+.raiox-stat-label{font-size:0.68rem;color:var(--g300);text-transform:uppercase;letter-spacing:0.5px;margin-top:3px}
+.raiox-esp-title{font-size:0.8rem;font-weight:700;color:var(--g500);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:14px}
+.raiox-esp-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.raiox-esp-name{font-size:0.82rem;color:var(--navy);min-width:140px}
+.raiox-esp-bar{flex:1;height:6px;background:var(--g100);border-radius:6px;overflow:hidden}
+.raiox-esp-fill{height:100%;border-radius:6px;transition:width 0.8s cubic-bezier(0.4,0,0.2,1)}
+.raiox-esp-val{font-size:0.82rem;font-weight:700;color:var(--navy);min-width:50px;text-align:right}
+
+/* ── SIMULADOR ── */
+.sim-section{background:#fff;padding:72px 40px}
+.sim-inner{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
+.sim-form{background:var(--off);border-radius:var(--radius);padding:32px}
+.sim-field{margin-bottom:20px}
+.sim-label{font-size:0.82rem;font-weight:700;color:var(--navy);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
+.sim-label span{font-weight:400;color:var(--g500)}
+.sim-input{width:100%;padding:11px 16px;border:1.5px solid var(--g100);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:0.92rem;outline:none;background:#fff;color:var(--navy);transition:border-color 0.2s}
+.sim-input:focus{border-color:var(--green)}
+.sim-range{width:100%;accent-color:var(--green);height:4px;cursor:pointer}
+.sim-range-row{display:flex;justify-content:space-between;font-size:0.75rem;color:var(--g300);margin-top:6px}
+.sim-results{background:var(--navy);border-radius:var(--radius);padding:32px;color:#fff}
+.sim-results-title{font-size:0.82rem;font-weight:700;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:1px;margin-bottom:24px}
+.sim-big{font-family:'Syne',sans-serif;font-size:2.8rem;font-weight:800;color:var(--green);line-height:1;margin-bottom:4px}
+.sim-big-label{font-size:0.85rem;color:rgba(255,255,255,0.5);margin-bottom:28px}
+.sim-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:22px}
+.sim-stat{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:var(--radius-sm);padding:13px}
+.sim-stat-val{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;color:#fff;margin-bottom:2px}
+.sim-stat-label{font-size:0.68rem;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.5px}
+.sim-bar-section{margin-top:8px}
+.sim-bar-row{margin-bottom:10px}
+.sim-bar-meta{display:flex;justify-content:space-between;font-size:0.78rem;margin-bottom:4px}
+.sim-bar-name{color:rgba(255,255,255,0.6)}
+.sim-bar-pct{color:rgba(255,255,255,0.8);font-weight:600}
+.sim-track{height:6px;background:rgba(255,255,255,0.1);border-radius:6px;overflow:hidden}
+.sim-fill{height:100%;border-radius:6px;transition:width 0.8s cubic-bezier(0.4,0,0.2,1)}
+.sim-fill.green{background:var(--green)}
+.sim-fill.amber{background:var(--amber)}
+.sim-cta-row{display:flex;gap:10px;margin-top:20px}
+.sim-cta{flex:1;padding:12px;border-radius:30px;font-family:'Syne',sans-serif;font-weight:700;font-size:0.85rem;cursor:pointer;transition:all 0.2s;text-align:center;border:none}
+.sim-cta.pri{background:var(--green);color:var(--navy)}
+.sim-cta.pri:hover{background:#28d968}
+.sim-cta.sec{background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.7);border:1px solid rgba(255,255,255,0.15)}
+.sim-cta.sec:hover{background:rgba(255,255,255,0.14);color:#fff}
+
+/* ── CENÁRIO (inovadora) ── */
+.cenario-section{background:linear-gradient(135deg,#050e1f 0%,#0A2540 60%,#0f3460 100%);padding:72px 40px;position:relative;overflow:hidden}
+.cenario-section::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 50% 60% at 80% 40%,rgba(34,197,94,0.07) 0%,transparent 70%);pointer-events:none}
+.cenario-inner{position:relative}
+.cenario-toggle{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:28px}
+.cenario-btn{padding:8px 18px;border-radius:30px;font-size:0.82rem;font-weight:600;cursor:pointer;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.7);transition:all 0.2s}
+.cenario-btn:hover{background:rgba(255,255,255,0.1);color:#fff}
+.cenario-btn.active{background:rgba(34,197,94,0.25);border-color:var(--green);color:#fff}
+.cenario-results{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.cenario-card{border-radius:var(--radius);padding:20px;border:1px solid}
+.cenario-card.ok{background:rgba(34,197,94,0.08);border-color:rgba(34,197,94,0.25)}
+.cenario-card.warn{background:rgba(245,158,11,0.08);border-color:rgba(245,158,11,0.25)}
+.cenario-card.danger{background:rgba(220,38,38,0.08);border-color:rgba(220,38,38,0.2)}
+.cenario-card-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.cenario-card-logo{width:32px;height:32px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:0.6rem;font-weight:800;color:#fff;flex-shrink:0}
+.cenario-card-name{font-size:0.88rem;font-weight:700;color:#fff}
+.cenario-status{font-size:0.8rem;font-weight:700;margin-bottom:8px}
+.cenario-status.ok{color:#86efac}
+.cenario-status.warn{color:#fcd34d}
+.cenario-status.danger{color:#fca5a5}
+.cenario-desc{font-size:0.78rem;color:rgba(255,255,255,0.6);line-height:1.6}
+.cenario-resultado{font-size:0.82rem;font-weight:700;margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.1)}
+.cenario-resultado.ok{color:#86efac}
+.cenario-resultado.warn{color:#fcd34d}
+.cenario-resultado.danger{color:#fca5a5}
+
+/* ── OBRIGATÓRIO vs DIFERENCIAL ── */
+.cob-section{background:#fff;padding:64px 40px}
+.cob-inner{display:grid;grid-template-columns:1fr 1fr;gap:40px}
+.cob-col-title{font-size:0.82rem;font-weight:700;color:var(--g500);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:16px}
+.cob-obrig-list{display:flex;flex-direction:column;gap:8px}
+.cob-obrig-item{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--off);border-radius:var(--radius-sm)}
+.cob-check{width:20px;height:20px;border-radius:50%;background:rgba(34,197,94,0.15);display:flex;align-items:center;justify-content:center;font-size:0.7rem;color:var(--green-dark);flex-shrink:0}
+.cob-item-name{font-size:0.85rem;color:var(--navy);font-weight:600}
+.cob-item-sub{font-size:0.72rem;color:var(--g300);margin-top:1px}
+.cob-dif-list{display:flex;flex-direction:column;gap:10px}
+.cob-dif-row{display:flex;align-items:center;gap:10px}
+.cob-dif-rank{font-size:0.75rem;font-weight:700;color:var(--g300);width:20px;text-align:center;flex-shrink:0}
+.cob-dif-name{font-size:0.82rem;color:var(--navy);min-width:150px}
+.cob-dif-bar{flex:1;height:7px;background:var(--g100);border-radius:7px;overflow:hidden}
+.cob-dif-fill{height:100%;border-radius:7px;transition:width 0.8s cubic-bezier(0.4,0,0.2,1)}
+.cob-dif-num{font-size:0.78rem;font-weight:700;color:var(--navy);min-width:40px;text-align:right}
+
+/* ── MOBILE CARDS ── */
+.mobile-cards{display:none;flex-direction:column;gap:14px}
+.mob-card{background:#fff;border:1px solid var(--g100);border-radius:var(--radius);padding:18px;transition:all 0.25s}
+.mob-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(10,37,64,0.1)}
+.mob-card-top{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.mob-logo{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:0.62rem;font-weight:800;color:#fff;flex-shrink:0}
+.mob-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.mob-stat{background:var(--off);border-radius:var(--radius-sm);padding:8px;text-align:center}
+.mob-stat-val{font-size:0.85rem;font-weight:700;color:var(--navy)}
+.mob-stat-label{font-size:0.62rem;color:var(--g300);margin-top:2px;text-transform:uppercase;letter-spacing:0.3px}
+
+/* ── PLANOS ── */
+.plans-section{background:var(--off);padding:80px 40px}
+.plans-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;margin-top:48px}
+.plan-card{background:#fff;border:1.5px solid var(--g100);border-radius:var(--radius);padding:32px 28px;position:relative;overflow:hidden;transition:all 0.3s}
+.plan-card:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(10,37,64,0.1)}
+.plan-card.featured{border:2px solid var(--green);box-shadow:0 8px 32px rgba(34,197,94,0.15)}
+.plan-badge-top{position:absolute;top:0;left:50%;transform:translateX(-50%);background:var(--green);color:var(--navy);font-size:0.72rem;font-weight:800;padding:4px 16px;border-radius:0 0 12px 12px;letter-spacing:0.5px;white-space:nowrap}
+.plan-icon{font-size:2rem;margin-bottom:16px;display:block}
+.plan-name{font-size:1.2rem;font-weight:800;color:var(--navy);margin-bottom:6px}
+.plan-desc{font-size:0.82rem;color:var(--g500);line-height:1.5;margin-bottom:20px}
+.plan-price{display:flex;align-items:baseline;gap:4px;margin-bottom:6px}
+.price-cur{font-size:1rem;color:var(--g300);font-weight:600;align-self:flex-start;margin-top:6px}
+.price-val{font-family:'Syne',sans-serif;font-size:2.4rem;font-weight:800;color:var(--navy)}
+.price-per{font-size:0.82rem;color:var(--g500)}
+.price-free{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;color:var(--green-dark)}
+.plan-trial{font-size:0.78rem;color:var(--green-dark);font-weight:600;margin-bottom:20px}
+.plan-divider{border:none;border-top:1px solid var(--g100);margin:20px 0}
+.feature-list{list-style:none}
+.feature-list li{display:flex;align-items:flex-start;gap:10px;font-size:0.85rem;color:var(--g500);padding:5px 0;line-height:1.4}
+.feat-check{color:var(--green);font-size:1rem;flex-shrink:0;margin-top:1px}
+.feat-cross{color:var(--g300);font-size:1rem;flex-shrink:0;margin-top:1px}
+.plan-btn{display:block;width:100%;margin-top:24px;padding:13px;border-radius:30px;font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;cursor:pointer;transition:all 0.25s;text-align:center;text-decoration:none;border:none}
+.plan-btn.outline{background:transparent;border:1.5px solid var(--g100);color:var(--navy)}
+.plan-btn.outline:hover{border-color:var(--navy);background:rgba(10,37,64,0.04)}
+.plan-btn.primary{background:var(--green);color:var(--navy);box-shadow:0 4px 16px rgba(34,197,94,0.3)}
+.plan-btn.primary:hover{background:#28d968;transform:translateY(-1px)}
+.plan-btn.dark{background:var(--navy);color:#fff}
+.plan-btn.dark:hover{background:var(--navy-mid)}
+.guarantee-box{display:flex;align-items:center;gap:20px;background:rgba(34,197,94,0.07);border:1px solid rgba(34,197,94,0.2);border-radius:var(--radius);padding:24px 28px;margin-top:32px;flex-wrap:wrap}
+.guarantee-num{font-family:'Syne',sans-serif;font-size:3rem;font-weight:800;color:var(--green);line-height:1;flex-shrink:0}
+.guarantee-text h4{font-size:1.05rem;font-weight:700;margin-bottom:4px}
+.guarantee-text p{font-size:0.85rem;color:var(--g500);line-height:1.5}
+
+/* ── MODALS ── */
+.modal-backdrop{position:fixed;inset:0;background:rgba(5,14,31,0.75);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(6px);opacity:0;pointer-events:none;transition:opacity 0.3s}
+.modal-backdrop.open{opacity:1;pointer-events:auto}
+.modal{background:#fff;border-radius:20px;width:100%;max-width:900px;max-height:88vh;overflow-y:auto;box-shadow:0 32px 80px rgba(0,0,0,0.3);transform:translateY(20px);transition:transform 0.3s}
+.modal-backdrop.open .modal{transform:translateY(0)}
+.modal-header{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--g100);padding:18px 28px;display:flex;align-items:center;justify-content:space-between;z-index:10}
+.modal-title{font-size:1.1rem;font-weight:800;color:var(--navy)}
+.modal-close{width:32px;height:32px;border-radius:50%;background:var(--off);border:none;cursor:pointer;font-size:1.1rem;color:var(--g500);transition:all 0.2s;display:flex;align-items:center;justify-content:center}
+.modal-close:hover{background:var(--g100);color:var(--navy)}
+.modal-body{padding:24px 28px}
+.comp-grid{display:grid;gap:16px}
+.comp-col{background:var(--off);border-radius:var(--radius);padding:22px;border:1.5px solid var(--g100)}
+.comp-col.best{border-color:var(--green);background:rgba(34,197,94,0.04)}
+.comp-col-header{display:flex;align-items:center;gap:12px;margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--g100)}
+.comp-col h3{font-size:0.95rem;font-weight:800;color:var(--navy)}
+.comp-best-badge{font-size:0.68rem;font-weight:800;background:var(--green);color:var(--navy);padding:2px 8px;border-radius:10px;white-space:nowrap}
+.comp-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--g100);gap:8px}
+.comp-row:last-child{border-bottom:none}
+.comp-row-label{font-size:0.8rem;color:var(--g500)}
+.comp-row-val{font-size:0.84rem;font-weight:700;color:var(--navy)}
+.comp-row-val.win{color:var(--green-dark)}
+.comp-row-val.lose{color:var(--red)}
+.bar-wrap{margin-bottom:10px}
+.bar-label{display:flex;justify-content:space-between;font-size:0.78rem;margin-bottom:4px}
+.bar-name{font-weight:600;color:var(--navy)}
+.bar-num{color:var(--g500)}
+.bar-track{height:8px;background:var(--g100);border-radius:8px;overflow:hidden}
+.bar-fill{height:100%;border-radius:8px;transition:width 0.9s cubic-bezier(0.4,0,0.2,1)}
+
+/* ── SIGNUP MODAL ── */
+.signup-modal{background:#fff;border-radius:20px;width:100%;max-width:440px;padding:40px;position:relative}
+.signup-title{font-size:1.4rem;font-weight:800;color:var(--navy);margin-bottom:8px;text-align:center}
+.signup-sub{font-size:0.88rem;color:var(--g500);margin-bottom:28px;text-align:center;line-height:1.5}
+.signup-field{margin-bottom:16px}
+.signup-field label{font-size:0.8rem;font-weight:700;color:var(--navy);display:block;margin-bottom:6px}
+.signup-input{width:100%;padding:12px 16px;border:1.5px solid var(--g100);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:0.92rem;outline:none;background:#fff;color:var(--navy);transition:border-color 0.2s}
+.signup-input:focus{border-color:var(--green)}
+.signup-submit{width:100%;padding:14px;border-radius:30px;background:var(--green);color:var(--navy);font-family:'Syne',sans-serif;font-weight:800;font-size:0.95rem;border:none;cursor:pointer;transition:all 0.2s;margin-top:8px}
+.signup-submit:hover{background:#28d968;transform:translateY(-1px)}
+.signup-success{display:none;text-align:center;padding:16px 0}
+.signup-success.show{display:block}
+.signup-success-icon{font-size:3rem;margin-bottom:12px}
+.signup-disclaimer{font-size:0.73rem;color:var(--g300);text-align:center;margin-top:12px;line-height:1.5}
+
+/* ── FAQ ── */
+.faq-item{border-bottom:1px solid var(--g100);padding:20px 0;cursor:pointer}
+.faq-q{display:flex;align-items:center;justify-content:space-between;font-weight:600;font-size:0.95rem;color:var(--navy)}
+.faq-icon{width:24px;height:24px;border-radius:50%;background:var(--off);display:flex;align-items:center;justify-content:center;font-size:1rem;color:var(--g500);flex-shrink:0;transition:transform 0.3s}
+.faq-a{font-size:0.88rem;color:var(--g500);line-height:1.7;margin-top:12px;display:none;padding-right:32px}
+.faq-item.open .faq-a{display:block}
+.faq-item.open .faq-icon{transform:rotate(45deg);background:var(--navy);color:#fff}
+
+/* ── FOOTER ── */
+footer{background:#050e1f;color:rgba(255,255,255,0.5);text-align:center;padding:28px 40px;font-size:0.82rem}
+.footer-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.2rem;color:#fff;margin-bottom:6px}
+.footer-logo span{color:var(--green)}
+.footer-links{display:flex;gap:20px;justify-content:center;margin-top:12px;flex-wrap:wrap}
+.footer-links a{color:rgba(255,255,255,0.4);text-decoration:none;font-size:0.8rem;transition:color 0.2s}
+.footer-links a:hover{color:rgba(255,255,255,0.8)}
+
+/* Advanced previdencia layer */
+.prev-advanced{background:#06101d;color:#fff;padding:72px 40px;position:relative;overflow:hidden}
+.prev-advanced::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 12% 8%,rgba(34,197,94,.12),transparent 32%),radial-gradient(circle at 88% 12%,rgba(59,130,246,.1),transparent 30%);pointer-events:none}
+.prev-advanced-inner{max-width:1180px;margin:0 auto;position:relative}
+.prev-adv-head{max-width:780px;margin-bottom:30px}
+.prev-adv-kicker{display:inline-flex;align-items:center;gap:8px;color:var(--green-light);font-size:.74rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px}
+.prev-adv-kicker::before{content:'';width:22px;height:2px;background:var(--green);border-radius:2px}
+.prev-adv-title{font-family:'Syne',sans-serif;font-size:clamp(1.8rem,3vw,3rem);line-height:1.08;margin-bottom:12px}
+.prev-adv-title span{color:var(--green-light)}
+.prev-adv-desc{color:rgba(255,255,255,.62);font-size:1rem;line-height:1.75}
+.prev-adv-grid{display:grid;grid-template-columns:1.08fr .92fr;gap:18px;align-items:start}
+.prev-card{background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:22px;box-shadow:0 24px 64px rgba(0,0,0,.26)}
+.prev-card h3{font-family:'Syne',sans-serif;font-size:1.12rem;margin-bottom:8px}
+.prev-card p{color:rgba(255,255,255,.62);font-size:.86rem;line-height:1.65}
+.prev-form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:16px}
+.prev-field label{display:block;color:rgba(255,255,255,.55);font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
+.prev-input,.prev-select{width:100%;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:12px;color:#fff;padding:11px 12px;font-family:inherit}
+.prev-select option{color:#0A2540}
+.prev-btn{border:0;border-radius:12px;background:var(--green);color:var(--navy);font-family:'Syne',sans-serif;font-weight:800;padding:12px 16px;cursor:pointer}
+.prev-btn.secondary{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);color:#fff}
+.prev-result{margin-top:16px;background:rgba(34,197,94,.09);border:1px solid rgba(34,197,94,.22);border-radius:16px;padding:16px}
+.prev-result-title{font-family:'Syne',sans-serif;font-weight:800;color:var(--green-light);margin-bottom:8px}
+.prev-result-row{display:flex;justify-content:space-between;gap:14px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.07);font-size:.85rem}
+.prev-result-row:last-child{border-bottom:0}
+.prev-result-row span:first-child{color:rgba(255,255,255,.58)}
+.prev-result-row strong{color:#fff;text-align:right}
+.prev-mini-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
+.prev-info{background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.09);border-radius:16px;padding:16px}
+.prev-info strong{display:block;font-family:'Syne',sans-serif;font-size:.95rem;margin-bottom:6px}
+.prev-info span{display:block;color:rgba(255,255,255,.6);font-size:.78rem;line-height:1.55}
+.prev-tax-table{width:100%;border-collapse:separate;border-spacing:0 8px;margin-top:14px}
+.prev-tax-table th{color:rgba(255,255,255,.52);font-size:.7rem;text-transform:uppercase;text-align:left;padding:0 10px}
+.prev-tax-table td{background:rgba(255,255,255,.055);padding:11px 10px;font-size:.82rem}
+.prev-tax-table td:first-child{border-radius:12px 0 0 12px}
+.prev-tax-table td:last-child{border-radius:0 12px 12px 0;color:var(--green-light);font-weight:800}
+.prev-check-list{display:grid;gap:10px;margin-top:14px}
+.prev-check{display:flex;gap:10px;color:rgba(255,255,255,.66);font-size:.84rem;line-height:1.55}
+.prev-check::before{content:'OK';color:var(--green-light);font-size:.68rem;font-weight:900;margin-top:2px;flex:0 0 auto}
+.prev-check.warn::before{content:'!';color:#fbbf24}
+.prev-age-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:14px}
+.prev-age-card{border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.045);border-radius:16px;padding:15px}
+.prev-age-card strong{display:block;color:#fff;margin-bottom:5px}
+.prev-age-card span{display:block;color:rgba(255,255,255,.58);font-size:.76rem;line-height:1.45}
+.prev-bars{display:grid;gap:10px;margin-top:14px}
+.prev-bar-meta{display:flex;justify-content:space-between;color:rgba(255,255,255,.7);font-size:.78rem;margin-bottom:5px}
+.prev-track{height:10px;background:rgba(255,255,255,.08);border-radius:999px;overflow:hidden}
+.prev-fill{height:100%;background:linear-gradient(90deg,#ef4444,#f59e0b,var(--green));border-radius:inherit;transition:width .25s}
+.prev-report{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;background:rgba(34,197,94,.09);border:1px solid rgba(34,197,94,.22);border-radius:18px;padding:18px;margin-top:18px}
+.prev-report strong{display:block;font-family:'Syne',sans-serif;margin-bottom:4px}
+.prev-report span{display:block;color:rgba(255,255,255,.62);font-size:.82rem}
+@media(max-width:960px){.prev-adv-grid,.prev-form-grid{grid-template-columns:1fr}.prev-mini-grid,.prev-age-row{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.prev-advanced{padding:56px 20px}.prev-mini-grid,.prev-age-row,.prev-report{grid-template-columns:1fr}}
+
+@media(max-width:768px){
+  .section,.plans-section,.cob-section,.sim-section{padding:48px 20px}
+  .hero{padding:40px 20px}.hero-layout{grid-template-columns:1fr}.hero-inst-col{display:none}
+  nav{padding:0 16px}.nav-bc{display:none}
+  .inner-nav{padding:0 12px}
+  .sim-inner,.raiox-inner,.cob-inner{grid-template-columns:1fr}
+  .quiz-opts{grid-template-columns:1fr}
+  .modal-body{padding:20px}
+  .comp-grid{grid-template-columns:1fr}
+  .table-wrap{display:none}
+  .mobile-cards{display:flex}
+  .pag-row{display:none}
+  .raiox-stats-grid{grid-template-columns:1fr 1fr}
+  .plans-grid{grid-template-columns:1fr}
+  .sim-grid{grid-template-columns:1fr}
+  .hist-grid{grid-template-columns:1fr 1fr}
+  .alerts-section{padding:40px 20px}
+}
+</style>
+<link rel="stylesheet" href="assets/css/global.css">
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div style="display:flex;align-items:center;gap:20px">
+    <div class="nav-logo">Fin<span>Match</span></div>
+    <div class="nav-bc"><span class="sep">›</span><span>Educação Financeira</span><span class="sep">›</span><span class="active">🏦 Previdência Privada</span></div>
+  </div>
+  <a href="#" class="nav-back">← Voltar</a>
+</nav>
+
+<!-- INNER NAV -->
+<div class="inner-nav" id="innerNav">
+  <div class="inner-nav-links">
+    <button class="inl active" onclick="goTo('secNoticias',this)">📰 Notícias</button>
+    <button class="inl" onclick="goTo('secAlertas',this)">🔔 Alertas</button>
+    <button class="inl" onclick="goTo('quizSection',this)">🧠 Quiz</button>
+    <button class="inl" onclick="goTo('comparativo',this)">📊 Comparativo</button>
+    <button class="inl" onclick="goTo('secHist',this)">📈 Rentabilidade</button>
+    <button class="inl" onclick="goTo('secRaiox',this)">🔍 Raio-X</button>
+    <button class="inl" onclick="goTo('secSim',this)">🧮 Simulador</button>
+    <button class="inl" onclick="goTo('secCenario',this)">🎯 Cenários</button>
+    <button class="inl" onclick="goTo('secCob',this)">🛡️ Coberturas</button>
+    <button class="inl" onclick="goTo('secPlanos',this)">🚀 Planos</button>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+    <div class="ipbar"><div class="ipfill" id="progressFill" style="width:3%"></div></div>
+    <span style="font-size:0.72rem;color:var(--g300)" id="progressLabel">3%</span>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero" id="secHero">
+  <div class="hero-grid"></div>
+  <div class="hero-layout">
+    <div>
+      <div class="hero-badge">🏦 Previdência Privada</div>
+      <h1>Compare as melhores<br><span>Previdências Privadas</span></h1>
+      <p class="hero-sub">Taxas de administração, rentabilidade histórica, PGBL vs VGBL, portabilidade e solidez da instituição — tudo para você decidir com clareza.</p>
+      <div class="hero-pills">
+        <span class="pill active">🏦 Previdência</span>
+        <span class="pill">💳 Cartões</span>
+        <span class="pill">🏥 Saúde</span>
+        <span class="pill">🛡️ Seguros</span>
+      </div>
+      <div class="data-stamp">
+        <span class="dot"></span>
+        Dados SUSEP/2026 · 20 instituições comparadas · Lei 14.803/2024 atualizada
+      </div>
+    </div>
+    <div class="hero-inst-col" id="heroInstCol"></div>
+  </div>
+</div>
+
+<!-- NOTÍCIAS -->
+<div class="section white" id="secNoticias">
+  <div class="sec-header">
+    <div class="sec-tag">Últimas Notícias</div>
+    <h2 class="sec-title">Fique por dentro do setor</h2>
+    <p class="sec-desc">Mudanças na legislação, novidades dos fundos, rentabilidades e tendências do mercado de previdência complementar.</p>
+  </div>
+  <div class="news-grid">
+    <div class="news-card"><div class="news-img" style="background:linear-gradient(135deg,#0f3460,#1e3a8a)">📊</div><div class="news-body"><span class="news-tag">Lei 14.803</span><h3>Escolha do regime tributário agora pode ser feita no resgate — o que muda?</h3><p>A Lei 14.803/2024 permite ao investidor decidir entre regressivo e progressivo na hora do resgate, trazendo muito mais flexibilidade ao planejamento fiscal.</p><div class="news-meta"><span class="news-source">Valor Econômico</span><span>3 mai. 2026</span></div></div></div>
+    <div class="news-card"><div class="news-img" style="background:linear-gradient(135deg,#064e3b,#0f6e56)">📈</div><div class="news-body"><span class="news-tag">Mercado</span><h3>Captação em PGBL bate recorde no 1º trimestre de 2026 com crescimento de 18%</h3><p>Segundo a Fenaprevi, os aportes em PGBL cresceram 18% em relação ao mesmo período de 2025, impulsionados pelos benefícios fiscais e maior educação financeira.</p><div class="news-meta"><span class="news-source">Exame Invest</span><span>28 abr. 2026</span></div></div></div>
+    <div class="news-card"><div class="news-img" style="background:linear-gradient(135deg,#4c1d95,#6d28d9)">⚖️</div><div class="news-body"><span class="news-tag">Regulação</span><h3>SUSEP exige transparência total em taxas de carregamento e administração a partir de jun/2026</h3><p>Nova resolução obriga seguradoras a detalhar todas as taxas de forma padronizada e comparável, facilitando a portabilidade entre planos.</p><div class="news-meta"><span class="news-source">InfoMoney</span><span>20 abr. 2026</span></div></div></div>
+    <div class="news-card"><div class="news-img" style="background:linear-gradient(135deg,#7c2d12,#c2410c)">🏦</div><div class="news-body"><span class="news-tag">Análise</span><h3>Fintechs desbancam bancos tradicionais em taxa de administração — média de 0,6% vs. 1,3%</h3><p>XP, BTG e Nubank lideram ranking de menor custo anual. Diferença de 0,7% ao ano pode representar até R$ 80.000 a menos no patrimônio final em 30 anos.</p><div class="news-meta"><span class="news-source">MoneyTimes</span><span>15 abr. 2026</span></div></div></div>
+    <div class="news-card"><div class="news-img" style="background:linear-gradient(135deg,#134e4a,#0d9488)">💰</div><div class="news-body"><span class="news-tag">Rentabilidade</span><h3>Fundos multimercado de previdência superam CDI em 2025 pela 3ª vez consecutiva</h3><p>62% dos fundos de previdência multimercado entregaram retornos acima do CDI no acumulado de 2025, na melhor performance da última década.</p><div class="news-meta"><span class="news-source">BTG Pactual</span><span>8 abr. 2026</span></div></div></div>
+    <div class="news-card"><div class="news-img" style="background:linear-gradient(135deg,#1e1b4b,#3730a3)">🎯</div><div class="news-body"><span class="news-tag">Dica</span><h3>Portabilidade de previdência cresceu 34% em 2025 — quando vale a pena migrar?</h3><p>Com taxas cada vez mais competitivas, a portabilidade entre planos bateu recorde. Saiba quais indicadores analisar antes de pedir a migração.</p><div class="news-meta"><span class="news-source">Suno Research</span><span>2 abr. 2026</span></div></div></div>
+  </div>
+</div>
+
+<!-- ALERTAS -->
+<div class="alerts-section" id="secAlertas">
+  <div style="position:relative">
+    <div class="sec-tag light">🔔 Central de Alertas</div>
+    <h2 class="sec-title light" style="margin-bottom:6px">Oportunidades com prazo — não perca</h2>
+    <p class="sec-desc light">Bônus de portabilidade, promoções de taxa zero e mudanças regulatórias que impactam sua estratégia agora.</p>
+  </div>
+  <div class="alerts-grid">
+    <div class="alert-card">
+      <div class="alert-icon up">📈</div>
+      <div class="alert-body">
+        <div class="alert-title">XP Investimentos: taxa de administração zero por 12 meses</div>
+        <div class="alert-sub">Portabilidade de qualquer banco para XP isenta taxa admin por 1 ano. Oferta válida para aportes acima de R$ 5.000.</div>
+        <div class="alert-footer"><span class="alert-badge hot">🔥 Expira em 8 dias</span><button class="alert-cta-btn">Ver oferta →</button></div>
+      </div>
+    </div>
+    <div class="alert-card">
+      <div class="alert-icon up">🎁</div>
+      <div class="alert-body">
+        <div class="alert-title">BTG Pactual: bônus de 5% no primeiro aporte via portabilidade</div>
+        <div class="alert-sub">Crédito de 5% sobre o valor portado como bônus de boas-vindas. Limite de R$ 1.500 por CPF. Válido até 31/mai/2026.</div>
+        <div class="alert-footer"><span class="alert-badge new">✨ Novo benefício</span><button class="alert-cta-btn">Ver oferta →</button></div>
+      </div>
+    </div>
+    <div class="alert-card">
+      <div class="alert-icon info">📅</div>
+      <div class="alert-body">
+        <div class="alert-title">Prazo PGBL: última chance de aportar para deduzir no IR 2026</div>
+        <div class="alert-sub">Aportes em PGBL feitos até 31/dez/2026 podem ser deduzidos na declaração de 2027. Contribuintes com IR a pagar devem agir agora.</div>
+        <div class="alert-footer"><span class="alert-badge info">📅 Até 31/dez/2026</span><button class="alert-cta-btn">Calcular benefício →</button></div>
+      </div>
+    </div>
+    <div class="alert-card">
+      <div class="alert-icon warn">⚠️</div>
+      <div class="alert-body">
+        <div class="alert-title">Bradesco Seguros reajusta taxa de carregamento em jul/2026</div>
+        <div class="alert-sub">Taxa de carregamento passará de 1,5% para 2,0% para novos aportes. Clientes atuais têm até junho para negociar ou portar.</div>
+        <div class="alert-footer"><span class="alert-badge hot">⏰ Mudança em 31 dias</span><button class="alert-cta-btn">Ver análise →</button></div>
+      </div>
+    </div>
+    <div class="alert-card">
+      <div class="alert-icon up">🏆</div>
+      <div class="alert-body">
+        <div class="alert-title">Icatu Seguros: fundo de renda variável lidera rentabilidade no ano</div>
+        <div class="alert-sub">Fundo Icatu Seg Dividendos acumula +18,4% em 2026, vs. CDI de 10,5% no período. Disponível para portabilidade sem carência.</div>
+        <div class="alert-footer"><span class="alert-badge new">📊 Destaque do mês</span><button class="alert-cta-btn">Ver fundo →</button></div>
+      </div>
+    </div>
+    <div class="alert-card">
+      <div class="alert-icon danger">🚨</div>
+      <div class="alert-body">
+        <div class="alert-title">Selic em queda: fundos de renda fixa podem render menos em 2027</div>
+        <div class="alert-sub">Expectativa de corte da Selic para 10% ao ano em 2027 impacta fundos DI atrelados ao CDI. Considere diversificar para multimercado.</div>
+        <div class="alert-footer"><span class="alert-badge hot">⚡ Alerta estratégico</span><button class="alert-cta-btn">Ver análise →</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div class="quiz-section" id="quizSection">
+  <div class="quiz-inner">
+    <div class="sec-tag light" style="margin-bottom:12px">🧠 Descoberta de Perfil</div>
+    <h2 class="sec-title light" style="margin-bottom:8px">PGBL ou VGBL? Qual é o seu perfil?</h2>
+    <p class="sec-desc light" style="margin-bottom:32px">4 perguntas rápidas para identificar o melhor plano e instituição para o seu perfil — com base no seu IR, horizonte de tempo e objetivo.</p>
+    <div class="quiz-progress" id="quizProgress">
+      <div class="quiz-step active" id="qs0"></div><div class="quiz-step" id="qs1"></div>
+      <div class="quiz-step" id="qs2"></div><div class="quiz-step" id="qs3"></div>
+    </div>
+    <div class="quiz-card">
+      <div id="quizContent"></div>
+      <div id="quizResult" class="quiz-result"></div>
+      <div class="quiz-nav" id="quizNav">
+        <button class="quiz-btn sec" id="quizBack" onclick="quizPrev()" style="display:none">← Anterior</button>
+        <button class="quiz-btn pri" id="quizNext" onclick="quizNext()" disabled>Próxima →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- COMPARATIVO -->
+<div class="section gray" id="comparativo">
+  <div class="sec-header">
+    <div class="sec-tag">Comparativo Completo</div>
+    <h2 class="sec-title">As 20 maiores instituições do Brasil</h2>
+    <p class="sec-desc">Filtre, ordene e compare até 3 instituições lado a lado. Dados SUSEP atualizados em maio/2026.</p>
+  </div>
+  <div class="compare-bar">
+    <span class="compare-bar-label">⚡ Comparar:</span>
+    <div class="compare-chips" id="compareChips"><span class="compare-placeholder" id="comparePlaceholder">Selecione instituições abaixo (máx. 3)</span></div>
+    <button class="compare-go-btn" id="compareGoBtn" disabled onclick="openCompareModal()">Ver Comparativo →</button>
+  </div>
+  <div class="filter-row">
+    <button class="filter-btn active" onclick="filtrar(this,'todos')">Todos</button>
+    <button class="filter-btn" onclick="filtrar(this,'pgbl')">PGBL</button>
+    <button class="filter-btn" onclick="filtrar(this,'vgbl')">VGBL</button>
+    <button class="filter-btn" onclick="filtrar(this,'ambos')">PGBL+VGBL</button>
+    <button class="filter-btn" onclick="filtrar(this,'baixaTaxa')">💚 Taxa &lt; 0,8%</button>
+    <input class="search-box" type="text" id="search" placeholder="🔍 Buscar instituição..." oninput="buscar(this.value)">
+    <select class="sort-select" onchange="sortBy(this.value)">
+      <option value="">Ordenar por...</option>
+      <option value="r_asc">Taxa Admin. (menor)</option>
+      <option value="r12_desc">Rentab. 12m (maior)</option>
+      <option value="r5_desc">Rentab. 5a (maior)</option>
+      <option value="min_asc">Aporte mín. (menor)</option>
+      <option value="stars_desc">Melhor avaliação</option>
+    </select>
+  </div>
+  <div class="table-wrap">
+    <table class="comp-table" id="compTable">
+      <thead>
+        <tr>
+          <th onclick="sortByCol('n')">Instituição ↕</th>
+          <th onclick="sortByCol('t')">Tipo ↕</th>
+          <th onclick="sortByCol('r')">Taxa Admin. ↕</th>
+          <th>Taxa Carregamento</th>
+          <th onclick="sortByCol('r12')">Rentab. 12m ↕</th>
+          <th onclick="sortByCol('r5')">Rentab. 5 anos ↕</th>
+          <th onclick="sortByCol('min')">Aporte Mín. ↕</th>
+          <th>Portabilidade</th>
+          <th onclick="sortByCol('stars')">Avaliação ↕</th>
+          <th>FinMatch</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+  <div class="mobile-cards" id="mobileCards"></div>
+  <div class="pag-row">
+    <span class="pag-info" id="pagInfo"></span>
+    <div class="pag-btns" id="pagBtns"></div>
+  </div>
+</div>
+
+<!-- HISTÓRICO DE RENTABILIDADE -->
+<div class="section white" id="secHist">
+  <div class="sec-header">
+    <div class="sec-tag">📈 Histórico de Rentabilidade</div>
+    <h2 class="sec-title">Quem entregou mais nos últimos 5 anos</h2>
+    <p class="sec-desc">Rentabilidade passada não garante futuro, mas revela consistência e gestão. Compare quem ficou acima e abaixo do CDI sistematicamente.</p>
+  </div>
+  <div class="hist-grid" id="histGrid"></div>
+  <div style="background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.2);border-radius:var(--radius);padding:16px 20px;margin-top:24px;font-size:0.85rem;color:var(--g500);line-height:1.6">
+    📊 <strong style="color:var(--navy)">Referência CDI:</strong> O CDI acumulado nos últimos 5 anos foi de aproximadamente <strong style="color:var(--green-dark)">68,4%</strong>. Fundos que ficaram consistentemente abaixo do CDI podem indicar má gestão ou taxas elevadas — reavalie com a calculadora de custo real.
+  </div>
+</div>
+
+<!-- RAIO-X DA INSTITUIÇÃO -->
+<div class="section gray" id="secRaiox">
+  <div class="sec-header">
+    <div class="sec-tag">🔍 Raio-X da Instituição</div>
+    <h2 class="sec-title">Solidez, patrimônio e rating de cada gestora</h2>
+    <p class="sec-desc">Selecione uma instituição e veja: patrimônio sob gestão, rating de solidez, número de cotistas, tipos de fundo disponíveis e histórico de fusões.</p>
+  </div>
+  <div class="raiox-inner">
+    <div class="raiox-sel" id="raioxSel"></div>
+    <div class="raiox-detail" id="raioxDetail"></div>
+  </div>
+</div>
+
+<!-- SIMULADOR -->
+<div class="sim-section" id="secSim">
+  <div class="sec-header">
+    <div class="sec-tag">🧮 Simulador FinMatch</div>
+    <h2 class="sec-title">Quanto você terá na aposentadoria?</h2>
+    <p class="sec-desc">Simule o crescimento do seu patrimônio com base nos dados reais das instituições. Calcule o impacto da taxa de administração no longo prazo.</p>
+  </div>
+  <div class="sim-inner">
+    <div class="sim-form">
+      <div class="sim-field">
+        <div class="sim-label">Sua idade atual <span id="idadeVal">30 anos</span></div>
+        <input type="range" class="sim-range" id="simIdade" min="18" max="60" value="30" oninput="calcSim()">
+        <div class="sim-range-row"><span>18</span><span>60</span></div>
+      </div>
+      <div class="sim-field">
+        <div class="sim-label">Aposentadoria aos <span id="aposentaVal">65 anos</span></div>
+        <input type="range" class="sim-range" id="simAposenta" min="55" max="80" value="65" oninput="calcSim()">
+        <div class="sim-range-row"><span>55</span><span>80</span></div>
+      </div>
+      <div class="sim-field">
+        <div class="sim-label">Aporte mensal <span id="aporteVal">R$ 500</span></div>
+        <input type="range" class="sim-range" id="simAporte" min="50" max="10000" step="50" value="500" oninput="calcSim()">
+        <div class="sim-range-row"><span>R$ 50</span><span>R$ 10.000</span></div>
+      </div>
+      <div class="sim-field">
+        <div class="sim-label">Instituição</div>
+        <select class="sim-input" id="simInst" onchange="calcSim()">
+          <option value="0.50">XP Investimentos (0,50% a.a.)</option>
+          <option value="0.55">BTG Pactual (0,55% a.a.)</option>
+          <option value="0.70" selected>Nubank Vida (0,70% a.a.)</option>
+          <option value="0.75">Icatu Seguros (0,75% a.a.)</option>
+          <option value="0.95">Itaú Previdência (0,95% a.a.)</option>
+          <option value="1.25">Bradesco Seguros (1,25% a.a.)</option>
+          <option value="1.50">Banco do Brasil (1,50% a.a.)</option>
+        </select>
+      </div>
+      <div style="padding:12px;background:rgba(34,197,94,0.06);border-radius:var(--radius-sm);border:1px solid rgba(34,197,94,0.15);font-size:0.78rem;color:var(--g500);line-height:1.6;margin-top:8px">
+        ⚠️ Simulação educacional com rentabilidade bruta de 12% a.a. descontada a taxa escolhida. Rentabilidade passada não garante resultados futuros.
+      </div>
+    </div>
+    <div class="sim-results">
+      <div class="sim-results-title">📊 Projeção ao aposentar</div>
+      <div class="sim-big" id="simTotal">R$ 0</div>
+      <div class="sim-big-label">patrimônio acumulado estimado</div>
+      <div class="sim-grid">
+        <div class="sim-stat"><div class="sim-stat-val" id="simAnos">0 anos</div><div class="sim-stat-label">Tempo de contribuição</div></div>
+        <div class="sim-stat"><div class="sim-stat-val" id="simRenda">R$ 0/mês</div><div class="sim-stat-label">Renda mensal estimada</div></div>
+        <div class="sim-stat"><div class="sim-stat-val" id="simAportado">R$ 0</div><div class="sim-stat-label">Total aportado</div></div>
+        <div class="sim-stat"><div class="sim-stat-val" id="simJuros">R$ 0</div><div class="sim-stat-label">Juros compostos</div></div>
+      </div>
+      <div class="sim-bar-section">
+        <div style="font-size:0.73rem;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px">Composição do patrimônio</div>
+        <div class="sim-bar-row"><div class="sim-bar-meta"><span class="sim-bar-name">Capital investido</span><span class="sim-bar-pct" id="simPctAporte">0%</span></div><div class="sim-track"><div class="sim-fill green" id="simBarAporte" style="width:0%"></div></div></div>
+        <div class="sim-bar-row"><div class="sim-bar-meta"><span class="sim-bar-name">Juros compostos</span><span class="sim-bar-pct" id="simPctJuros">0%</span></div><div class="sim-track"><div class="sim-fill amber" id="simBarJuros" style="width:0%"></div></div></div>
+      </div>
+      <div id="simExtraInfo" style="margin-top:14px;padding:12px;background:rgba(34,197,94,0.1);border-radius:var(--radius-sm);border:1px solid rgba(34,197,94,0.2);font-size:0.78rem;color:rgba(255,255,255,0.7);line-height:1.6"></div>
+      <div class="sim-cta-row">
+        <button class="sim-cta pri" onclick="document.getElementById('comparativo').scrollIntoView({behavior:'smooth'})">Ver Instituições →</button>
+        <button class="sim-cta sec" onclick="openSignupModal('Simulador')">Salvar Simulação</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CENÁRIOS (inovadora) -->
+<div class="cenario-section" id="secCenario">
+  <div class="cenario-inner">
+    <div class="sec-tag light">🎯 Simulador de Cenários</div>
+    <h2 class="sec-title light" style="margin-bottom:8px">E se acontecer isso com minha previdência?</h2>
+    <p class="sec-desc light" style="margin-bottom:28px">Simule situações reais e veja como cada instituição se comporta — resgate antecipado, queda da Selic, portabilidade, ou perda do emprego.</p>
+    <div class="cenario-toggle" id="cenarioToggle"></div>
+    <div class="cenario-results" id="cenarioResults"></div>
+  </div>
+</div>
+
+<!-- OBRIGATÓRIO vs DIFERENCIAL -->
+<div class="prev-advanced" id="secPrevAvancado">
+  <div class="prev-advanced-inner">
+    <div class="prev-adv-head">
+      <div class="prev-adv-kicker">Estrategia de previdencia</div>
+      <h2 class="prev-adv-title">Calcule o impacto fiscal, a portabilidade e o <span>custo invisivel</span></h2>
+      <p class="prev-adv-desc">Esta camada complementa o quiz, o comparativo e o simulador que ja existem na pagina. A ideia e transformar a decisao em numeros: PGBL vs VGBL, regressivo vs progressivo, economia de IR, taxa administrativa e planejamento sucessorio.</p>
+    </div>
+
+    <div class="prev-adv-grid">
+      <div class="prev-card">
+        <h3>Simulador PGBL vs VGBL + beneficio fiscal</h3>
+        <p>Informe renda, tipo de declaracao, aporte e prazo para estimar deducao no IR, patrimonio liquido e plano mais indicado.</p>
+        <div class="prev-form-grid">
+          <div class="prev-field"><label>Renda bruta anual</label><input class="prev-input" id="prevRendaAnual" type="number" value="120000"></div>
+          <div class="prev-field"><label>Aporte anual</label><input class="prev-input" id="prevAporteAnual" type="number" value="12000"></div>
+          <div class="prev-field"><label>Declaracao IR</label><select class="prev-select" id="prevDeclaracao"><option value="completa">Completa</option><option value="simplificada">Simplificada</option></select></div>
+          <div class="prev-field"><label>Aliquota marginal</label><select class="prev-select" id="prevAliquota"><option value="0.275">27,5%</option><option value="0.225">22,5%</option><option value="0.15">15%</option><option value="0.075">7,5%</option></select></div>
+          <div class="prev-field"><label>Saldo atual</label><input class="prev-input" id="prevSaldoAtual" type="number" value="80000"></div>
+          <div class="prev-field"><label>Prazo ate resgate</label><input class="prev-input" id="prevPrazo" type="number" value="15"></div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px">
+          <button class="prev-btn" onclick="calcPrevFiscal()">Calcular estrategia</button>
+          <button class="prev-btn secondary" onclick="window.print()">Gerar relatorio</button>
+        </div>
+        <div class="prev-result">
+          <div class="prev-result-title">Resultado da estrategia</div>
+          <div class="prev-result-row"><span>Plano indicado</span><strong id="prevPlanoIndicado">-</strong></div>
+          <div class="prev-result-row"><span>Limite PGBL dedutivel</span><strong id="prevLimitePgbl">-</strong></div>
+          <div class="prev-result-row"><span>Economia fiscal estimada</span><strong id="prevEconomiaIr">-</strong></div>
+          <div class="prev-result-row"><span>Regime provavel</span><strong id="prevRegime">-</strong></div>
+        </div>
+      </div>
+
+      <div class="prev-card">
+        <h3>Tabela regressiva de IR</h3>
+        <p>Quanto maior o prazo de permanencia, menor tende a ser a aliquota no regime regressivo.</p>
+        <table class="prev-tax-table">
+          <thead><tr><th>Prazo</th><th>Aliquota</th></tr></thead>
+          <tbody>
+            <tr><td>Ate 2 anos</td><td>35%</td></tr>
+            <tr><td>2 a 4 anos</td><td>30%</td></tr>
+            <tr><td>4 a 6 anos</td><td>25%</td></tr>
+            <tr><td>6 a 8 anos</td><td>20%</td></tr>
+            <tr><td>8 a 10 anos</td><td>15%</td></tr>
+            <tr><td>Acima de 10 anos</td><td>10%</td></tr>
+          </tbody>
+        </table>
+        <div class="prev-report"><div><strong>Lei 14.803/2024</strong><span>A pagina ja cita a flexibilidade da escolha no resgate. Aqui ela vira criterio pratico de decisao.</span></div></div>
+      </div>
+    </div>
+
+    <div class="prev-adv-grid" style="margin-top:18px">
+      <div class="prev-card">
+        <h3>Calculadora de portabilidade</h3>
+        <p>Compare sua taxa atual com uma taxa nova e veja quanto a diferenca pode representar no longo prazo.</p>
+        <div class="prev-form-grid">
+          <div class="prev-field"><label>Saldo portado</label><input class="prev-input" id="prevPortSaldo" type="number" value="100000"></div>
+          <div class="prev-field"><label>Taxa atual (% a.a.)</label><input class="prev-input" id="prevTaxaAtual" type="number" step="0.1" value="2.0"></div>
+          <div class="prev-field"><label>Taxa nova (% a.a.)</label><input class="prev-input" id="prevTaxaNova" type="number" step="0.1" value="0.5"></div>
+          <div class="prev-field"><label>Prazo (anos)</label><input class="prev-input" id="prevPortPrazo" type="number" value="20"></div>
+        </div>
+        <button class="prev-btn" style="margin-top:14px" onclick="calcPrevPortabilidade()">Simular portabilidade</button>
+        <div class="prev-result">
+          <div class="prev-result-title">Impacto estimado</div>
+          <div class="prev-result-row"><span>Custo na taxa atual</span><strong id="prevCustoAtual">-</strong></div>
+          <div class="prev-result-row"><span>Custo na taxa nova</span><strong id="prevCustoNovo">-</strong></div>
+          <div class="prev-result-row"><span>Economia potencial</span><strong id="prevEconomiaPort">-</strong></div>
+        </div>
+      </div>
+
+      <div class="prev-card">
+        <h3>Taxa invisivel no patrimonio</h3>
+        <p>Visualize quanto sobra do patrimonio quando a taxa administrativa aumenta.</p>
+        <div class="prev-bars">
+          <div><div class="prev-bar-meta"><span>Taxa 0,5% a.a.</span><span id="prevBarLowTxt">100%</span></div><div class="prev-track"><div class="prev-fill" id="prevBarLow" style="width:100%"></div></div></div>
+          <div><div class="prev-bar-meta"><span>Taxa 1,5% a.a.</span><span id="prevBarMidTxt">-</span></div><div class="prev-track"><div class="prev-fill" id="prevBarMid" style="width:72%"></div></div></div>
+          <div><div class="prev-bar-meta"><span>Taxa 2,5% a.a.</span><span id="prevBarHighTxt">-</span></div><div class="prev-track"><div class="prev-fill" id="prevBarHigh" style="width:54%"></div></div></div>
+        </div>
+        <p style="margin-top:14px">Use junto com a calculadora de portabilidade para identificar planos antigos que podem estar drenando retorno.</p>
+      </div>
+    </div>
+
+    <div class="prev-mini-grid">
+      <div class="prev-info"><strong>Sucessao patrimonial</strong><span>Inclua beneficiarios, percentuais e objetivo sucessorio. Previdencia pode agilizar a transmissao, mas exige leitura contratual e orientacao juridica.</span></div>
+      <div class="prev-info"><strong>Previdencia vs CDB/Tesouro</strong><span>Previdencia tende a fazer mais sentido quando ha beneficio fiscal, horizonte longo, portabilidade e estrategia sucessoria.</span></div>
+      <div class="prev-info"><strong>Score Previdencia</strong><span>Peso sugerido: taxa, rentabilidade, risco, solidez da seguradora, portabilidade, liquidez e transparencia.</span></div>
+    </div>
+
+    <div class="prev-adv-grid" style="margin-top:18px">
+      <div class="prev-card">
+        <h3>Checklist antes de contratar</h3>
+        <div class="prev-check-list">
+          <div class="prev-check">Tenho reserva de emergencia antes de travar dinheiro no longo prazo.</div>
+          <div class="prev-check">Sei se minha declaracao de IR e completa ou simplificada.</div>
+          <div class="prev-check">Entendi taxa administrativa, carregamento, portabilidade e liquidez.</div>
+          <div class="prev-check">Comparei o fundo com CDI, benchmark e alternativas comuns.</div>
+          <div class="prev-check">Defini beneficiarios e revisei o impacto sucessorio.</div>
+        </div>
+      </div>
+      <div class="prev-card">
+        <h3>Evite previdencia se...</h3>
+        <div class="prev-check-list">
+          <div class="prev-check warn">Voce precisa de liquidez imediata ou pode resgatar em prazo curto.</div>
+          <div class="prev-check warn">O plano cobra carregamento alto ou taxa acima de 1,5% sem justificativa.</div>
+          <div class="prev-check warn">Voce nao sabe qual regime tributario esta contratando.</div>
+          <div class="prev-check warn">A rentabilidade fica consistentemente abaixo do benchmark depois das taxas.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="prev-card" style="margin-top:18px">
+      <h3>Regua por idade</h3>
+      <p>A estrategia muda conforme tempo ate aposentadoria, tolerancia a risco e objetivo fiscal.</p>
+      <div class="prev-age-row">
+        <div class="prev-age-card"><strong>25 anos</strong><span>Priorize aporte recorrente, taxa baixa e fundos com horizonte longo.</span></div>
+        <div class="prev-age-card"><strong>35 anos</strong><span>Combine beneficio fiscal, diversificacao e portabilidade quando necessario.</span></div>
+        <div class="prev-age-card"><strong>45 anos</strong><span>Reduza erros de taxa, calibre risco e simule renda futura com mais rigor.</span></div>
+        <div class="prev-age-card"><strong>55 anos</strong><span>Foque em regime tributario, liquidez, renda e sucessao patrimonial.</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="cob-section" id="secCob">
+  <div class="sec-header">
+    <div class="sec-tag">🛡️ Regulação e Diferenciais</div>
+    <h2 class="sec-title">O que é obrigatório pela SUSEP e o que é diferencial</h2>
+    <p class="sec-desc">Saiba o que toda previdência privada é obrigada a oferecer por lei — e o que é genuíno diferencial de cada gestora, para não pagar por algo que já teria de graça.</p>
+  </div>
+  <div class="cob-inner">
+    <div>
+      <div class="cob-col-title">✅ Obrigatório (SUSEP/CVM) — todo plano</div>
+      <div class="cob-obrig-list" id="cobObrigList"></div>
+    </div>
+    <div>
+      <div class="cob-col-title">🌟 Diferenciais — varia por gestora</div>
+      <div class="cob-dif-list" id="cobDifList"></div>
+    </div>
+  </div>
+</div>
+
+<!-- PLANOS -->
+<div class="plans-section" id="secPlanos">
+  <div class="sec-header" style="text-align:center">
+    <div class="sec-tag" style="text-align:center">Planos</div>
+    <h2 class="sec-title" style="max-width:100%;text-align:center">Pronto para evoluir?</h2>
+    <p class="sec-desc" style="max-width:520px;margin:10px auto 0">Escolha o plano que acompanha o seu crescimento. 7 dias de garantia ou seu dinheiro de volta.</p>
+  </div>
+  <div class="guarantee-box" style="max-width:600px;margin:0 auto 40px">
+    <div class="guarantee-num">7</div>
+    <div class="guarantee-text"><h4>Garantia de 7 dias ou seu dinheiro de volta</h4><p>Não ficou satisfeito nos primeiros 7 dias? Devolvemos 100% sem perguntas.</p></div>
+  </div>
+  <div class="plans-grid">
+    <div class="plan-card"><span class="plan-icon">🆓</span><div class="plan-name">Plano Grátis</div><div class="plan-desc">Para quem está começando a organizar as finanças e investir com mais clareza.</div><div class="plan-price"><span class="price-free">Grátis</span></div><div class="plan-trial">Comece agora sem compromisso</div><hr class="plan-divider"><ul class="feature-list"><li><span class="feat-check">✓</span>Comparativo de 10 instituições</li><li><span class="feat-check">✓</span>Simulador básico de aposentadoria</li><li><span class="feat-check">✓</span>Quiz PGBL vs VGBL</li><li><span class="feat-check">✓</span>Central de alertas básica</li><li><span class="feat-cross">✗</span>Histórico de rentabilidade completo</li><li><span class="feat-cross">✗</span>Raio-X da instituição</li></ul><button class="plan-btn outline" onclick="openSignupModal('Grátis')">Começar grátis</button></div>
+    <div class="plan-card"><span class="plan-icon">⚡</span><div class="plan-name">Plano Basic</div><div class="plan-desc">Para quem quer organizar a rotina de investimentos com mais profundidade.</div><div class="plan-price"><span class="price-cur">R$</span><span class="price-val">25</span><span class="price-per">/mês</span></div><div class="plan-trial">7 dias grátis</div><hr class="plan-divider"><ul class="feature-list"><li><span class="feat-check">✓</span>Tudo do Grátis</li><li><span class="feat-check">✓</span>Comparativo completo (20 inst.)</li><li><span class="feat-check">✓</span>Histórico de rentabilidade 5 anos</li><li><span class="feat-check">✓</span>Raio-X das instituições</li><li><span class="feat-check">✓</span>Simulador de cenários</li><li><span class="feat-cross">✗</span>Consultoria de portfólio</li></ul><button class="plan-btn dark" onclick="openSignupModal('Basic')">Testar 7 dias grátis</button></div>
+    <div class="plan-card featured"><span class="plan-badge-top">⭐ Mais popular</span><span class="plan-icon" style="margin-top:16px">🚀</span><div class="plan-name">Plano Standard</div><div class="plan-desc">Para quem busca mais autonomia e quer extrair o máximo da previdência.</div><div class="plan-price"><span class="price-cur">R$</span><span class="price-val">45</span><span class="price-per">/mês</span></div><div class="plan-trial" style="color:var(--green-dark)">7 dias grátis</div><hr class="plan-divider"><ul class="feature-list"><li><span class="feat-check">✓</span>Tudo do Basic</li><li><span class="feat-check">✓</span>Alertas de portabilidade com bônus</li><li><span class="feat-check">✓</span>Análise de benefício fiscal (PGBL)</li><li><span class="feat-check">✓</span>Carteiras recomendadas certificadas</li><li><span class="feat-check">✓</span>Curso: Previdência do zero ao avançado</li><li><span class="feat-check">✓</span>Suporte humano neutro prioritário</li></ul><button class="plan-btn primary" onclick="openSignupModal('Standard')">Testar o Standard agora</button></div>
+    <div class="plan-card"><span class="plan-icon">💎</span><div class="plan-name">Plano Advanced</div><div class="plan-desc">Para quem quer análise de elite e planejamento de longo prazo personalizado.</div><div class="plan-price"><span class="price-cur">R$</span><span class="price-val">98</span><span class="price-per">/mês</span></div><div class="plan-trial">7 dias grátis</div><hr class="plan-divider"><ul class="feature-list"><li><span class="feat-check">✓</span>Tudo do Standard</li><li><span class="feat-check">✓</span>Análise mensal do portfólio</li><li><span class="feat-check">✓</span>Relatório de otimização fiscal</li><li><span class="feat-check">✓</span>Negociação de taxa com gestoras</li><li><span class="feat-check">✓</span>Planejamento sucessório incluído</li><li><span class="feat-check">✓</span>Grupo VIP de estrategistas</li></ul><button class="plan-btn dark" onclick="openSignupModal('Advanced')">Conhecer o Advanced</button></div>
+  </div>
+</div>
+
+<!-- FAQ -->
+<div class="section white">
+  <div class="sec-header" style="text-align:center;margin-bottom:40px">
+    <div class="sec-tag" style="text-align:center">FAQ</div>
+    <h2 class="sec-title" style="text-align:center">Perguntas frequentes</h2>
+  </div>
+  <div style="max-width:680px;margin:0 auto" id="faqList"></div>
+</div>
+
+<footer>
+  <div class="footer-logo">Fin<span>Match</span></div>
+  <p>Plataforma Inteligente de Decisão Financeira — FinMatch © 2026</p>
+  <p style="margin-top:4px">Pablo Henrique Horaguti da Silva · Ciências Econômicas · Universidade Cruzeiro do Sul</p>
+  <div class="footer-links"><a href="#">Política de Privacidade</a><a href="#">Termos de Uso</a><a href="#">LGPD</a><a href="#">Contato</a></div>
+</footer>
+
+<!-- MODALS -->
+<div class="modal-backdrop" id="compareModal">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">⚡ Comparativo Lado a Lado</div><button class="modal-close" onclick="closeModal('compareModal')">✕</button></div>
+    <div class="modal-body" id="compareModalBody"></div>
+  </div>
+</div>
+<div class="modal-backdrop" id="signupModal">
+  <div class="signup-modal">
+    <button class="modal-close" onclick="closeModal('signupModal')" style="position:absolute;top:16px;right:16px">✕</button>
+    <div id="signupForm">
+      <div class="signup-title">Criar conta FinMatch</div>
+      <div class="signup-sub" id="signupSubtitle">Comece a comparar previdências gratuitamente.</div>
+      <div class="signup-field"><label>Nome completo</label><input class="signup-input" type="text" placeholder="Seu nome"></div>
+      <div class="signup-field"><label>E-mail</label><input class="signup-input" type="email" placeholder="seu@email.com"></div>
+      <div class="signup-field"><label>Perfil de investidor</label>
+        <select class="signup-input"><option>Conservador</option><option>Moderado</option><option>Arrojado</option><option>Agressivo</option></select></div>
+      <button class="signup-submit" onclick="submitSignup()">Criar conta grátis →</button>
+      <div class="signup-disclaimer">Sem spam. Dados protegidos pela LGPD.</div>
+    </div>
+    <div class="signup-success" id="signupSuccess">
+      <div class="signup-success-icon">🎉</div>
+      <div class="signup-title">Conta criada!</div>
+      <div class="signup-sub">Bem-vindo ao FinMatch. Verifique seu e-mail.</div>
+      <button class="signup-submit" onclick="closeModal('signupModal')">Explorar agora →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════ DADOS ═══════════
+const instColors=['#1d4ed8','#dc2626','#16a34a','#7c3aed','#c2410c','#0891b2','#b45309','#be185d','#0f766e','#4338ca','#15803d','#b91c1c','#1e40af','#6d28d9','#92400e','#155e75','#9a3412','#9d174d','#047857','#374151'];
+const instNames=[
+  {n:'Bradesco Seguros',ab:'BD',t:'ambos',r:1.25,r12:12.4,r5:68.2,min:100,port:true,stars:4,rec:true,pat:'R$ 180 bi',rating:'AAA',cotistas:'2,1 mi',fundos:28,hist5:[12.1,8.3,14.2,11.8,12.4]},
+  {n:'Itaú Previdência',ab:'IT',t:'ambos',r:0.95,r12:13.1,r5:71.5,min:200,port:true,stars:5,rec:true,pat:'R$ 210 bi',rating:'AAA',cotistas:'3,4 mi',fundos:42,hist5:[13.0,9.1,15.1,12.5,13.1]},
+  {n:'Banco do Brasil',ab:'BB',t:'pgbl',r:1.50,r12:11.2,r5:59.8,min:50,port:true,stars:3,rec:false,pat:'R$ 290 bi',rating:'AA+',cotistas:'5,2 mi',fundos:18,hist5:[11.0,7.8,12.5,10.9,11.2]},
+  {n:'Caixa Econômica',ab:'CE',t:'vgbl',r:1.20,r12:10.8,r5:55.3,min:30,port:false,stars:3,rec:false,pat:'R$ 320 bi',rating:'AA+',cotistas:'7,8 mi',fundos:12,hist5:[10.5,7.2,12.0,10.4,10.8]},
+  {n:'XP Investimentos',ab:'XP',t:'ambos',r:0.50,r12:14.8,r5:82.3,min:1000,port:true,stars:5,rec:true,pat:'R$ 48 bi',rating:'AA',cotistas:'820 mil',fundos:65,hist5:[14.5,10.8,16.8,13.9,14.8]},
+  {n:'Nubank Vida',ab:'NU',t:'vgbl',r:0.70,r12:13.5,r5:74.1,min:1,port:true,stars:4,rec:true,pat:'R$ 12 bi',rating:'AA-',cotistas:'1,9 mi',fundos:8,hist5:[13.2,9.8,15.0,13.0,13.5]},
+  {n:'Santander Prev.',ab:'SN',t:'pgbl',r:1.35,r12:11.9,r5:62.7,min:150,port:true,stars:3,rec:false,pat:'R$ 95 bi',rating:'AA+',cotistas:'1,2 mi',fundos:22,hist5:[11.6,8.2,13.5,11.4,11.9]},
+  {n:'Porto Seguro Vida',ab:'PS',t:'ambos',r:1.10,r12:12.7,r5:67.4,min:100,port:true,stars:4,rec:false,pat:'R$ 38 bi',rating:'AA',cotistas:'680 mil',fundos:20,hist5:[12.4,8.9,14.0,12.2,12.7]},
+  {n:'Mongeral Aegon',ab:'MA',t:'vgbl',r:0.90,r12:13.2,r5:70.9,min:300,port:true,stars:4,rec:false,pat:'R$ 22 bi',rating:'AA-',cotistas:'420 mil',fundos:15,hist5:[13.0,9.4,14.8,12.8,13.2]},
+  {n:'MetLife Brasil',ab:'ML',t:'pgbl',r:1.15,r12:12.1,r5:64.5,min:200,port:true,stars:3,rec:false,pat:'R$ 28 bi',rating:'AA',cotistas:'510 mil',fundos:18,hist5:[11.8,8.5,13.6,11.6,12.1]},
+  {n:'SulAmérica Prev.',ab:'SA',t:'ambos',r:1.00,r12:13.0,r5:69.8,min:100,port:true,stars:4,rec:false,pat:'R$ 55 bi',rating:'AA',cotistas:'890 mil',fundos:25,hist5:[12.8,9.2,14.5,12.5,13.0]},
+  {n:'Zurich Seguros',ab:'ZU',t:'vgbl',r:0.85,r12:13.7,r5:73.2,min:500,port:true,stars:4,rec:true,pat:'R$ 18 bi',rating:'AA-',cotistas:'290 mil',fundos:12,hist5:[13.4,9.7,15.2,13.2,13.7]},
+  {n:'BTG Pactual Prev.',ab:'BT',t:'ambos',r:0.55,r12:15.2,r5:84.1,min:5000,port:true,stars:5,rec:true,pat:'R$ 32 bi',rating:'AA',cotistas:'380 mil',fundos:38,hist5:[14.9,11.2,17.0,14.5,15.2]},
+  {n:'Azul Seguros',ab:'AZ',t:'pgbl',r:1.40,r12:11.4,r5:60.1,min:100,port:false,stars:3,rec:false,pat:'R$ 8 bi',rating:'A+',cotistas:'180 mil',fundos:8,hist5:[11.2,7.9,12.8,10.9,11.4]},
+  {n:'Mapfre Vida',ab:'MP',t:'vgbl',r:1.25,r12:12.0,r5:63.9,min:200,port:true,stars:3,rec:false,pat:'R$ 15 bi',rating:'AA-',cotistas:'320 mil',fundos:14,hist5:[11.7,8.4,13.4,11.5,12.0]},
+  {n:'Icatu Seguros',ab:'IC',t:'ambos',r:0.75,r12:13.9,r5:75.8,min:100,port:true,stars:5,rec:true,pat:'R$ 42 bi',rating:'AA',cotistas:'720 mil',fundos:30,hist5:[13.6,10.0,15.5,13.4,13.9]},
+  {n:'Allianz Previdência',ab:'AL',t:'pgbl',r:1.05,r12:12.5,r5:66.3,min:250,port:true,stars:4,rec:false,pat:'R$ 24 bi',rating:'AA',cotistas:'410 mil',fundos:16,hist5:[12.2,8.8,14.0,12.0,12.5]},
+  {n:'Generali Prev.',ab:'GE',t:'vgbl',r:1.20,r12:11.7,r5:61.5,min:150,port:false,stars:3,rec:false,pat:'R$ 10 bi',rating:'A+',cotistas:'220 mil',fundos:10,hist5:[11.4,8.1,13.0,11.2,11.7]},
+  {n:'Chubb Vida',ab:'CB',t:'ambos',r:1.30,r12:12.3,r5:65.1,min:300,port:true,stars:3,rec:false,pat:'R$ 14 bi',rating:'AA-',cotistas:'260 mil',fundos:12,hist5:[12.0,8.6,13.8,11.8,12.3]},
+  {n:'Liberty Seguros',ab:'LB',t:'vgbl',r:1.45,r12:11.0,r5:57.6,min:100,port:false,stars:2,rec:false,pat:'R$ 6 bi',rating:'A',cotistas:'150 mil',fundos:7,hist5:[10.8,7.5,12.2,10.5,11.0]},
+];
+
+let dados=[...instNames];let pagina=0;const POR_PAG=10;
+let sortCol='';let sortDir=1;let compareList=[];
+
+const fmtR=n=>'R$ '+n.toLocaleString('pt-BR');
+const renderStars=n=>{let s='<div class="star-row">';for(let i=1;i<=5;i++)s+=`<span class="star${i>n?' empty':''}">★</span>`;return s+'</div>'};
+function badgeTipo(t){const m={pgbl:'badge-pgbl',vgbl:'badge-vgbl',ambos:'badge-ambos'};const l={pgbl:'PGBL',vgbl:'VGBL',ambos:'PGBL+VGBL'};return`<span class="badge-tipo ${m[t]}">${l[t]}</span>`}
+
+// ── HERO INST CARDS ──
+const heroInstData=[
+  {ab:'BT',nome:'BTG Pactual',desc:'0,55% a.a. · +15,2% em 12m',cor:'linear-gradient(135deg,#1e1b4b,#4338ca)',badge:'Menor taxa'},
+  {ab:'XP',nome:'XP Investimentos',desc:'0,50% a.a. · +14,8% em 12m',cor:'linear-gradient(135deg,#111,#222)',badge:'Melhor retorno'},
+  {ab:'IC',nome:'Icatu Seguros',desc:'0,75% a.a. · +13,9% em 12m',cor:'linear-gradient(135deg,#064e3b,#059669)',badge:'★★★★★'},
+];
+document.getElementById('heroInstCol').innerHTML=heroInstData.map(c=>`
+  <div class="hero-inst-card" style="background:${c.cor}" onclick="document.getElementById('comparativo').scrollIntoView({behavior:'smooth'})">
+    <div class="hic-logo" style="background:rgba(255,255,255,0.15)">${c.ab}</div>
+    <div class="hic-info"><div class="hic-nome">${c.nome}</div><div class="hic-desc">${c.desc}</div></div>
+    <span class="hic-badge">${c.badge}</span>
+  </div>`).join('');
+
+// ── TABELA ──
+function renderTabela(){
+  const tbody=document.getElementById('tbody');tbody.innerHTML='';
+  const slice=dados.slice(pagina*POR_PAG,pagina*POR_PAG+POR_PAG);
+  slice.forEach(d=>{
+    const idx=instNames.indexOf(d);const bg=instColors[idx];
+    const inComp=compareList.includes(idx);
+    const rCls=d.r<0.8?'green':d.r>1.3?'red':'amber';
+    const r12Cls=d.r12>13?'green':d.r12<11.5?'red':'';
+    const r5Cls=d.r5>75?'green':d.r5<62?'red':'';
+    tbody.innerHTML+=`<tr>
+      <td><div style="display:flex;align-items:center">
+        <span class="inst-logo" style="background:${bg}">${d.ab}</span>
+        <div><div class="inst-name">${d.n}</div><div class="inst-sub">${d.cotistas} cotistas</div>
+        <button class="${inComp?'add-compare-btn active':'add-compare-btn'}" onclick="toggleCompare(${idx})" id="cmpBtn${idx}">${inComp?'✓ Selecionado':'+ Comparar'}</button></div>
+      </div></td>
+      <td>${badgeTipo(d.t)}</td>
+      <td><span class="cell-val ${rCls}">${d.r.toFixed(2)}% a.a.</span></td>
+      <td><span class="cell-val green">Isento</span></td>
+      <td><span class="cell-val ${r12Cls}">${d.r12.toFixed(1)}%</span></td>
+      <td><span class="cell-val ${r5Cls}">${d.r5.toFixed(1)}%</span></td>
+      <td><span class="cell-val">${fmtR(d.min)}</span></td>
+      <td>${d.port?'<span style="color:var(--green-dark);font-weight:700">✓ Sim</span>':'<span style="color:var(--red);font-weight:700">✗ Não</span>'}</td>
+      <td>${renderStars(d.stars)}</td>
+      <td>${d.rec?'<span class="rec-badge">✓ Indicado</span>':'<span style="color:var(--g300);font-size:0.8rem">—</span>'}</td>
+    </tr>`;
+  });
+  const total=dados.length;const ini=pagina*POR_PAG+1;const fim=Math.min(ini+POR_PAG-1,total);
+  document.getElementById('pagInfo').textContent=`Mostrando ${ini}–${fim} de ${total} instituições`;
+  renderMobileCards(slice);renderPag();
+}
+
+function renderMobileCards(slice){
+  const mc=document.getElementById('mobileCards');mc.innerHTML='';
+  slice.forEach(d=>{
+    const idx=instNames.indexOf(d);const bg=instColors[idx];
+    mc.innerHTML+=`<div class="mob-card">
+      <div class="mob-card-top">
+        <div class="mob-logo" style="background:${bg}">${d.ab}</div>
+        <div><div style="font-size:0.92rem;font-weight:700;color:var(--navy)">${d.n}</div>
+        <div style="font-size:0.72rem;color:var(--g300)">${badgeTipo(d.t)}</div></div>
+      </div>
+      <div class="mob-stats">
+        <div class="mob-stat"><div class="mob-stat-val ${d.r<0.8?'':'red'}">${d.r.toFixed(2)}%</div><div class="mob-stat-label">Taxa adm.</div></div>
+        <div class="mob-stat"><div class="mob-stat-val">${d.r12.toFixed(1)}%</div><div class="mob-stat-label">Rent. 12m</div></div>
+        <div class="mob-stat"><div class="mob-stat-val">${fmtR(d.min)}</div><div class="mob-stat-label">Aporte mín.</div></div>
+      </div>
+    </div>`;
+  });
+}
+
+function renderPag(){
+  const total=Math.ceil(dados.length/POR_PAG);const pb=document.getElementById('pagBtns');pb.innerHTML='';
+  if(pagina>0){const b=document.createElement('button');b.className='pag-btn';b.textContent='← Anterior';b.onclick=()=>{pagina--;renderTabela()};pb.appendChild(b);}
+  for(let i=0;i<total;i++){const b=document.createElement('button');b.className='pag-btn'+(i===pagina?' active':'');b.textContent=i+1;b.onclick=(()=>{const p=i;return()=>{pagina=p;renderTabela();}})();pb.appendChild(b);}
+  if(pagina<total-1){const b=document.createElement('button');b.className='pag-btn';b.textContent='Próxima →';b.onclick=()=>{pagina++;renderTabela()};pb.appendChild(b);}
+}
+
+function filtrar(el,tipo){
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');
+  if(tipo==='todos')dados=[...instNames];
+  else if(tipo==='pgbl')dados=instNames.filter(d=>d.t==='pgbl'||d.t==='ambos');
+  else if(tipo==='vgbl')dados=instNames.filter(d=>d.t==='vgbl'||d.t==='ambos');
+  else if(tipo==='ambos')dados=instNames.filter(d=>d.t==='ambos');
+  else if(tipo==='baixaTaxa')dados=instNames.filter(d=>d.r<0.8);
+  pagina=0;renderTabela();
+}
+function buscar(q){dados=instNames.filter(d=>d.n.toLowerCase().includes(q.toLowerCase()));pagina=0;renderTabela();}
+function sortBy(v){
+  if(!v){dados=[...instNames];renderTabela();return;}
+  const[col,dir]=v.split('_');const mult=dir==='asc'?1:-1;
+  dados=[...dados].sort((a,b)=>mult*(a[col]-b[col]));pagina=0;renderTabela();
+}
+function sortByCol(col){
+  if(sortCol===col)sortDir*=-1;else{sortCol=col;sortDir=1;}
+  dados=[...dados].sort((a,b)=>{const va=a[col],vb=b[col];return sortDir*(typeof va==='string'?va.localeCompare(vb):va-vb);});
+  pagina=0;renderTabela();
+}
+
+// ── COMPARE ──
+function toggleCompare(idx){
+  const pos=compareList.indexOf(idx);
+  if(pos>-1)compareList.splice(pos,1);
+  else{if(compareList.length>=3){alert('Selecione no máximo 3.');return;}compareList.push(idx);}
+  renderCompareBar();renderTabela();
+}
+function renderCompareBar(){
+  const chips=document.getElementById('compareChips');chips.innerHTML='';
+  const ph=document.getElementById('comparePlaceholder');
+  if(compareList.length===0){ph.style.display='';chips.appendChild(ph);}
+  else{ph.style.display='none';compareList.forEach(idx=>{const d=instNames[idx];const chip=document.createElement('div');chip.className='compare-chip';chip.innerHTML=`${d.n} <span class="compare-chip-rm" onclick="toggleCompare(${idx})">✕</span>`;chips.appendChild(chip);});}
+  document.getElementById('compareGoBtn').disabled=compareList.length<2;
+}
+function openCompareModal(){
+  if(compareList.length<2)return;
+  const body=document.getElementById('compareModalBody');
+  const ops=compareList.map(i=>instNames[i]);
+  const minR=Math.min(...ops.map(o=>o.r));const maxR12=Math.max(...ops.map(o=>o.r12));const maxR5=Math.max(...ops.map(o=>o.r5));
+  let html=`<div class="comp-grid" style="grid-template-columns:repeat(${ops.length},1fr)">`;
+  ops.forEach((d,i)=>{
+    const idx=compareList[i];const bg=instColors[idx];
+    const isBest=d.r===minR||d.r12===maxR12;
+    html+=`<div class="comp-col${isBest?' best':''}">
+      <div class="comp-col-header"><span class="inst-logo" style="background:${bg};width:38px;height:38px;flex-shrink:0">${d.ab}</span>
+      <div><h3>${d.n}</h3>${isBest?'<span class="comp-best-badge">⭐ Destaque</span>':''}</div></div>
+      <div class="comp-row"><span class="comp-row-label">Tipo</span><span class="comp-row-val">${badgeTipo(d.t)}</span></div>
+      <div class="comp-row"><span class="comp-row-label">Taxa Admin.</span><span class="comp-row-val ${d.r===minR?'win':d.r>1.2?'lose':''}">${d.r.toFixed(2)}% a.a.</span></div>
+      <div class="comp-row"><span class="comp-row-label">Rentab. 12m</span><span class="comp-row-val ${d.r12===maxR12?'win':''}">${d.r12.toFixed(1)}%</span></div>
+      <div class="comp-row"><span class="comp-row-label">Rentab. 5 anos</span><span class="comp-row-val ${d.r5===maxR5?'win':''}">${d.r5.toFixed(1)}%</span></div>
+      <div class="comp-row"><span class="comp-row-label">Aporte mín.</span><span class="comp-row-val">${fmtR(d.min)}</span></div>
+      <div class="comp-row"><span class="comp-row-label">Portabilidade</span><span class="comp-row-val ${d.port?'win':'lose'}">${d.port?'✓ Sim':'✗ Não'}</span></div>
+      <div class="comp-row"><span class="comp-row-label">Patrimônio</span><span class="comp-row-val">${d.pat}</span></div>
+      <div class="comp-row"><span class="comp-row-label">Rating</span><span class="comp-row-val">${d.rating}</span></div>
+      <div class="comp-row"><span class="comp-row-label">Nº de fundos</span><span class="comp-row-val">${d.fundos} fundos</span></div>
+      <div class="comp-row"><span class="comp-row-label">Avaliação</span><span class="comp-row-val">${'★'.repeat(d.stars)}${'☆'.repeat(5-d.stars)}</span></div>
+    </div>`;
+  });
+  html+='</div>';
+  const maxRent=Math.max(...ops.map(d=>d.r12));
+  html+=`<div style="margin-top:24px"><div style="font-size:0.8rem;font-weight:700;color:var(--g500);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">Rentabilidade acumulada em 12 meses</div>`;
+  ops.forEach((d,i)=>{const bg=instColors[compareList[i]];const pct=Math.round(d.r12/maxRent*100);html+=`<div class="bar-wrap"><div class="bar-label"><span class="bar-name">${d.n}</span><span class="bar-num">${d.r12.toFixed(1)}%</span></div><div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${bg}"></div></div></div>`;});
+  html+='</div>';
+  body.innerHTML=html;
+  document.getElementById('compareModal').classList.add('open');
+}
+
+// ── QUIZ ──
+const quizData=[
+  {q:'Você faz a declaração completa do Imposto de Renda?',hint:'Isso determina se você pode aproveitar o benefício fiscal do PGBL',opts:[{icon:'📋',l:'Sim, declaração completa'},{icon:'📄',l:'Não / Simplificada'},{icon:'🤔',l:'Não tenho certeza'},{icon:'⛔',l:'Não declaro IR'}]},
+  {q:'Qual é o seu horizonte de investimento?',hint:'Quanto mais longo, maior a vantagem do regime regressivo de IR',opts:[{icon:'⚡',l:'Menos de 5 anos'},{icon:'📅',l:'5 a 10 anos'},{icon:'🌱',l:'10 a 20 anos'},{icon:'🏆',l:'Mais de 20 anos'}]},
+  {q:'Qual aporte mensal você pretende fazer?',hint:'O PGBL é mais vantajoso para quem aporta valores maiores (até 12% da renda)',opts:[{icon:'🪙',l:'Até R$ 300/mês'},{icon:'💵',l:'R$ 300 a R$ 1.000/mês'},{icon:'💰',l:'R$ 1.000 a R$ 3.000/mês'},{icon:'🏦',l:'Acima de R$ 3.000/mês'}]},
+  {q:'Qual é sua maior prioridade?',hint:'Cada perfil tem estratégias diferentes de longo prazo',opts:[{icon:'🛡️',l:'Segurança — preservar capital'},{icon:'📈',l:'Crescimento — maior rentabilidade'},{icon:'💸',l:'Economia fiscal — reduzir IR'},{icon:'⚖️',l:'Equilíbrio entre tudo'}]},
+];
+let quizStep=0,quizAnswers=[],quizSelected=null;
+function renderQuiz(){
+  const content=document.getElementById('quizContent');const result=document.getElementById('quizResult');
+  const nav=document.getElementById('quizNav');const back=document.getElementById('quizBack');const next=document.getElementById('quizNext');
+  result.classList.remove('show');result.style.display='none';content.style.display='';nav.style.display='flex';
+  if(quizStep>=quizData.length){showQuizResult();return;}
+  const q=quizData[quizStep];quizSelected=null;next.disabled=true;
+  back.style.display=quizStep>0?'':'none';
+  next.textContent=quizStep===quizData.length-1?'Ver Resultado →':'Próxima →';
+  content.innerHTML=`<div class="quiz-q">${q.q}</div><div class="quiz-hint">${q.hint}</div>
+    <div class="quiz-opts">${q.opts.map((o,i)=>`<button class="quiz-opt" onclick="selectOpt(${i})"><span class="opt-icon">${o.icon}</span>${o.l}</button>`).join('')}</div>`;
+  for(let i=0;i<4;i++){const s=document.getElementById('qs'+i);if(s)s.className='quiz-step'+(i<quizStep?' done':i===quizStep?' active':'');}
+}
+function selectOpt(i){quizSelected=i;document.querySelectorAll('.quiz-opt').forEach((b,j)=>b.classList.toggle('selected',j===i));document.getElementById('quizNext').disabled=false;}
+function quizNext(){if(quizSelected===null)return;quizAnswers[quizStep]=quizSelected;quizStep++;renderQuiz();}
+function quizPrev(){quizStep--;renderQuiz();}
+function showQuizResult(){
+  const content=document.getElementById('quizContent');const result=document.getElementById('quizResult');const nav=document.getElementById('quizNav');
+  content.style.display='none';nav.style.display='none';
+  const irCompleto=quizAnswers[0]===0;const longoPrazo=quizAnswers[1]>=2;const altoAporte=quizAnswers[2]>=2;const fiscal=quizAnswers[3]===2;
+  let tipo,icon,desc,recs,notRecs;
+  if(irCompleto&&(fiscal||altoAporte)){tipo='PGBL';icon='💼';desc='Seu perfil indica que o PGBL é a melhor escolha. Como você faz a declaração completa, pode deduzir até 12% da renda tributável no IR — uma vantagem fiscal que pode representar até R$ 4.800/ano de economia.';recs=['PGBL','Regime Regressivo (longo prazo)','Deduções no IR Completo'];notRecs=['VGBL (perde o benefício fiscal)'];}
+  else{tipo='VGBL';icon='📊';desc='Seu perfil indica que o VGBL é mais adequado. O IR incide apenas sobre os rendimentos no resgate, não sobre o capital. Ideal para quem não usa deduções no IR ou declara pela simplificada.';recs=['VGBL','Regime Progressivo (curto prazo)','Portabilidade sem carência'];notRecs=['PGBL (sem vantagem fiscal para você)'];}
+  const recInsts=instNames.filter(d=>d.rec&&(d.t==='ambos'||d.t===tipo.toLowerCase())).slice(0,3).map(d=>d.n).join(', ');
+  result.innerHTML=`<div class="result-icon">${icon}</div><div class="result-title">Seu perfil: ${tipo}</div>
+    <div class="result-desc">${desc}<br><br><strong style="color:#fff">Instituições recomendadas:</strong><br><span style="color:rgba(255,255,255,0.65)">${recInsts}</span></div>
+    <div class="result-tags">${recs.map(r=>`<span class="result-tag">✓ ${r}</span>`).join('')}${notRecs.map(r=>`<span class="result-tag bad">✗ ${r}</span>`).join('')}</div>
+    <div style="display:flex;gap:12px;justify-content:center;margin-top:24px;flex-wrap:wrap">
+      <button class="quiz-btn pri" onclick="document.getElementById('comparativo').scrollIntoView({behavior:'smooth'})">Ver comparativo →</button>
+      <button class="quiz-btn sec" onclick="refazerQuiz()">Refazer quiz</button>
+    </div>`;
+  result.style.display='block';result.classList.add('show');
+  for(let i=0;i<4;i++){const s=document.getElementById('qs'+i);if(s)s.className='quiz-step done';}
+}
+function refazerQuiz(){quizStep=0;quizAnswers=[];renderQuiz();}
+renderQuiz();
+
+// ── HISTÓRICO DE RENTABILIDADE ──
+const histCols={top:'#22c55e',mid:'#f59e0b',low:'#ef4444'};
+const CDI5=68.4;
+document.getElementById('histGrid').innerHTML=instNames.slice(0,8).map(d=>{
+  const cls=d.r5>75?'top':d.r5>65?'mid':'low';
+  const label=d.r5>75?'Acima do CDI':d.r5>65?'Na média':'Abaixo do CDI';
+  const maxBar=Math.max(...d.hist5);
+  return`<div class="hist-card ${cls}">
+    <div class="hist-head"><span class="hist-name">${d.n}</span><span class="hist-badge ${cls}">${label}</span></div>
+    <div class="hist-chart">${d.hist5.map(v=>`<div class="hist-bar" style="height:${Math.round(v/maxBar*100)}%;background:${histCols[cls]}">${v.toFixed(0)}%</div>`).join('')}</div>
+    <div class="hist-anos"><span class="hist-ano">2020</span><span class="hist-ano">2021</span><span class="hist-ano">2022</span><span class="hist-ano">2023</span><span class="hist-ano">2024</span></div>
+    <div class="hist-media-row"><span style="color:var(--g500);font-size:0.8rem">Acumulado 5 anos</span><span class="hist-badge ${cls}" style="font-size:0.8rem">${d.r5.toFixed(1)}%</span></div>
+    <div class="hist-cdi-ref">CDI no período: ${CDI5}%</div>
+  </div>`;
+}).join('');
+
+// ── RAIO-X ──
+const raioxOps=instNames.slice(0,6);let raioxAtivo=0;
+const raioxIndicadores=[
+  {nome:'Solidez financeira',cor:'#22c55e',vals:[98,96,88,85,92,90]},
+  {nome:'Variedade de fundos',cor:'#1d4ed8',vals:[62,100,28,20,70,85]},
+  {nome:'Atendimento digital',cor:'#7c3aed',vals:[75,95,65,70,100,92]},
+  {nome:'Transparência de taxas',cor:'#0891b2',vals:[80,90,70,68,95,88]},
+  {nome:'Rentabilidade histórica',cor:'#f59e0b',vals:[78,88,70,65,85,92]},
+];
+function renderRaiox(){
+  const sel=document.getElementById('raioxSel');
+  sel.innerHTML='<div style="font-size:0.82rem;font-weight:700;color:var(--g500);margin-bottom:12px;text-transform:uppercase;letter-spacing:0.5px">Selecione a instituição</div>'+
+    raioxOps.map((d,i)=>`<div class="raiox-op${i===raioxAtivo?' active':''}" onclick="selecionarRaiox(${i})">
+      <div class="raiox-op-logo" style="background:${instColors[instNames.indexOf(d)]}">${d.ab}</div>
+      <div><div class="raiox-op-name">${d.n}</div><div class="raiox-op-tipo">${d.t==='ambos'?'PGBL + VGBL':d.t.toUpperCase()}</div></div>
+    </div>`).join('');
+  const d=raioxOps[raioxAtivo];
+  document.getElementById('raioxDetail').innerHTML=`
+    <div style="font-size:0.92rem;font-weight:700;color:var(--navy);margin-bottom:18px">${d.n} — Ficha completa</div>
+    <div class="raiox-stats-grid">
+      <div class="raiox-stat"><div class="raiox-stat-val">${d.pat}</div><div class="raiox-stat-label">Patrimônio gerido</div></div>
+      <div class="raiox-stat"><div class="raiox-stat-val">${d.rating}</div><div class="raiox-stat-label">Rating de solidez</div></div>
+      <div class="raiox-stat"><div class="raiox-stat-val">${d.cotistas}</div><div class="raiox-stat-label">Cotistas ativos</div></div>
+      <div class="raiox-stat"><div class="raiox-stat-val">${d.fundos}</div><div class="raiox-stat-label">Fundos disponíveis</div></div>
+    </div>
+    <div class="raiox-esp-title">Avaliação por dimensão</div>
+    ${raioxIndicadores.map((ind,i)=>`<div class="raiox-esp-row">
+      <span class="raiox-esp-name">${ind.nome}</span>
+      <div class="raiox-esp-bar"><div class="raiox-esp-fill" style="width:${ind.vals[raioxAtivo]}%;background:${ind.cor}"></div></div>
+      <span class="raiox-esp-val">${ind.vals[raioxAtivo]}/100</span>
+    </div>`).join('')}`;
+}
+function selecionarRaiox(i){raioxAtivo=i;renderRaiox();}
+renderRaiox();
+
+// ── SIMULADOR ──
+function calcSim(){
+  const idade=+document.getElementById('simIdade').value;
+  const aposentar=+document.getElementById('simAposenta').value;
+  const aporte=+document.getElementById('simAporte').value;
+  const taxa=+document.getElementById('simInst').value;
+  document.getElementById('idadeVal').textContent=`${idade} anos`;
+  document.getElementById('aposentaVal').textContent=`${aposentar} anos`;
+  document.getElementById('aporteVal').textContent='R$ '+aporte.toLocaleString('pt-BR');
+  const anos=Math.max(0,aposentar-idade);const meses=anos*12;
+  const rentBruta=0.12;const rentLiq=rentBruta-(taxa/100);
+  const mensal=Math.pow(1+rentLiq,1/12)-1;
+  const vf=meses>0?aporte*(Math.pow(1+mensal,meses)-1)/mensal:0;
+  const totalAportado=aporte*meses;const juros=Math.max(0,vf-totalAportado);
+  const rendaMensal=vf*0.04/12;
+  const pctAporte=vf>0?Math.round((totalAportado/vf)*100):50;const pctJuros=100-pctAporte;
+  document.getElementById('simTotal').textContent='R$ '+Math.round(vf).toLocaleString('pt-BR');
+  document.getElementById('simAnos').textContent=`${anos} anos`;
+  document.getElementById('simRenda').textContent='R$ '+Math.round(rendaMensal).toLocaleString('pt-BR')+'/mês';
+  document.getElementById('simAportado').textContent='R$ '+Math.round(totalAportado).toLocaleString('pt-BR');
+  document.getElementById('simJuros').textContent='R$ '+Math.round(juros).toLocaleString('pt-BR');
+  document.getElementById('simPctAporte').textContent=`${pctAporte}%`;document.getElementById('simPctJuros').textContent=`${pctJuros}%`;
+  document.getElementById('simBarAporte').style.width=`${pctAporte}%`;document.getElementById('simBarJuros').style.width=`${pctJuros}%`;
+  const diff=vf-aporte*meses*Math.pow(1+0.12-0.0125,meses/12);
+  document.getElementById('simExtraInfo').textContent=`💡 Com ${anos} anos de aportes de R$ ${aporte.toLocaleString('pt-BR')}/mês, você acumula R$ ${Math.round(vf).toLocaleString('pt-BR')}. Os juros compostos representam ${pctJuros}% do total — essa é a mágica da previdência de longo prazo.`;
+}
+calcSim();
+
+// ── CENÁRIOS ──
+const cenarios=[
+  {label:'💸 Resgate antecipado (3 anos)',nome:'resgate'},
+  {label:'📉 Queda da Selic para 10%',nome:'selic'},
+  {label:'🔄 Portabilidade entre bancos',nome:'portabilidade'},
+  {label:'😰 Perdi o emprego: e agora?',nome:'emprego'},
+  {label:'👴 Aposentei: melhor forma de resgatar?',nome:'aposentadoria'},
+];
+const cenarioResultados={
+  resgate:[
+    {op:'XP Investimentos',bg:'#111',ab:'XP',status:'warn',desc:'Resgate antecipado em 3 anos no regime regressivo incide IR de 30%. Em 2 anos: 35%. O resgate antes de 6 anos sempre tem alíquota acima de 15%. Porém sem taxa de carregamento na saída.',resultado:'IR de 30% sobre rendimentos — planeje com antecedência'},
+    {op:'Bradesco Seguros',bg:'#dc2626',ab:'BD',status:'warn',desc:'Regime regressivo com 3 anos: IR de 30% sobre rendimentos. Taxa de carregamento na saída de até 2% sobre o valor resgatado. Combine: impacto total pode reduzir retorno em até 32%.',resultado:'IR 30% + possível taxa de saída de 2%'},
+    {op:'Nubank Vida',bg:'#7c3aed',ab:'NU',status:'ok',desc:'Sem taxa de carregamento na entrada ou saída. IR de 30% sobre rendimentos para resgate em 3 anos no regime regressivo. Recomenda-se aguardar 4 anos para alíquota de 25%.',resultado:'IR 30% — sem taxa de carregamento'},
+  ],
+  selic:[
+    {op:'XP Investimentos',bg:'#111',ab:'XP',status:'ok',desc:'Com 65 fundos disponíveis, a XP permite diversificar para renda variável, multimercado e inflação (IPCA+) — ideais quando a Selic cai. A migração entre fundos é gratuita e sem IR no momento da troca.',resultado:'Diversificação simples — sem custo de migração'},
+    {op:'Banco do Brasil',bg:'#16a34a',ab:'BB',status:'danger',desc:'Com apenas 18 fundos disponíveis, principalmente DI e renda fixa, a opção de diversificação é muito limitada. Queda da Selic impacta diretamente a rentabilidade sem alternativa de realocação.',resultado:'Alta concentração em DI — risco elevado com queda de Selic'},
+    {op:'Icatu Seguros',bg:'#0f766e',ab:'IC',status:'ok',desc:'30 fundos disponíveis com exposição a ações, multimercado e crédito privado. Gestão ativa que historicamente supera o CDI mesmo em cenários de queda de juros.',resultado:'Boa diversificação — histórico acima do CDI'},
+  ],
+  portabilidade:[
+    {op:'XP Investimentos',bg:'#111',ab:'XP',status:'ok',desc:'Portabilidade recebida sem carência e sem taxa de carregamento. Bônus de 5% sobre o valor portado disponível até 31/mai/2026. Processo 100% digital em até 5 dias úteis.',resultado:'Sem custo + bônus de 5% até 31/mai'},
+    {op:'Caixa Econômica',bg:'#16a34a',ab:'CE',status:'danger',desc:'Não aceita portabilidade de entrada. Portabilidade de saída permitida apenas após 60 dias de permanência. Processo burocrático com formulário presencial em algumas agências.',resultado:'Não aceita portabilidade — risco de ficar preso'},
+    {op:'Itaú Previdência',bg:'#dc2626',ab:'IT',status:'ok',desc:'Portabilidade aceita sem carências específicas. Processo digital em 7 dias úteis. Sem taxa de carregamento na portabilidade. Não há bônus, mas a qualidade da gestão justifica.',resultado:'Processo digital — 7 dias úteis sem custo'},
+  ],
+  emprego:[
+    {op:'XP Investimentos',bg:'#111',ab:'XP',status:'ok',desc:'Com aporte mínimo de R$ 1.000, pode suspender contribuições sem penalidade. O plano continua ativo e investido. Recomenda-se manter — o benefício de longo prazo é maior do que o custo de resgatar agora.',resultado:'Pode suspender aportes — plano continua ativo'},
+    {op:'Nubank Vida',bg:'#7c3aed',ab:'NU',status:'ok',desc:'Aporte mínimo de apenas R$ 1 — pode reduzir ao máximo sem encerrar o plano. Sem taxa de carregamento. Se precisar resgatar: sem multa além do IR regressivo.',resultado:'Máxima flexibilidade — aporte mínimo de R$ 1'},
+    {op:'Bradesco Seguros',bg:'#dc2626',ab:'BD',status:'warn',desc:'Pode suspender aportes, mas há taxa de carregamento de saída caso precise resgatar nos primeiros 5 anos. Avalie se o capital não está mais urgente do que o plano tributário.',resultado:'Atenção: taxa de saída nos primeiros 5 anos'},
+  ],
+  aposentadoria:[
+    {op:'Regime Regressivo',bg:'#1d4ed8',ab:'RR',status:'ok',desc:'Se você aportou por 10+ anos, a alíquota é de apenas 10% — a mais baixa do sistema. Ideal para quem quer fazer resgates grandes de uma vez. Quanto mais tempo, menor o IR.',resultado:'10% de IR com 10+ anos — a menor alíquota'},
+    {op:'Regime Progressivo',bg:'#0891b2',ab:'RP',status:'warn',desc:'IR calculado pela tabela progressiva (até 27,5%). Pode ser vantajoso para quem tem renda baixa na aposentadoria (abaixo de R$ 3.174/mês — isento). Analise com seu contador.',resultado:'Pode ser isento se renda baixa na aposentadoria'},
+    {op:'Renda Vitalícia',bg:'#7c3aed',ab:'RV',status:'ok',desc:'Transformar o patrimônio em renda vitalícia garante proteção para quem viver muito. Porém, o capital fica retido na seguradora. Para longevidade alta (80+), pode ser mais vantajoso.',resultado:'Segurança para longevidade — mas capital fica retido'},
+  ],
+};
+let cenarioAtivo='resgate';
+function renderCenario(){
+  document.getElementById('cenarioToggle').innerHTML=cenarios.map(c=>`<button class="cenario-btn${c.nome===cenarioAtivo?' active':''}" onclick="setCenario('${c.nome}')">${c.label}</button>`).join('');
+  const res=cenarioResultados[cenarioAtivo]||[];
+  document.getElementById('cenarioResults').innerHTML=res.map(r=>`<div class="cenario-card ${r.status}">
+    <div class="cenario-card-head"><div class="cenario-card-logo" style="background:${r.bg}">${r.ab}</div><span class="cenario-card-name">${r.op}</span></div>
+    <div class="cenario-status ${r.status}">${{ok:'✅ Favorável',warn:'⚠️ Com ressalvas',danger:'🚨 Desvantagem'}[r.status]}</div>
+    <div class="cenario-desc">${r.desc}</div>
+    <div class="cenario-resultado ${r.status}">${r.resultado}</div>
+  </div>`).join('');
+}
+function setCenario(nome){cenarioAtivo=nome;renderCenario();}
+renderCenario();
+
+// ── COBERTURAS ──
+const cobObrig=[
+  {nome:'Portabilidade sem carência',sub:'Direito garantido pela SUSEP após 60 dias'},
+  {nome:'Resgate total ou parcial',sub:'Regulamentado — pode ter carência contratual'},
+  {nome:'Transparência de taxas',sub:'Taxa de admin. e carregamento obrigatoriamente divulgadas'},
+  {nome:'Regime tributário à escolha',sub:'Lei 14.803/2024 — progressivo ou regressivo'},
+  {nome:'Fundo garantidor (FGCoop)',sub:'Cobertura limitada para alguns planos'},
+  {nome:'Benefício por morte ou invalidez',sub:'Cobertura básica obrigatória nos planos com seguro'},
+];
+const cobDif=[
+  {nome:'Gestão ativa multimercado',n:14,cor:'#1d4ed8'},
+  {nome:'Fundo de ações dedicado',n:11,cor:'#7c3aed'},
+  {nome:'Portabilidade sem custo',n:16,cor:'#22c55e'},
+  {nome:'Migração digital entre fundos',n:12,cor:'#0891b2'},
+  {nome:'Bônus de portabilidade',n:6,cor:'#f59e0b'},
+  {nome:'Planejamento successório',n:8,cor:'#dc2626'},
+  {nome:'Assessoria de investimentos',n:9,cor:'#0f766e'},
+  {nome:'App com relatórios detalhados',n:15,cor:'#4338ca'},
+];
+document.getElementById('cobObrigList').innerHTML=cobObrig.map(c=>`<div class="cob-obrig-item"><div class="cob-check">✓</div><div><div class="cob-item-name">${c.nome}</div><div class="cob-item-sub">${c.sub}</div></div></div>`).join('');
+document.getElementById('cobDifList').innerHTML=cobDif.map((c,i)=>`<div class="cob-dif-row"><span class="cob-dif-rank">${i+1}</span><span class="cob-dif-name">${c.nome}</span><div class="cob-dif-bar"><div class="cob-dif-fill" style="width:${Math.round(c.n/20*100)}%;background:${c.cor}"></div></div><span class="cob-dif-num">${c.n}/20</span></div>`).join('');
+
+// ── INNER NAV ──
+function goTo(id,btn){
+  document.getElementById(id).scrollIntoView({behavior:'smooth'});
+  document.querySelectorAll('.inl').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+}
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement.scrollHeight-window.innerHeight;
+  const pct=Math.max(3,Math.round(window.scrollY/h*100));
+  document.getElementById('progressFill').style.width=pct+'%';
+  document.getElementById('progressLabel').textContent=pct+'%';
+  const sections=[['secNoticias',0],['secAlertas',1],['quizSection',2],['comparativo',3],['secHist',4],['secRaiox',5],['secSim',6],['secCenario',7],['secPrevAvancado',8],['secCob',9],['secPlanos',10]];
+  const links=document.querySelectorAll('.inl');
+  sections.forEach(([id,i])=>{const el=document.getElementById(id);if(!el)return;const r=el.getBoundingClientRect();if(r.top<=110&&r.bottom>110){links.forEach(l=>l.classList.remove('active'));if(links[i])links[i].classList.add('active');}});
+});
+
+// ── MODALS ──
+function closeModal(id){document.getElementById(id).classList.remove('open')}
+function openSignupModal(plan){document.getElementById('signupSubtitle').textContent=`Plano ${plan} — Compare previdências gratuitamente.`;document.getElementById('signupForm').style.display='';document.getElementById('signupSuccess').classList.remove('show');document.getElementById('signupModal').classList.add('open');}
+function submitSignup(){document.getElementById('signupForm').style.display='none';document.getElementById('signupSuccess').classList.add('show');}
+document.getElementById('compareModal').addEventListener('click',function(e){if(e.target===this)closeModal('compareModal')});
+document.getElementById('signupModal').addEventListener('click',function(e){if(e.target===this)closeModal('signupModal')});
+
+// ── FAQ ──
+const faqs=[
+  {q:'Qual a diferença entre PGBL e VGBL?',a:'PGBL: deduz aportes no IR completo (até 12% da renda bruta) — ideal para quem tem IR a pagar. VGBL: IR incide só sobre os rendimentos no resgate — ideal para quem usa IR simplificado ou é isento. A Lei 14.803/2024 permite escolher o regime na hora do resgate.'},
+  {q:'O que é o regime regressivo e o progressivo?',a:'Regressivo: alíquota de IR diminui com o tempo — 35% em até 2 anos, até 10% após 10 anos. Ótimo para quem pensa no longo prazo. Progressivo: tabela padrão do IR (até 27,5%), mas pode ser isento para quem terá renda baixa na aposentadoria.'},
+  {q:'Como funciona a portabilidade de previdência?',a:'A portabilidade permite migrar de uma instituição para outra sem pagar IR e sem cumprir nova carência — desde que seja do mesmo tipo (PGBL→PGBL ou VGBL→VGBL). É um direito garantido pela SUSEP. O processo leva de 5 a 10 dias úteis e é 100% digital nas principais gestoras.'},
+  {q:'Vale a pena fazer previdência privada com Selic alta?',a:'Sim. Fundos de previdência DI acompanham a Selic automaticamente. Com Selic em 12,75%, fundos DI de qualidade entregam 12%+ bruto ao ano. O benefício fiscal do PGBL (dedução de IR) adiciona mais 7,5%–27,5% de retorno extra sobre os aportes. O conjunto supera a maioria dos investimentos diretos.'},
+  {q:'Posso perder dinheiro na previdência privada?',a:'Em fundos de renda fixa e DI: o risco é muito baixo (variação do CDI). Em fundos de ações ou multimercado: o saldo pode oscilar negativamente no curto prazo. Para quem tem horizonte longo (10+ anos), fundos mais arrojados historicamente entregam retornos superiores.'},
+  {q:'O que é a taxa de carregamento?',a:'Taxa cobrada sobre cada aporte feito, que reduz diretamente o valor investido. Exemplo: taxa de 2% sobre aporte de R$ 1.000 = apenas R$ 980 investidos. As principais fintechs (XP, BTG, Nubank, Icatu) operam com carregamento zero. Bancos tradicionais podem cobrar até 3%.'},
+  {q:'Como funciona o Raio-X da Instituição na FinMatch?',a:'A feature de Raio-X mostra: patrimônio sob gestão, rating de solidez (AAA, AA, A), número de cotistas, quantidade de fundos disponíveis e avaliação por dimensão (solidez, variedade, digital, transparência, rentabilidade). Tudo em um painel visual para facilitar a comparação.'},
+  {q:'Garantia de 7 dias do FinMatch',a:'Todo plano pago tem 7 dias de garantia incondicional. Se você não ficar satisfeito por qualquer motivo, basta solicitar o reembolso e devolvemos 100% sem perguntas.'},
+];
+const faqList=document.getElementById('faqList');
+faqs.forEach(f=>{
+  const d=document.createElement('div');d.className='faq-item';
+  d.innerHTML=`<div class="faq-q">${f.q}<span class="faq-icon">+</span></div><div class="faq-a">${f.a}</div>`;
+  d.onclick=()=>{document.querySelectorAll('.faq-item').forEach(x=>{if(x!==d)x.classList.remove('open');});d.classList.toggle('open');};
+  faqList.appendChild(d);
+});
+
+// advanced previdencia calculators
+const fmtPrev=n=>'R$ '+Math.round(n).toLocaleString('pt-BR');
+function calcPrevFiscal(){
+  const renda=+document.getElementById('prevRendaAnual').value||0;
+  const aporte=+document.getElementById('prevAporteAnual').value||0;
+  const declaracao=document.getElementById('prevDeclaracao').value;
+  const aliq=+document.getElementById('prevAliquota').value||0;
+  const prazo=+document.getElementById('prevPrazo').value||0;
+  const limite=renda*0.12;
+  const dedutivel=Math.min(aporte,limite);
+  const economia=declaracao==='completa'?dedutivel*aliq:0;
+  const plano=declaracao==='completa'&&dedutivel>0?'PGBL tende a fazer mais sentido':'VGBL tende a fazer mais sentido';
+  const regime=prazo>=10?'Regressivo: foco em 10% no longo prazo':prazo>=6?'Regressivo pode ser competitivo, compare no resgate':'Progressivo pode ser mais flexivel no curto prazo';
+  document.getElementById('prevPlanoIndicado').textContent=plano;
+  document.getElementById('prevLimitePgbl').textContent=fmtPrev(limite);
+  document.getElementById('prevEconomiaIr').textContent=fmtPrev(economia);
+  document.getElementById('prevRegime').textContent=regime;
+}
+function calcPrevPortabilidade(){
+  const saldo=+document.getElementById('prevPortSaldo').value||0;
+  const atual=(+document.getElementById('prevTaxaAtual').value||0)/100;
+  const nova=(+document.getElementById('prevTaxaNova').value||0)/100;
+  const prazo=+document.getElementById('prevPortPrazo').value||0;
+  const rent=0.10;
+  const semTaxa=saldo*Math.pow(1+rent,prazo);
+  const atualFinal=saldo*Math.pow(1+Math.max(rent-atual,0),prazo);
+  const novoFinal=saldo*Math.pow(1+Math.max(rent-nova,0),prazo);
+  const custoAtual=semTaxa-atualFinal;
+  const custoNovo=semTaxa-novoFinal;
+  const economia=novoFinal-atualFinal;
+  document.getElementById('prevCustoAtual').textContent=fmtPrev(custoAtual);
+  document.getElementById('prevCustoNovo').textContent=fmtPrev(custoNovo);
+  document.getElementById('prevEconomiaPort').textContent=fmtPrev(economia);
+  updatePrevTaxBars(saldo,prazo);
+}
+function updatePrevTaxBars(saldo,prazo){
+  const rent=0.10;
+  const base=saldo*Math.pow(1+rent-0.005,prazo);
+  const mid=saldo*Math.pow(1+rent-0.015,prazo);
+  const high=saldo*Math.pow(1+rent-0.025,prazo);
+  const midPct=Math.max(8,Math.round(mid/base*100));
+  const highPct=Math.max(8,Math.round(high/base*100));
+  document.getElementById('prevBarLow').style.width='100%';
+  document.getElementById('prevBarMid').style.width=midPct+'%';
+  document.getElementById('prevBarHigh').style.width=highPct+'%';
+  document.getElementById('prevBarLowTxt').textContent=fmtPrev(base);
+  document.getElementById('prevBarMidTxt').textContent=fmtPrev(mid);
+  document.getElementById('prevBarHighTxt').textContent=fmtPrev(high);
+}
+function initPrevAdvanced(){
+  const cobBtn=document.querySelector(".inner-nav-links button[onclick*=\"secCob\"]");
+  if(cobBtn&&!document.querySelector(".inner-nav-links button[onclick*=\"secPrevAvancado\"]")){
+    cobBtn.insertAdjacentHTML('beforebegin',`<button class="inl" onclick="goTo('secPrevAvancado',this)">Estrategia</button>`);
+  }
+  calcPrevFiscal();
+  calcPrevPortabilidade();
+}
+
+renderTabela();renderCompareBar();
+initPrevAdvanced();
+</script>
+<script src="assets/js/global.js"></script>
+</body>
+</html>

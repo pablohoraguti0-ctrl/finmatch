@@ -1,0 +1,1419 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FinMatch – Seguros</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0A2540;--navy-mid:#0f3460;
+  --orange:#f97316;--orange-light:#fed7aa;--orange-dark:#c2410c;
+  --green:#22C55E;--green-dark:#16a34a;
+  --white:#fff;--off:#F0F4F8;--g100:#e8edf3;--g300:#94a3b8;--g500:#64748b;
+  --red:#dc2626;--amber:#f59e0b;--purple:#7c3aed;--blue:#1d4ed8;
+  --radius:16px;--radius-sm:8px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--off);color:var(--navy);overflow-x:hidden}
+h1,h2,h3,h4{font-family:'Syne',sans-serif}
+
+/* ── NAV ── */
+nav{position:sticky;top:0;z-index:300;display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:60px;background:rgba(10,37,64,0.97);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,0.07)}
+.nav-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.3rem;color:#fff}
+.nav-logo span{color:var(--orange)}
+.nav-bc{display:flex;align-items:center;gap:8px;font-size:0.82rem;color:rgba(255,255,255,0.5)}
+.nav-bc .sep{color:rgba(255,255,255,0.2)}
+.nav-bc .active{color:var(--orange-light);font-weight:600}
+.nav-back{color:rgba(255,255,255,0.65);font-size:0.85rem;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);padding:6px 14px;border-radius:20px;text-decoration:none;transition:all 0.2s}
+.nav-back:hover{color:#fff;background:rgba(255,255,255,0.14)}
+
+/* ── INNER NAV ── */
+.inner-nav{position:sticky;top:60px;z-index:199;background:rgba(255,255,255,0.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--g100);padding:0 32px;display:flex;align-items:center;justify-content:space-between;height:46px;overflow-x:auto}
+.inner-nav-links{display:flex;gap:2px;white-space:nowrap}
+.inl{padding:5px 12px;border-radius:20px;font-size:0.78rem;font-weight:600;color:var(--g500);cursor:pointer;border:none;background:none;transition:all 0.2s;white-space:nowrap}
+.inl:hover,.inl.active{color:var(--navy);background:var(--g100)}
+.ipbar{width:90px;height:3px;background:var(--g100);border-radius:3px;overflow:hidden;flex-shrink:0}
+.ipfill{height:100%;background:var(--orange);border-radius:3px;transition:width 0.3s}
+
+/* ── HERO ── */
+.hero{background:linear-gradient(135deg,#050e1f 0%,#0A2540 55%,#1a0c04 100%);padding:56px 40px 48px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 55% 70% at 25% 50%,rgba(249,115,22,0.1) 0%,transparent 70%);pointer-events:none}
+.hero-grid{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px);background-size:50px 50px}
+.hero-layout{display:grid;grid-template-columns:1fr 380px;gap:40px;align-items:center;position:relative}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(249,115,22,0.15);border:1px solid rgba(249,115,22,0.3);color:var(--orange-light);border-radius:30px;padding:5px 14px;font-size:0.78rem;font-weight:600;margin-bottom:20px}
+.hero h1{font-size:clamp(1.8rem,3.5vw,3rem);font-weight:800;color:#fff;line-height:1.15}
+.hero h1 span{color:var(--orange)}
+.hero-sub{color:rgba(255,255,255,0.6);font-size:1rem;margin-top:14px;max-width:520px;line-height:1.7}
+.hero-pills{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
+.pill{padding:6px 16px;border-radius:20px;font-size:0.8rem;font-weight:600;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.75);cursor:pointer;transition:all 0.2s}
+.pill.active{background:rgba(249,115,22,0.2);border-color:rgba(249,115,22,0.4);color:var(--orange-light)}
+.data-stamp{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.5);border-radius:20px;padding:4px 12px;font-size:0.75rem;margin-top:16px}
+.data-stamp .dot{width:6px;height:6px;border-radius:50%;background:var(--orange);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+/* hero tipo cards */
+.hero-tipos-col{display:flex;flex-direction:column;gap:10px}
+.hero-tipo-card{border-radius:13px;padding:14px 18px;cursor:pointer;transition:all 0.25s;border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;gap:14px}
+.hero-tipo-card:hover{transform:translateY(-2px) scale(1.02);box-shadow:0 16px 32px rgba(0,0,0,0.3)}
+.htc-icon{font-size:1.6rem;flex-shrink:0}
+.htc-info{flex:1}
+.htc-nome{font-size:0.88rem;font-weight:700;color:#fff;margin-bottom:2px}
+.htc-desc{font-size:0.7rem;color:rgba(255,255,255,0.5)}
+.htc-badge{font-size:0.65rem;font-weight:700;padding:2px 8px;border-radius:20px;background:rgba(255,255,255,0.15);color:rgba(255,255,255,0.85);white-space:nowrap}
+
+/* ── SECTIONS ── */
+.section{padding:64px 40px}
+.section.white{background:#fff}
+.section.gray{background:var(--off)}
+.section.dark-grad{background:linear-gradient(135deg,#050e1f 0%,#0A2540 55%,#1a0c04 100%)}
+.sec-tag{font-size:0.73rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--orange-dark);margin-bottom:10px}
+.sec-tag.light{color:var(--orange-light)}
+.sec-title{font-size:clamp(1.5rem,2.5vw,2.2rem);font-weight:800;line-height:1.2;color:var(--navy)}
+.sec-title.light{color:#fff}
+.sec-desc{color:var(--g500);font-size:0.95rem;line-height:1.7;margin-top:10px;max-width:640px}
+.sec-desc.light{color:rgba(255,255,255,0.6)}
+.sec-header{margin-bottom:36px}
+
+/* ── NEWS ── */
+.news-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+.news-card{background:#fff;border:1px solid var(--g100);border-radius:var(--radius);overflow:hidden;transition:all 0.3s;cursor:pointer}
+.news-card:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(10,37,64,0.1)}
+.news-img{height:130px;display:flex;align-items:center;justify-content:center;font-size:2.5rem}
+.news-body{padding:20px}
+.news-tag{display:inline-block;font-size:0.72rem;font-weight:700;padding:3px 10px;border-radius:20px;margin-bottom:10px;background:rgba(249,115,22,0.1);color:var(--orange-dark)}
+.news-card h3{font-size:0.95rem;font-weight:700;margin-bottom:8px;line-height:1.4}
+.news-card p{font-size:0.82rem;color:var(--g500);line-height:1.55}
+.news-meta{display:flex;align-items:center;justify-content:space-between;margin-top:14px;padding-top:14px;border-top:1px solid var(--g100);font-size:0.75rem;color:var(--g300)}
+.news-source{font-weight:600;color:var(--navy)}
+
+/* ── ALERTAS ── */
+.alerts-section{background:var(--navy);padding:48px 40px}
+.alerts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:28px}
+.alert-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius);padding:20px;display:flex;gap:16px;align-items:flex-start;transition:all 0.2s;cursor:pointer}
+.alert-card:hover{background:rgba(255,255,255,0.07);transform:translateY(-2px)}
+.alert-icon{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.alert-icon.up{background:rgba(249,115,22,0.2);color:var(--orange-light)}
+.alert-icon.warn{background:rgba(245,158,11,0.2);color:#fcd34d}
+.alert-icon.info{background:rgba(99,102,241,0.2);color:#a5b4fc}
+.alert-icon.danger{background:rgba(239,68,68,0.2);color:#fca5a5}
+.alert-body{flex:1}
+.alert-title{font-size:0.88rem;font-weight:700;color:#fff;margin-bottom:4px;line-height:1.4}
+.alert-sub{font-size:0.78rem;color:rgba(255,255,255,0.55);line-height:1.5;margin-bottom:10px}
+.alert-footer{display:flex;align-items:center;justify-content:space-between}
+.alert-badge{font-size:0.68rem;font-weight:700;padding:2px 8px;border-radius:20px}
+.alert-badge.hot{background:rgba(239,68,68,0.2);color:#fca5a5}
+.alert-badge.new{background:rgba(34,197,94,0.2);color:#86efac}
+.alert-badge.info{background:rgba(99,102,241,0.2);color:#a5b4fc}
+.alert-cta-btn{font-size:0.75rem;font-weight:700;color:var(--orange-light);background:none;border:none;cursor:pointer}
+
+/* ── CALCULADORA DE RISCO ── */
+.risco-section{background:#fff;padding:64px 40px}
+.risco-layout{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
+.risco-form{background:var(--off);border-radius:var(--radius);padding:28px}
+.risco-field{margin-bottom:18px}
+.risco-label{font-size:0.82rem;font-weight:700;color:var(--navy);margin-bottom:10px;display:block}
+.risco-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.risco-opt{padding:10px 14px;border:1.5px solid var(--g100);border-radius:var(--radius-sm);font-size:0.82rem;font-weight:600;cursor:pointer;transition:all 0.2s;color:var(--g500);background:#fff;text-align:left}
+.risco-opt:hover{border-color:var(--orange);color:var(--orange-dark)}
+.risco-opt.selected{border-color:var(--orange);background:rgba(249,115,22,0.08);color:var(--orange-dark)}
+.risco-range{width:100%;accent-color:var(--orange);cursor:pointer}
+.risco-btn{width:100%;margin-top:20px;padding:13px;border-radius:30px;background:var(--orange);color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;border:none;cursor:pointer;transition:all 0.2s}
+.risco-btn:hover{background:var(--orange-dark);transform:translateY(-1px)}
+.risco-resultado{background:var(--navy);border-radius:var(--radius);padding:28px;color:#fff}
+.risco-res-title{font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1px;margin-bottom:20px}
+.risco-cat-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.07)}
+.risco-cat-row:last-of-type{border-bottom:none}
+.risco-cat-left{display:flex;align-items:center;gap:10px}
+.risco-cat-icon{font-size:1.1rem}
+.risco-cat-nome{font-size:0.88rem;font-weight:600;color:#fff}
+.risco-cat-desc{font-size:0.72rem;color:rgba(255,255,255,0.4);margin-top:1px}
+.risco-cat-right{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.risco-cat-bar{width:80px;height:5px;background:rgba(255,255,255,0.1);border-radius:5px;overflow:hidden}
+.risco-cat-fill{height:100%;border-radius:5px;transition:width 0.8s cubic-bezier(0.4,0,0.2,1)}
+.risco-cat-pct{font-size:0.72rem;font-weight:700}
+.risco-cat-pct.alto{color:#fca5a5}
+.risco-cat-pct.medio{color:#fcd34d}
+.risco-cat-pct.baixo{color:#86efac}
+.risco-urgencia{margin-top:20px;padding:14px;background:rgba(249,115,22,0.15);border-radius:var(--radius-sm);border:1px solid rgba(249,115,22,0.3)}
+.risco-urg-label{font-size:0.72rem;color:var(--orange-light);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px}
+.risco-urg-val{font-size:1rem;font-weight:700;color:#fff}
+
+/* ── GEO ── */
+.geo-box{background:#fff;border-radius:var(--radius);border:1px solid var(--g100);padding:28px;box-shadow:0 2px 16px rgba(10,37,64,0.06)}
+.geo-search-row{display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap}
+.geo-input{flex:1;min-width:200px;padding:12px 16px;border:1.5px solid var(--g100);border-radius:30px;font-family:'DM Sans',sans-serif;font-size:0.9rem;outline:none;color:var(--navy);transition:border-color 0.2s}
+.geo-input:focus{border-color:var(--orange)}
+.geo-loc-btn{padding:12px 20px;border-radius:30px;background:var(--orange);color:#fff;border:none;font-family:'Syne',sans-serif;font-weight:700;font-size:0.85rem;cursor:pointer;white-space:nowrap;transition:all 0.2s}
+.geo-loc-btn:hover{background:var(--orange-dark);transform:translateY(-1px)}
+.geo-estado-tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
+.geo-tag{padding:5px 14px;border-radius:20px;font-size:0.78rem;font-weight:600;cursor:pointer;border:1px solid var(--g100);background:#fff;color:var(--g500);transition:all 0.2s}
+.geo-tag.active{background:var(--orange);border-color:var(--orange);color:#fff}
+.geo-results-title{font-size:0.82rem;font-weight:700;color:var(--g500);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:14px}
+.geo-plan-row{display:flex;align-items:center;gap:12px;padding:12px;border-radius:var(--radius-sm);margin-bottom:8px;border:1px solid var(--g100);background:var(--off)}
+.geo-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.geo-dot.ok{background:var(--green)}
+.geo-dot.partial{background:var(--amber)}
+.geo-dot.no{background:var(--red)}
+.geo-plan-logo{width:32px;height:32px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:0.6rem;font-weight:800;color:#fff;flex-shrink:0}
+.geo-plan-info{flex:1}
+.geo-plan-name{font-size:0.88rem;font-weight:700;color:var(--navy)}
+.geo-plan-cov{font-size:0.72rem;color:var(--g300);margin-top:2px}
+.geo-status-badge{font-size:0.7rem;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap}
+.geo-status-badge.ok{background:rgba(34,197,94,0.12);color:var(--green-dark)}
+.geo-status-badge.partial{background:rgba(245,158,11,0.12);color:#92400e}
+.geo-status-badge.no{background:rgba(220,38,38,0.12);color:var(--red)}
+
+/* ── QUIZ ── */
+.quiz-section{background:linear-gradient(135deg,#050e1f 0%,#0A2540 55%,#1a0c04 100%);padding:72px 40px;position:relative;overflow:hidden}
+.quiz-section::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 80% 50%,rgba(249,115,22,0.07) 0%,transparent 70%);pointer-events:none}
+.quiz-inner{max-width:680px;margin:0 auto;position:relative}
+.quiz-progress{display:flex;gap:8px;margin-bottom:32px}
+.quiz-step{flex:1;height:4px;border-radius:4px;background:rgba(255,255,255,0.12);transition:all 0.4s}
+.quiz-step.done{background:var(--orange)}
+.quiz-step.active{background:rgba(249,115,22,0.5)}
+.quiz-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:36px 40px}
+.quiz-q{font-size:1.15rem;font-weight:700;color:#fff;margin-bottom:8px;line-height:1.4}
+.quiz-hint{font-size:0.85rem;color:rgba(255,255,255,0.45);margin-bottom:28px}
+.quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.quiz-opt{background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.12);border-radius:var(--radius-sm);padding:14px 18px;cursor:pointer;transition:all 0.2s;color:rgba(255,255,255,0.8);font-size:0.88rem;font-weight:600;text-align:left}
+.quiz-opt:hover{background:rgba(249,115,22,0.12);border-color:rgba(249,115,22,0.4);color:#fff}
+.quiz-opt.selected{background:rgba(249,115,22,0.2);border-color:var(--orange);color:#fff}
+.quiz-opt .opt-icon{display:block;font-size:1.4rem;margin-bottom:8px}
+.quiz-nav{display:flex;gap:12px;margin-top:24px;justify-content:flex-end}
+.quiz-btn{padding:10px 24px;border-radius:30px;font-family:'Syne',sans-serif;font-size:0.88rem;font-weight:700;cursor:pointer;transition:all 0.2s;border:none}
+.quiz-btn.sec{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.7)}
+.quiz-btn.sec:hover{background:rgba(255,255,255,0.14);color:#fff}
+.quiz-btn.pri{background:var(--orange);color:#fff}
+.quiz-btn.pri:hover{background:var(--orange-dark);transform:translateY(-1px)}
+.quiz-btn:disabled{opacity:0.4;cursor:not-allowed;transform:none}
+.quiz-result{display:none;text-align:center;padding:8px 0}
+.quiz-result.show{display:block}
+.result-icon{font-size:3rem;margin-bottom:16px}
+.result-title{font-size:1.4rem;font-weight:800;color:#fff;margin-bottom:10px}
+.result-desc{color:rgba(255,255,255,0.6);font-size:0.92rem;line-height:1.7;margin-bottom:24px;text-align:left}
+.result-tags{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.result-tag{background:rgba(249,115,22,0.18);border:1px solid rgba(249,115,22,0.35);color:var(--orange-light);border-radius:20px;padding:5px 14px;font-size:0.8rem;font-weight:600}
+.result-tag.bad{background:rgba(239,68,68,0.15);border-color:rgba(239,68,68,0.3);color:#fca5a5}
+
+/* ── TABELA ── */
+.filter-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:24px;align-items:center}
+.filter-btn{padding:7px 16px;border-radius:20px;font-size:0.82rem;font-weight:600;cursor:pointer;border:1px solid var(--g100);background:#fff;color:var(--g500);transition:all 0.2s}
+.filter-btn.active,.filter-btn:hover{background:var(--navy);border-color:var(--navy);color:#fff}
+.search-box{padding:8px 16px;border-radius:20px;border:1px solid var(--g100);font-family:'DM Sans',sans-serif;font-size:0.85rem;outline:none;background:#fff;color:var(--navy);min-width:200px}
+.search-box:focus{border-color:var(--orange)}
+.sort-select{padding:8px 14px;border-radius:20px;border:1px solid var(--g100);font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:600;outline:none;background:#fff;color:var(--g500);cursor:pointer}
+.compare-bar{background:var(--navy);border-radius:var(--radius);padding:14px 20px;margin-bottom:16px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;border:1px solid rgba(255,255,255,0.08)}
+.compare-bar-label{color:rgba(255,255,255,0.6);font-size:0.82rem;flex-shrink:0}
+.compare-chips{display:flex;gap:8px;flex:1;flex-wrap:wrap}
+.compare-chip{background:rgba(249,115,22,0.15);border:1px solid rgba(249,115,22,0.3);color:var(--orange-light);border-radius:20px;padding:4px 12px;font-size:0.78rem;font-weight:600;display:flex;align-items:center;gap:6px}
+.compare-chip-rm{cursor:pointer;opacity:0.7}
+.compare-chip-rm:hover{opacity:1}
+.compare-placeholder{color:rgba(255,255,255,0.25);font-size:0.82rem;font-style:italic}
+.compare-go-btn{background:var(--orange);color:#fff;border:none;border-radius:20px;padding:7px 18px;font-family:'Syne',sans-serif;font-size:0.82rem;font-weight:700;cursor:pointer;white-space:nowrap;transition:all 0.2s}
+.compare-go-btn:hover{background:var(--orange-dark);transform:translateY(-1px)}
+.compare-go-btn:disabled{opacity:0.4;cursor:not-allowed;transform:none}
+.add-compare-btn{font-size:0.72rem;font-weight:700;color:var(--g300);cursor:pointer;background:none;border:1px dashed var(--g300);border-radius:20px;padding:2px 8px;transition:all 0.2s;white-space:nowrap}
+.add-compare-btn:hover{color:var(--navy);border-color:var(--navy)}
+.add-compare-btn.active{color:var(--orange-dark);border-color:var(--orange)}
+.table-wrap{background:#fff;border-radius:var(--radius);border:1px solid var(--g100);overflow:hidden;box-shadow:0 2px 16px rgba(10,37,64,0.06)}
+.comp-table{width:100%;border-collapse:collapse;font-size:0.83rem}
+.comp-table th{background:var(--navy);color:#fff;padding:13px 14px;text-align:left;font-family:'Syne',sans-serif;font-size:0.74rem;font-weight:600;white-space:nowrap;cursor:pointer;user-select:none}
+.comp-table th:hover{background:#1a3f6b}
+.comp-table th:not(:first-child){text-align:center}
+.comp-table td{padding:12px 14px;border-bottom:1px solid var(--g100);color:var(--g500);vertical-align:middle}
+.comp-table td:not(:first-child){text-align:center}
+.comp-table tr:last-child td{border-bottom:none}
+.comp-table tr:hover td{background:rgba(249,115,22,0.03)}
+.inst-name{font-weight:700;color:var(--navy);font-size:0.88rem}
+.inst-sub{font-size:0.7rem;color:var(--g300);margin-top:1px}
+.inst-logo{width:36px;height:36px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;font-size:0.62rem;font-weight:800;color:#fff;margin-right:10px;flex-shrink:0;vertical-align:middle}
+.cell-val{font-weight:700;color:var(--navy);font-size:0.87rem}
+.cell-val.green{color:var(--green-dark)}
+.cell-val.red{color:var(--red)}
+.cell-val.amber{color:#b45309}
+.cell-val.orange{color:var(--orange-dark)}
+.badge-tipo{display:inline-block;font-size:0.68rem;font-weight:700;padding:2px 8px;border-radius:20px;white-space:nowrap}
+.badge-auto{background:#fef3c7;color:#92400e}
+.badge-vida{background:#dbeafe;color:#1e40af}
+.badge-resid{background:#dcfce7;color:#15803d}
+.badge-multi{background:#ede9fe;color:#5b21b6}
+.star-row{display:flex;gap:1px;justify-content:center}
+.star{color:#f59e0b;font-size:0.82rem}
+.star.empty{color:var(--g100)}
+.rec-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(249,115,22,0.12);color:var(--orange-dark);font-size:0.7rem;font-weight:700;padding:2px 8px;border-radius:20px}
+.pag-row{display:flex;align-items:center;justify-content:space-between;margin-top:20px;flex-wrap:wrap;gap:12px}
+.pag-info{font-size:0.83rem;color:var(--g500)}
+.pag-btns{display:flex;gap:6px}
+.pag-btn{padding:6px 14px;border-radius:8px;border:1px solid var(--g100);background:#fff;font-size:0.82rem;font-weight:600;cursor:pointer;color:var(--g500);transition:all 0.2s}
+.pag-btn.active,.pag-btn:hover{background:var(--navy);color:#fff;border-color:var(--navy)}
+
+/* ── FRANQUIA (feature exclusiva) ── */
+.franquia-section{background:#fff;padding:64px 40px}
+.franquia-layout{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
+.franquia-form{background:var(--off);border-radius:var(--radius);padding:28px}
+.franquia-field{margin-bottom:18px}
+.franquia-label{font-size:0.82rem;font-weight:700;color:var(--navy);margin-bottom:8px;display:flex;justify-content:space-between}
+.franquia-input{width:100%;padding:11px 16px;border:1.5px solid var(--g100);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:0.92rem;outline:none;background:#fff;color:var(--navy);transition:border-color 0.2s}
+.franquia-input:focus{border-color:var(--orange)}
+.franquia-range{width:100%;accent-color:var(--orange);cursor:pointer}
+.franquia-btn{width:100%;padding:13px;border-radius:30px;background:var(--orange);color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;border:none;cursor:pointer;transition:all 0.2s;margin-top:8px}
+.franquia-btn:hover{background:var(--orange-dark);transform:translateY(-1px)}
+.franquia-results{display:flex;flex-direction:column;gap:12px}
+.franquia-result-card{background:#fff;border:1.5px solid var(--g100);border-radius:var(--radius);padding:18px;transition:all 0.25s}
+.franquia-result-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(10,37,64,0.08)}
+.franquia-result-card.winner{border-color:var(--green);background:rgba(34,197,94,0.04)}
+.fr-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.fr-logo{width:32px;height:32px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:0.6rem;font-weight:800;color:#fff;flex-shrink:0}
+.fr-name{font-size:0.88rem;font-weight:700;color:var(--navy)}
+.fr-winner-badge{margin-left:auto;background:var(--green);color:#fff;font-size:0.65rem;font-weight:800;padding:2px 8px;border-radius:10px;white-space:nowrap}
+.fr-line{display:flex;justify-content:space-between;font-size:0.82rem;padding:6px 0;border-bottom:1px solid var(--g100)}
+.fr-line:last-child{border-bottom:none}
+.fr-label{color:var(--g500)}
+.fr-val{font-weight:700;color:var(--navy)}
+.fr-val.green{color:var(--green-dark)}
+.fr-val.red{color:var(--red)}
+.fr-val.amber{color:#b45309}
+.fr-total{display:flex;justify-content:space-between;padding-top:10px;margin-top:6px;border-top:2px solid var(--g100);font-size:0.88rem;font-weight:700}
+
+/* ── SINISTRALIDADE (feature inovadora) ── */
+.sinistralidade-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.sin-card{border:1.5px solid var(--g100);border-radius:var(--radius);padding:20px;background:#fff;transition:all 0.25s;cursor:pointer}
+.sin-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(10,37,64,0.08)}
+.sin-card.top{border-color:rgba(34,197,94,0.4);background:rgba(34,197,94,0.03)}
+.sin-card.mid{border-color:rgba(245,158,11,0.35);background:rgba(245,158,11,0.03)}
+.sin-card.low{border-color:rgba(220,38,38,0.3);background:rgba(220,38,38,0.03)}
+.sin-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.sin-name{font-size:0.88rem;font-weight:700;color:var(--navy)}
+.sin-badge{font-size:0.68rem;font-weight:700;padding:2px 9px;border-radius:20px}
+.sin-badge.top{background:rgba(34,197,94,0.15);color:var(--green-dark)}
+.sin-badge.mid{background:rgba(245,158,11,0.15);color:#92400e}
+.sin-badge.low{background:rgba(220,38,38,0.12);color:var(--red)}
+.sin-chart{display:flex;align-items:flex-end;gap:5px;height:52px;margin-bottom:8px}
+.sin-bar{flex:1;border-radius:3px 3px 0 0;display:flex;align-items:flex-start;justify-content:center;padding-top:3px;font-size:0.58rem;font-weight:700;color:rgba(255,255,255,0.9)}
+.sin-anos{display:flex;gap:5px}
+.sin-ano{flex:1;font-size:0.58rem;color:var(--g300);text-align:center}
+.sin-media-row{display:flex;justify-content:space-between;align-items:center;margin-top:10px;padding-top:10px;border-top:1px solid var(--g100);font-size:0.8rem}
+.sin-ref{font-size:0.72rem;color:var(--g300);margin-top:4px}
+
+/* ── CENÁRIOS ── */
+.cenario-section{background:linear-gradient(135deg,#050e1f 0%,#0A2540 55%,#1a0c04 100%);padding:72px 40px;position:relative;overflow:hidden}
+.cenario-section::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 50% 60% at 80% 40%,rgba(249,115,22,0.07) 0%,transparent 70%);pointer-events:none}
+.cenario-inner{position:relative}
+.cenario-toggle{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:28px}
+.cenario-btn{padding:8px 18px;border-radius:30px;font-size:0.82rem;font-weight:600;cursor:pointer;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.7);transition:all 0.2s}
+.cenario-btn:hover{background:rgba(255,255,255,0.1);color:#fff}
+.cenario-btn.active{background:rgba(249,115,22,0.25);border-color:var(--orange);color:#fff}
+.cenario-results{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.cenario-card{border-radius:var(--radius);padding:20px;border:1px solid}
+.cenario-card.ok{background:rgba(34,197,94,0.08);border-color:rgba(34,197,94,0.25)}
+.cenario-card.warn{background:rgba(245,158,11,0.08);border-color:rgba(245,158,11,0.25)}
+.cenario-card.danger{background:rgba(220,38,38,0.08);border-color:rgba(220,38,38,0.2)}
+.cenario-card-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.cenario-card-logo{width:32px;height:32px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:0.6rem;font-weight:800;color:#fff;flex-shrink:0}
+.cenario-card-name{font-size:0.88rem;font-weight:700;color:#fff}
+.cenario-status{font-size:0.8rem;font-weight:700;margin-bottom:8px}
+.cenario-status.ok{color:#86efac}
+.cenario-status.warn{color:#fcd34d}
+.cenario-status.danger{color:#fca5a5}
+.cenario-desc{font-size:0.78rem;color:rgba(255,255,255,0.6);line-height:1.6}
+.cenario-resultado{font-size:0.82rem;font-weight:700;margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.1)}
+.cenario-resultado.ok{color:#86efac}
+.cenario-resultado.warn{color:#fcd34d}
+.cenario-resultado.danger{color:#fca5a5}
+
+/* ── SCORE DE PROTEÇÃO ── */
+.score-section{background:var(--off);padding:64px 40px}
+.score-layout{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+.score-box{background:#fff;border-radius:var(--radius);border:1px solid var(--g100);padding:28px;box-shadow:0 2px 16px rgba(10,37,64,0.06)}
+.score-cats{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px}
+.score-cat{background:var(--off);border-radius:var(--radius-sm);padding:14px}
+.score-cat-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.score-cat-name{font-size:0.82rem;font-weight:600;color:var(--navy)}
+.score-cat-pct{font-size:0.88rem;font-weight:700}
+.score-cat-bar{height:5px;background:var(--g100);border-radius:5px;overflow:hidden}
+.score-cat-fill{height:100%;border-radius:5px;transition:width 0.8s cubic-bezier(0.4,0,0.2,1)}
+.score-total{text-align:center;padding:20px;background:var(--navy);border-radius:var(--radius);color:#fff}
+.score-total-num{font-family:'Syne',sans-serif;font-size:3rem;font-weight:800;color:var(--orange)}
+.score-total-label{font-size:0.85rem;color:rgba(255,255,255,0.5);margin-top:4px}
+.score-desc-box{padding:0 8px}
+.score-desc-title{font-size:1.1rem;font-weight:700;color:var(--navy);margin-bottom:12px}
+.score-desc-item{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--g100);font-size:0.85rem}
+.score-desc-item:last-child{border-bottom:none}
+.score-desc-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.score-desc-text{color:var(--g500);line-height:1.5}
+
+/* ── COBERTURAS ── */
+.cob-section{background:#fff;padding:64px 40px}
+.cob-inner{display:grid;grid-template-columns:1fr 1fr;gap:40px}
+.cob-col-title{font-size:0.82rem;font-weight:700;color:var(--g500);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:16px}
+.cob-obrig-list{display:flex;flex-direction:column;gap:8px}
+.cob-obrig-item{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--off);border-radius:var(--radius-sm)}
+.cob-check{width:20px;height:20px;border-radius:50%;background:rgba(34,197,94,0.15);display:flex;align-items:center;justify-content:center;font-size:0.7rem;color:var(--green-dark);flex-shrink:0}
+.cob-item-name{font-size:0.85rem;color:var(--navy);font-weight:600}
+.cob-item-sub{font-size:0.72rem;color:var(--g300);margin-top:1px}
+.cob-dif-list{display:flex;flex-direction:column;gap:10px}
+.cob-dif-row{display:flex;align-items:center;gap:10px}
+.cob-dif-rank{font-size:0.75rem;font-weight:700;color:var(--g300);width:20px;text-align:center;flex-shrink:0}
+.cob-dif-name{font-size:0.82rem;color:var(--navy);min-width:150px}
+.cob-dif-bar{flex:1;height:7px;background:var(--g100);border-radius:7px;overflow:hidden}
+.cob-dif-fill{height:100%;border-radius:7px;transition:width 0.8s cubic-bezier(0.4,0,0.2,1)}
+.cob-dif-num{font-size:0.78rem;font-weight:700;color:var(--navy);min-width:40px;text-align:right}
+
+/* ── MOBILE CARDS ── */
+.mobile-cards{display:none;flex-direction:column;gap:14px}
+.mob-card{background:#fff;border:1px solid var(--g100);border-radius:var(--radius);padding:18px;transition:all 0.25s}
+.mob-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(10,37,64,0.1)}
+.mob-card-top{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.mob-logo{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:0.62rem;font-weight:800;color:#fff;flex-shrink:0}
+.mob-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.mob-stat{background:var(--off);border-radius:var(--radius-sm);padding:8px;text-align:center}
+.mob-stat-val{font-size:0.85rem;font-weight:700;color:var(--navy)}
+.mob-stat-label{font-size:0.62rem;color:var(--g300);margin-top:2px;text-transform:uppercase;letter-spacing:0.3px}
+
+/* ── PLANOS ── */
+.plans-section{background:var(--off);padding:80px 40px}
+.plans-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;margin-top:48px}
+.plan-card{background:#fff;border:1.5px solid var(--g100);border-radius:var(--radius);padding:32px 28px;position:relative;overflow:hidden;transition:all 0.3s}
+.plan-card:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(10,37,64,0.1)}
+.plan-card.featured{border:2px solid var(--orange);box-shadow:0 8px 32px rgba(249,115,22,0.15)}
+.plan-badge-top{position:absolute;top:0;left:50%;transform:translateX(-50%);background:var(--orange);color:#fff;font-size:0.72rem;font-weight:800;padding:4px 16px;border-radius:0 0 12px 12px;letter-spacing:0.5px;white-space:nowrap}
+.plan-icon{font-size:2rem;margin-bottom:16px;display:block}
+.plan-name{font-size:1.2rem;font-weight:800;color:var(--navy);margin-bottom:6px}
+.plan-desc{font-size:0.82rem;color:var(--g500);line-height:1.5;margin-bottom:20px}
+.plan-price{display:flex;align-items:baseline;gap:4px;margin-bottom:6px}
+.price-cur{font-size:1rem;color:var(--g300);font-weight:600;align-self:flex-start;margin-top:6px}
+.price-val{font-family:'Syne',sans-serif;font-size:2.4rem;font-weight:800;color:var(--navy)}
+.price-per{font-size:0.82rem;color:var(--g500)}
+.price-free{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;color:var(--orange-dark)}
+.plan-trial{font-size:0.78rem;color:var(--orange-dark);font-weight:600;margin-bottom:20px}
+.plan-divider{border:none;border-top:1px solid var(--g100);margin:20px 0}
+.feature-list{list-style:none}
+.feature-list li{display:flex;align-items:flex-start;gap:10px;font-size:0.85rem;color:var(--g500);padding:5px 0;line-height:1.4}
+.feat-check{color:var(--green);font-size:1rem;flex-shrink:0;margin-top:1px}
+.feat-cross{color:var(--g300);font-size:1rem;flex-shrink:0;margin-top:1px}
+.plan-btn{display:block;width:100%;margin-top:24px;padding:13px;border-radius:30px;font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;cursor:pointer;transition:all 0.25s;text-align:center;text-decoration:none;border:none}
+.plan-btn.outline{background:transparent;border:1.5px solid var(--g100);color:var(--navy)}
+.plan-btn.outline:hover{border-color:var(--navy);background:rgba(10,37,64,0.04)}
+.plan-btn.primary{background:var(--orange);color:#fff;box-shadow:0 4px 16px rgba(249,115,22,0.3)}
+.plan-btn.primary:hover{background:var(--orange-dark);transform:translateY(-1px)}
+.plan-btn.dark{background:var(--navy);color:#fff}
+.plan-btn.dark:hover{background:var(--navy-mid)}
+.guarantee-box{display:flex;align-items:center;gap:20px;background:rgba(249,115,22,0.07);border:1px solid rgba(249,115,22,0.2);border-radius:var(--radius);padding:24px 28px;margin-top:32px;flex-wrap:wrap}
+.guarantee-num{font-family:'Syne',sans-serif;font-size:3rem;font-weight:800;color:var(--orange);line-height:1;flex-shrink:0}
+.guarantee-text h4{font-size:1.05rem;font-weight:700;margin-bottom:4px}
+.guarantee-text p{font-size:0.85rem;color:var(--g500);line-height:1.5}
+
+/* ── MODALS ── */
+.modal-backdrop{position:fixed;inset:0;background:rgba(5,14,31,0.75);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(6px);opacity:0;pointer-events:none;transition:opacity 0.3s}
+.modal-backdrop.open{opacity:1;pointer-events:auto}
+.modal{background:#fff;border-radius:20px;width:100%;max-width:900px;max-height:88vh;overflow-y:auto;box-shadow:0 32px 80px rgba(0,0,0,0.3);transform:translateY(20px);transition:transform 0.3s}
+.modal-backdrop.open .modal{transform:translateY(0)}
+.modal-header{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--g100);padding:18px 28px;display:flex;align-items:center;justify-content:space-between;z-index:10}
+.modal-title{font-size:1.1rem;font-weight:800;color:var(--navy)}
+.modal-close{width:32px;height:32px;border-radius:50%;background:var(--off);border:none;cursor:pointer;font-size:1.1rem;color:var(--g500);transition:all 0.2s;display:flex;align-items:center;justify-content:center}
+.modal-close:hover{background:var(--g100);color:var(--navy)}
+.modal-body{padding:24px 28px}
+.comp-grid-modal{display:grid;gap:16px}
+.comp-col{background:var(--off);border-radius:var(--radius);padding:22px;border:1.5px solid var(--g100)}
+.comp-col.best{border-color:var(--orange);background:rgba(249,115,22,0.04)}
+.comp-col-header{display:flex;align-items:center;gap:12px;margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--g100)}
+.comp-col h3{font-size:0.95rem;font-weight:800;color:var(--navy)}
+.comp-best-badge{font-size:0.68rem;font-weight:800;background:var(--orange);color:#fff;padding:2px 8px;border-radius:10px;white-space:nowrap}
+.comp-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--g100);gap:8px}
+.comp-row:last-child{border-bottom:none}
+.comp-row-label{font-size:0.8rem;color:var(--g500)}
+.comp-row-val{font-size:0.84rem;font-weight:700;color:var(--navy)}
+.comp-row-val.win{color:var(--green-dark)}
+.comp-row-val.lose{color:var(--red)}
+
+/* ── SIGNUP MODAL ── */
+.signup-modal{background:#fff;border-radius:20px;width:100%;max-width:440px;padding:40px;position:relative}
+.signup-title{font-size:1.4rem;font-weight:800;color:var(--navy);margin-bottom:8px;text-align:center}
+.signup-sub{font-size:0.88rem;color:var(--g500);margin-bottom:28px;text-align:center;line-height:1.5}
+.signup-field{margin-bottom:16px}
+.signup-field label{font-size:0.8rem;font-weight:700;color:var(--navy);display:block;margin-bottom:6px}
+.signup-input{width:100%;padding:12px 16px;border:1.5px solid var(--g100);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:0.92rem;outline:none;background:#fff;color:var(--navy);transition:border-color 0.2s}
+.signup-input:focus{border-color:var(--orange)}
+.signup-submit{width:100%;padding:14px;border-radius:30px;background:var(--orange);color:#fff;font-family:'Syne',sans-serif;font-weight:800;font-size:0.95rem;border:none;cursor:pointer;transition:all 0.2s;margin-top:8px}
+.signup-submit:hover{background:var(--orange-dark);transform:translateY(-1px)}
+.signup-success{display:none;text-align:center;padding:16px 0}
+.signup-success.show{display:block}
+.signup-success-icon{font-size:3rem;margin-bottom:12px}
+.signup-disclaimer{font-size:0.73rem;color:var(--g300);text-align:center;margin-top:12px;line-height:1.5}
+
+/* ── FAQ ── */
+.faq-item{border-bottom:1px solid var(--g100);padding:20px 0;cursor:pointer}
+.faq-q{display:flex;align-items:center;justify-content:space-between;font-weight:600;font-size:0.95rem;color:var(--navy)}
+.faq-icon{width:24px;height:24px;border-radius:50%;background:var(--off);display:flex;align-items:center;justify-content:center;font-size:1rem;color:var(--g500);flex-shrink:0;transition:transform 0.3s}
+.faq-a{font-size:0.88rem;color:var(--g500);line-height:1.7;margin-top:12px;display:none;padding-right:32px}
+.faq-item.open .faq-a{display:block}
+.faq-item.open .faq-icon{transform:rotate(45deg);background:var(--navy);color:#fff}
+
+/* ── FOOTER ── */
+footer{background:#050e1f;color:rgba(255,255,255,0.5);text-align:center;padding:28px 40px;font-size:0.82rem}
+.footer-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.2rem;color:#fff;margin-bottom:6px}
+.footer-logo span{color:var(--orange)}
+.footer-links{display:flex;gap:20px;justify-content:center;margin-top:12px;flex-wrap:wrap}
+.footer-links a{color:rgba(255,255,255,0.4);text-decoration:none;font-size:0.8rem;transition:color 0.2s}
+.footer-links a:hover{color:rgba(255,255,255,0.8)}
+
+@media(max-width:768px){
+  .section,.plans-section,.cob-section,.risco-section,.score-section,.franquia-section{padding:48px 20px}
+  .hero{padding:40px 20px}.hero-layout{grid-template-columns:1fr}.hero-tipos-col{display:none}
+  nav{padding:0 16px}.nav-bc{display:none}
+  .inner-nav{padding:0 12px}
+  .risco-layout,.franquia-layout,.cob-inner,.score-layout{grid-template-columns:1fr}
+  .quiz-opts{grid-template-columns:1fr}
+  .modal-body{padding:20px}
+  .comp-grid-modal{grid-template-columns:1fr}
+  .table-wrap{display:none}
+  .mobile-cards{display:flex}
+  .pag-row{display:none}
+  .plans-grid{grid-template-columns:1fr}
+  .score-cats{grid-template-columns:1fr 1fr}
+  .alerts-section{padding:40px 20px}
+}
+</style>
+<link rel="stylesheet" href="assets/css/global.css">
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div style="display:flex;align-items:center;gap:20px">
+    <div class="nav-logo">Fin<span>Match</span></div>
+    <div class="nav-bc"><span class="sep">›</span><span>Educação Financeira</span><span class="sep">›</span><span class="active">🛡️ Seguros</span></div>
+  </div>
+  <a href="#" class="nav-back">← Voltar</a>
+</nav>
+
+<!-- INNER NAV -->
+<div class="inner-nav" id="innerNav">
+  <div class="inner-nav-links">
+    <button class="inl active" onclick="goTo('secNoticias',this)">📰 Notícias</button>
+    <button class="inl" onclick="goTo('secAlertas',this)">🔔 Alertas</button>
+    <button class="inl" onclick="goTo('secRisco',this)">⚠️ Meu Risco</button>
+    <button class="inl" onclick="goTo('secGeo',this)">📍 Cobertura</button>
+    <button class="inl" onclick="goTo('quizSection',this)">🧠 Quiz</button>
+    <button class="inl" onclick="goTo('comparativo',this)">📊 Comparativo</button>
+    <button class="inl" onclick="goTo('secFranquia',this)">💰 Franquias</button>
+    <button class="inl" onclick="goTo('secSinistralidade',this)">📈 Sinistralidade</button>
+    <button class="inl" onclick="goTo('secCenario',this)">🚨 Cenários</button>
+    <button class="inl" onclick="goTo('secScore',this)">🛡️ Score</button>
+    <button class="inl" onclick="goTo('secCoberturas',this)">✅ Coberturas</button>
+    <button class="inl" onclick="goTo('secPlanos',this)">🚀 Planos</button>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+    <div class="ipbar"><div class="ipfill" id="progressFill" style="width:3%"></div></div>
+    <span style="font-size:0.72rem;color:var(--g300)" id="progressLabel">3%</span>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero" id="secHero">
+  <div class="hero-grid"></div>
+  <div class="hero-layout">
+    <div>
+      <div class="hero-badge">🛡️ Comparador de Seguros</div>
+      <h1>Compare os melhores<br><span>Seguros do Brasil</span></h1>
+      <p class="hero-sub">Auto, vida, residência e viagem — compare franquias, coberturas, sinistralidade histórica e disponibilidade na sua região antes de contratar.</p>
+      <div class="hero-pills">
+        <span class="pill">🏦 Previdência</span>
+        <span class="pill">💳 Cartões</span>
+        <span class="pill">🏥 Saúde</span>
+        <span class="pill active">🛡️ Seguros</span>
+      </div>
+      <div class="data-stamp">
+        <span class="dot"></span>
+        Dados SUSEP/2026 · 20 seguradoras · Geolocalização por CEP
+      </div>
+    </div>
+    <div class="hero-tipos-col" id="heroTiposCol"></div>
+  </div>
+</div>
+
+<!-- NOTÍCIAS -->
+<div class="section white" id="secNoticias">
+  <div class="sec-header">
+    <div class="sec-tag">Últimas Notícias</div>
+    <h2 class="sec-title">Fique por dentro do mercado segurador</h2>
+    <p class="sec-desc">Mudanças na regulação, novas coberturas obrigatórias e tendências do setor de seguros no Brasil.</p>
+  </div>
+  <div class="news-grid">
+    <div class="news-card"><div class="news-img" style="background:linear-gradient(135deg,#7c2d12,#f97316)">🚗</div><div class="news-body"><span class="news-tag">Auto</span><h3>Seguro auto tem alta de 18% nos prêmios em 2026 — furtos sobem nas capitais</h3><p>Aumento de sinistros em SP, RJ e BH eleva custo dos seguros auto. Regiões com índice de roubo acima da média têm reajuste ainda maior nas tarifas.</p><div class="news-meta"><span class="news-source">Revista Apólice</span><span>4 mai. 2026</span></div></div></div>
+    <div class="news-card"><div class="news-img" style="background:linear-gradient(135deg,#064e3b,#059669)">🏠</div><div class="news-body"><span class="news-tag">Residencial</span><h3>Seguro residencial passa a ser obrigatório em financiamentos imobiliários a partir de jun/2026</h3><p>Nova resolução do Banco Central torna o seguro residencial compulsório em qualquer financiamento habitacional, com possibilidade de portabilidade.</p><div class="news-meta"><span class="news-source">Infomoney</span><span>28 abr. 2026</span></div></div></div>
+    <div class="news-card"><div class="news-img" style="background:linear-gradient(135deg,#1e1b4b,#4338ca)">✈️</div><div class="news-body"><span class="news-tag">Viagem</span><h3>Seguro viagem dispara 45% com novas exigências de vistos europeus e americanos</h3><p>Exigência de cobertura mínima de €30.000 para visto Schengen e USD 100.000 para visto americano impulsionam contratações.</p><div class="news-meta"><span class="news-source">Panrotas</span><span>21 abr. 2026</span></div></div></div>
+    <div class="news-card"><div class="news-img" style="background:linear-gradient(135deg,#4c1d95,#7c3aed)">💊</div><div class="news-body"><span class="news-tag">Vida</span><h3>Seguro de vida individual cresce 28% — fintechs oferecem cobertura por R$ 29/mês</h3><p>Plataformas digitais democratizam o seguro de vida com coberturas de R$ 300 mil por menos de R$ 30/mês. Contratação 100% online e sem exame médico até R$ 500 mil.</p><div class="news-meta"><span class="news-source">Valor Investe</span><span>14 abr. 2026</span></div></div></div>
+    <div class="news-card"><div class="news-img" style="background:linear-gradient(135deg,#134e4a,#0d9488)">⚖️</div><div class="news-body"><span class="news-tag">Regulação</span><h3>SUSEP exige transparência total em franquias e exclusões de cobertura a partir de ago/2026</h3><p>Resolução 406/2026 obriga seguradoras a detalhar todas as exclusões de cobertura em linguagem clara antes da contratação.</p><div class="news-meta"><span class="news-source">SUSEP</span><span>7 abr. 2026</span></div></div></div>
+    <div class="news-card"><div class="news-img" style="background:linear-gradient(135deg,#7c2d12,#b45309)">🌊</div><div class="news-body"><span class="news-tag">Análise</span><h3>Enchentes e eventos climáticos elevam sinistros residenciais no Sul — seguradoras reajustam tarifas regionais</h3><p>RS e SC registram aumento de 340% nos sinistros por eventos climáticos. Seguradoras passam a exigir vistoria prévia e mapeamento de risco para novas apólices.</p><div class="news-meta"><span class="news-source">Época Negócios</span><span>1 abr. 2026</span></div></div></div>
+  </div>
+</div>
+
+<!-- ALERTAS -->
+<div class="alerts-section" id="secAlertas">
+  <div class="sec-tag light">🔔 Central de Alertas</div>
+  <h2 class="sec-title light" style="margin-bottom:6px">Oportunidades e riscos com prazo</h2>
+  <p class="sec-desc light">Promoções, renovações críticas e mudanças que impactam sua proteção agora.</p>
+  <div class="alerts-grid">
+    <div class="alert-card"><div class="alert-icon up">🎁</div><div class="alert-body"><div class="alert-title">Porto Seguro: 2 meses grátis na contratação de seguro auto em maio/2026</div><div class="alert-sub">Promoção válida para novos clientes com veículos até 5 anos de uso. Desconto aplicado nas 2 primeiras parcelas mensais.</div><div class="alert-footer"><span class="alert-badge new">✨ Expira em 18 dias</span><button class="alert-cta-btn">Ver oferta →</button></div></div></div>
+    <div class="alert-card"><div class="alert-icon warn">⚠️</div><div class="alert-body"><div class="alert-title">Tokio Marine aumenta franquia para CEPs de alto risco em SP a partir de jun/2026</div><div class="alert-sub">Clientes em CEPs com índice de roubo acima de 8% terão franquia reajustada de R$ 2.800 para R$ 3.500. Avalie portabilidade.</div><div class="alert-footer"><span class="alert-badge hot">⏰ Mudança em 22 dias</span><button class="alert-cta-btn">Ver análise →</button></div></div></div>
+    <div class="alert-card"><div class="alert-icon info">✈️</div><div class="alert-body"><div class="alert-title">Visto Schengen: novas exigências elevam cobertura mínima para €30.000</div><div class="alert-sub">Consulados europeus passam a exigir cobertura mínima de €30.000 de assistência médica. Planos antigos podem não atender.</div><div class="alert-footer"><span class="alert-badge info">📅 Vigência jun/2026</span><button class="alert-cta-btn">Verificar seu plano →</button></div></div></div>
+    <div class="alert-card"><div class="alert-icon up">💚</div><div class="alert-body"><div class="alert-title">Allianz e Zurich lançam seguro residencial por R$ 35/mês para apartamentos</div><div class="alert-sub">Novos planos específicos para apartamentos incluem cobertura contra incêndio, roubo de conteúdo e responsabilidade civil com vizinhos.</div><div class="alert-footer"><span class="alert-badge new">✨ Novo produto</span><button class="alert-cta-btn">Conhecer →</button></div></div></div>
+    <div class="alert-card"><div class="alert-icon danger">🚨</div><div class="alert-body"><div class="alert-title">RS e SC: seguradoras suspendem novas apólices residenciais em zonas de risco climático</div><div class="alert-sub">Após enchentes de 2024/2025, 4 seguradoras suspenderam novas contratações residenciais em 38 municípios do Sul.</div><div class="alert-footer"><span class="alert-badge hot">🔥 Urgente</span><button class="alert-cta-btn">Ver municípios →</button></div></div></div>
+    <div class="alert-card"><div class="alert-icon info">💳</div><div class="alert-body"><div class="alert-title">Seguro de vida: contratação digital sem exame médico até R$ 1 mi — prazo de 30 dias</div><div class="alert-sub">Campanha especial da Icatu e Zurich permite contratação de seguro de vida em até 5 minutos, sem exame, para perfis de baixo risco.</div><div class="alert-footer"><span class="alert-badge new">✨ Disponível agora</span><button class="alert-cta-btn">Contratar →</button></div></div></div>
+  </div>
+</div>
+
+<!-- CALCULADORA DE RISCO -->
+<div class="risco-section" id="secRisco">
+  <div class="sec-header">
+    <div class="sec-tag">⚠️ Calculadora de Risco</div>
+    <h2 class="sec-title">Qual seguro é mais urgente para você?</h2>
+    <p class="sec-desc">Antes de comparar planos, entenda seu perfil de risco. Informe seu contexto e veja qual categoria de seguro deve ser sua prioridade.</p>
+  </div>
+  <div class="risco-layout">
+    <div class="risco-form">
+      <div class="risco-field">
+        <label class="risco-label">Você possui veículo?</label>
+        <div class="risco-opts">
+          <button class="risco-opt" onclick="selRisco(this,'veiculo','sim')"><span style="font-size:1.2rem">🚗</span> Sim, tenho carro</button>
+          <button class="risco-opt" onclick="selRisco(this,'veiculo','moto')"><span style="font-size:1.2rem">🏍️</span> Sim, tenho moto</button>
+          <button class="risco-opt" onclick="selRisco(this,'veiculo','nao')"><span style="font-size:1.2rem">🚌</span> Não possuo</button>
+          <button class="risco-opt" onclick="selRisco(this,'veiculo','frota')"><span style="font-size:1.2rem">🚐</span> Tenho frota</button>
+        </div>
+      </div>
+      <div class="risco-field">
+        <label class="risco-label">Onde você mora?</label>
+        <div class="risco-opts">
+          <button class="risco-opt" onclick="selRisco(this,'moradia','apto')"><span style="font-size:1.2rem">🏢</span> Apartamento</button>
+          <button class="risco-opt" onclick="selRisco(this,'moradia','casa')"><span style="font-size:1.2rem">🏠</span> Casa própria</button>
+          <button class="risco-opt" onclick="selRisco(this,'moradia','aluguel')"><span style="font-size:1.2rem">🔑</span> Aluguel</button>
+          <button class="risco-opt" onclick="selRisco(this,'moradia','cond')"><span style="font-size:1.2rem">🏘️</span> Cond. fechado</button>
+        </div>
+      </div>
+      <div class="risco-field">
+        <label class="risco-label">Você tem dependentes?</label>
+        <div class="risco-opts">
+          <button class="risco-opt" onclick="selRisco(this,'dep','nao')"><span style="font-size:1.2rem">🧑</span> Não, moro só</button>
+          <button class="risco-opt" onclick="selRisco(this,'dep','conjuge')"><span style="font-size:1.2rem">💑</span> Cônjuge</button>
+          <button class="risco-opt" onclick="selRisco(this,'dep','filhos')"><span style="font-size:1.2rem">👨‍👩‍👧</span> Filhos menores</button>
+          <button class="risco-opt" onclick="selRisco(this,'dep','pais')"><span style="font-size:1.2rem">👴</span> Pais idosos</button>
+        </div>
+      </div>
+      <div class="risco-field">
+        <label class="risco-label">Você viaja com frequência?</label>
+        <div class="risco-opts">
+          <button class="risco-opt" onclick="selRisco(this,'viagem','nunca')"><span style="font-size:1.2rem">🏡</span> Raramente</button>
+          <button class="risco-opt" onclick="selRisco(this,'viagem','dom')"><span style="font-size:1.2rem">🇧🇷</span> Nacional / ano</button>
+          <button class="risco-opt" onclick="selRisco(this,'viagem','int')"><span style="font-size:1.2rem">✈️</span> Internacional</button>
+          <button class="risco-opt" onclick="selRisco(this,'viagem','freq')"><span style="font-size:1.2rem">🌎</span> +4x por ano</button>
+        </div>
+      </div>
+      <button class="risco-btn" onclick="calcRisco()">Calcular meu perfil de risco →</button>
+    </div>
+    <div class="risco-resultado">
+      <div class="risco-res-title">⚠️ Seu perfil de risco</div>
+      <div id="riscoResultDiv">
+        <div style="text-align:center;padding:40px 20px;color:rgba(255,255,255,0.3)">
+          <div style="font-size:2.5rem;margin-bottom:12px">⚙️</div>
+          <div style="font-size:0.88rem">Preencha o formulário ao lado para ver seu perfil de risco personalizado</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- GEOLOCALIZAÇÃO -->
+<div class="section gray" id="secGeo">
+  <div class="sec-header">
+    <div class="sec-tag">📍 Cobertura por Região</div>
+    <h2 class="sec-title">Verifique disponibilidade na sua cidade</h2>
+    <p class="sec-desc">Algumas seguradoras não operam em todas as regiões — ou aplicam tarifas especiais em áreas de alto risco. Informe seu CEP e veja a situação real.</p>
+  </div>
+  <div class="geo-box">
+    <div class="geo-search-row">
+      <input class="geo-input" type="text" id="geoInput" placeholder="Digite seu CEP (ex: 01310-100) ou cidade..." oninput="filtrarGeo(this.value)">
+      <button class="geo-loc-btn" onclick="usarLocalizacao()">📍 Usar minha localização</button>
+    </div>
+    <div class="geo-estado-tags" id="geoEstados">
+      <span class="geo-tag active" onclick="selecionarEstado(this,'SP')">São Paulo</span>
+      <span class="geo-tag" onclick="selecionarEstado(this,'RJ')">Rio de Janeiro</span>
+      <span class="geo-tag" onclick="selecionarEstado(this,'MG')">Minas Gerais</span>
+      <span class="geo-tag" onclick="selecionarEstado(this,'RS')">Rio Grande do Sul</span>
+      <span class="geo-tag" onclick="selecionarEstado(this,'PR')">Paraná</span>
+      <span class="geo-tag" onclick="selecionarEstado(this,'BA')">Bahia</span>
+      <span class="geo-tag" onclick="selecionarEstado(this,'CE')">Ceará</span>
+      <span class="geo-tag" onclick="selecionarEstado(this,'SC')">Santa Catarina</span>
+    </div>
+    <div class="geo-results-title" id="geoTitle">Disponibilidade em São Paulo - SP:</div>
+    <div id="geoResults"></div>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div class="quiz-section" id="quizSection">
+  <div class="quiz-inner">
+    <div class="sec-tag light" style="margin-bottom:12px">🧠 Descoberta de Perfil</div>
+    <h2 class="sec-title light" style="margin-bottom:8px">Qual seguro combina com você?</h2>
+    <p class="sec-desc light" style="margin-bottom:32px">4 perguntas rápidas para identificar o tipo de seguro mais adequado ao seu perfil — e quais seguradoras recomendamos.</p>
+    <div class="quiz-progress" id="quizProgress">
+      <div class="quiz-step active" id="qs0"></div><div class="quiz-step" id="qs1"></div>
+      <div class="quiz-step" id="qs2"></div><div class="quiz-step" id="qs3"></div>
+    </div>
+    <div class="quiz-card">
+      <div id="quizContent"></div>
+      <div id="quizResult" class="quiz-result"></div>
+      <div class="quiz-nav" id="quizNav">
+        <button class="quiz-btn sec" id="quizBack" onclick="quizPrev()" style="display:none">← Anterior</button>
+        <button class="quiz-btn pri" id="quizNext" onclick="quizNext()" disabled>Próxima →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- COMPARATIVO -->
+<div class="section gray" id="comparativo">
+  <div class="sec-header">
+    <div class="sec-tag">Comparativo Completo</div>
+    <h2 class="sec-title">As 20 maiores seguradoras do Brasil</h2>
+    <p class="sec-desc">Filtre por tipo, compare até 3 seguradoras lado a lado e ordene por qualquer coluna. Dados SUSEP atualizados em mai/2026.</p>
+  </div>
+  <div class="compare-bar">
+    <span class="compare-bar-label">⚡ Comparar:</span>
+    <div class="compare-chips" id="compareChips"><span class="compare-placeholder" id="comparePlaceholder">Selecione seguradoras abaixo (máx. 3)</span></div>
+    <button class="compare-go-btn" id="compareGoBtn" disabled onclick="openCompareModal()">Ver Comparativo →</button>
+  </div>
+  <div class="filter-row">
+    <button class="filter-btn active" onclick="filtrar(this,'todos')">Todos</button>
+    <button class="filter-btn" onclick="filtrar(this,'auto')">🚗 Auto</button>
+    <button class="filter-btn" onclick="filtrar(this,'vida')">💚 Vida</button>
+    <button class="filter-btn" onclick="filtrar(this,'resid')">🏠 Residencial</button>
+    <button class="filter-btn" onclick="filtrar(this,'multi')">🔀 Multiramo</button>
+    <button class="filter-btn" onclick="filtrar(this,'semFranq')">💚 Menor Franquia</button>
+    <input class="search-box" type="text" id="search" placeholder="🔍 Buscar seguradora..." oninput="buscar(this.value)">
+    <select class="sort-select" onchange="sortBy(this.value)">
+      <option value="">Ordenar por...</option>
+      <option value="mensalMin_asc">Mensalidade (menor)</option>
+      <option value="franquia_asc">Franquia (menor)</option>
+      <option value="sinistralidade_desc">Sinistralidade (maior)</option>
+      <option value="stars_desc">Melhor avaliação</option>
+      <option value="cobertura_desc">Cobertura (maior)</option>
+    </select>
+  </div>
+  <div class="table-wrap">
+    <table class="comp-table" id="compTable">
+      <thead>
+        <tr>
+          <th onclick="sortByCol('nome')">Seguradora ↕</th>
+          <th onclick="sortByCol('tipo')">Tipo ↕</th>
+          <th onclick="sortByCol('mensalMin')">Mensalidade ↕</th>
+          <th onclick="sortByCol('franquia')">Franquia Auto ↕</th>
+          <th onclick="sortByCol('cobertura')">Cobertura ↕</th>
+          <th onclick="sortByCol('sinistralidade')">Sinistralidade ↕</th>
+          <th>Sem Exame Médico</th>
+          <th onclick="sortByCol('stars')">Avaliação ↕</th>
+          <th>FinMatch</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+  <div class="mobile-cards" id="mobileCards"></div>
+  <div class="pag-row">
+    <span class="pag-info" id="pagInfo"></span>
+    <div class="pag-btns" id="pagBtns"></div>
+  </div>
+</div>
+
+<!-- COMPARADOR DE FRANQUIAS (exclusiva) -->
+<div class="franquia-section" id="secFranquia">
+  <div class="sec-header">
+    <div class="sec-tag">💰 Comparador de Franquias</div>
+    <h2 class="sec-title">O custo escondido que ninguém mostra</h2>
+    <p class="sec-desc">Um seguro barato pode ter franquia altíssima. Informe o valor do seu veículo e veja o custo total real de cada plano — mensalidade + franquia em caso de sinistro.</p>
+  </div>
+  <div class="franquia-layout">
+    <div class="franquia-form">
+      <div class="franquia-field">
+        <div class="franquia-label">Valor do veículo (FIPE) <span id="fipeVal">R$ 80.000</span></div>
+        <input type="range" class="franquia-range" id="simFipe" min="20000" max="300000" step="5000" value="80000" oninput="calcFranquia()">
+        <div style="display:flex;justify-content:space-between;font-size:0.75rem;color:var(--g300);margin-top:6px"><span>R$ 20.000</span><span>R$ 300.000</span></div>
+      </div>
+      <div class="franquia-field">
+        <div class="franquia-label">Frequência de uso anual <span id="usoVal">Alta (diário)</span></div>
+        <input type="range" class="franquia-range" id="simUso" min="1" max="3" value="2" oninput="calcFranquia()">
+        <div style="display:flex;justify-content:space-between;font-size:0.75rem;color:var(--g300);margin-top:6px"><span>Baixa</span><span>Alta</span></div>
+      </div>
+      <div class="franquia-field">
+        <div class="franquia-label">Período de análise <span id="periodoFVal">3 anos</span></div>
+        <input type="range" class="franquia-range" id="simPeriodoF" min="1" max="5" value="3" oninput="calcFranquia()">
+        <div style="display:flex;justify-content:space-between;font-size:0.75rem;color:var(--g300);margin-top:6px"><span>1 ano</span><span>5 anos</span></div>
+      </div>
+      <div style="padding:12px;background:rgba(249,115,22,0.06);border-radius:var(--radius-sm);border:1px solid rgba(249,115,22,0.15);font-size:0.78rem;color:var(--g500);line-height:1.6;margin-top:8px">
+        ⚠️ Simulação baseada em franquias médias praticadas para o valor FIPE informado. Valores reais variam por CEP, perfil do condutor e histórico.
+      </div>
+    </div>
+    <div class="franquia-results" id="franquiaResults">
+      <div style="text-align:center;padding:40px;color:var(--g300)">
+        <div style="font-size:2.5rem;margin-bottom:12px">💰</div>
+        <div>Ajuste os parâmetros ao lado para calcular</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SINISTRALIDADE HISTÓRICA (inovadora) -->
+<div class="section white" id="secSinistralidade">
+  <div class="sec-header">
+    <div class="sec-tag">📈 Histórico de Sinistralidade</div>
+    <h2 class="sec-title">Quem realmente paga na hora do sinistro</h2>
+    <p class="sec-desc">Taxa de sinistralidade entre 55–75% é considerada saudável pela SUSEP. Abaixo de 40% pode indicar alto índice de negativa de sinistros — um dado que nenhum comparador mostra ao consumidor.</p>
+  </div>
+  <div class="sinistralidade-grid" id="sinistralGrid"></div>
+  <div style="background:rgba(249,115,22,0.06);border:1px solid rgba(249,115,22,0.2);border-radius:var(--radius);padding:16px 20px;margin-top:24px;font-size:0.85rem;color:var(--g500);line-height:1.6">
+    🏛️ <strong style="color:var(--navy)">Referência SUSEP:</strong> Sinistralidade entre <strong style="color:var(--green-dark)">55% e 75%</strong> indica equilíbrio saudável. <strong style="color:var(--red)">Abaixo de 40%</strong> pode indicar negativa abusiva de sinistros. <strong style="color:var(--amber)">Acima de 85%</strong> indica risco de insolvência da seguradora.
+  </div>
+</div>
+
+<!-- CENÁRIOS (inovadora) -->
+<div class="cenario-section" id="secCenario">
+  <div class="cenario-inner">
+    <div class="sec-tag light">🚨 Simulador de Cenários</div>
+    <h2 class="sec-title light" style="margin-bottom:8px">E se acontecer isso comigo?</h2>
+    <p class="sec-desc light" style="margin-bottom:28px">Escolha um sinistro real e veja quanto você pagaria do bolso com cada seguradora — cobertura, franquia e limitações incluídas.</p>
+    <div class="cenario-toggle" id="cenarioToggle"></div>
+    <div class="cenario-results" id="cenarioResults"></div>
+  </div>
+</div>
+
+<!-- SCORE DE PROTEÇÃO -->
+<div class="score-section" id="secScore">
+  <div class="sec-header">
+    <div class="sec-tag">🛡️ Score de Proteção</div>
+    <h2 class="sec-title">Quanto você está protegido hoje?</h2>
+    <p class="sec-desc">Veja sua cobertura atual por categoria e entenda o que ainda está descoberto no seu portfólio de seguros.</p>
+  </div>
+  <div class="score-layout">
+    <div class="score-box">
+      <div style="font-size:0.82rem;font-weight:700;color:var(--g500);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:16px">Cobertura por categoria</div>
+      <div class="score-cats" id="scoreCats"></div>
+      <div class="score-total" id="scoreTotal"></div>
+    </div>
+    <div class="score-desc-box">
+      <div class="score-desc-title">O que cada nível significa</div>
+      <div class="score-desc-item"><div class="score-desc-dot" style="background:var(--green)"></div><div class="score-desc-text"><strong>Verde (acima de 70%):</strong> Cobertura adequada para o seu perfil. Risco residual controlado.</div></div>
+      <div class="score-desc-item"><div class="score-desc-dot" style="background:var(--amber)"></div><div class="score-desc-text"><strong>Amarelo (40–70%):</strong> Cobertura parcial. Há lacunas que podem gerar custo elevado em caso de sinistro.</div></div>
+      <div class="score-desc-item"><div class="score-desc-dot" style="background:var(--red)"></div><div class="score-desc-text"><strong>Vermelho (abaixo de 40%):</strong> Descoberto ou com cobertura insuficiente. Prioridade de contratação.</div></div>
+      <div style="margin-top:20px;padding:14px;background:rgba(249,115,22,0.06);border-radius:var(--radius-sm);border:1px solid rgba(249,115,22,0.15);font-size:0.82rem;color:var(--g500);line-height:1.6">
+        💡 O score considera seu perfil informado no quiz e na calculadora de risco. Complete as etapas anteriores para uma análise mais precisa.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- COBERTURAS -->
+<div class="cob-section" id="secCoberturas">
+  <div class="sec-header">
+    <div class="sec-tag">✅ Coberturas</div>
+    <h2 class="sec-title">Obrigação legal vs. diferenciais reais</h2>
+    <p class="sec-desc">Saiba o que toda seguradora é obrigada a oferecer por lei — e o que é diferencial genuíno, para não pagar por algo que você já teria de graça.</p>
+  </div>
+  <div class="cob-inner">
+    <div>
+      <div class="cob-col-title">✅ Obrigatório (SUSEP/DPVAT) — toda apólice</div>
+      <div class="cob-obrig-list" id="cobObrigList"></div>
+    </div>
+    <div>
+      <div class="cob-col-title">🌟 Diferenciais — varia por seguradora</div>
+      <div class="cob-dif-list" id="cobDifList"></div>
+    </div>
+  </div>
+</div>
+
+<!-- PLANOS -->
+<div class="plans-section" id="secPlanos">
+  <div class="sec-header" style="text-align:center">
+    <div class="sec-tag" style="text-align:center">Planos</div>
+    <h2 class="sec-title" style="max-width:100%;text-align:center">Pronto para estar protegido?</h2>
+    <p class="sec-desc" style="max-width:520px;margin:10px auto 0">Acesse análises completas, alertas de renovação e comparativos exclusivos com geolocalização avançada.</p>
+  </div>
+  <div class="guarantee-box" style="max-width:600px;margin:0 auto 40px">
+    <div class="guarantee-num">7</div>
+    <div class="guarantee-text"><h4>Garantia de 7 dias ou seu dinheiro de volta</h4><p>Não ficou satisfeito nos primeiros 7 dias? Devolvemos 100% sem perguntas.</p></div>
+  </div>
+  <div class="plans-grid">
+    <div class="plan-card"><span class="plan-icon">🆓</span><div class="plan-name">Plano Grátis</div><div class="plan-desc">Para quem quer entender seguros e comparar as principais opções.</div><div class="plan-price"><span class="price-free">Grátis</span></div><div class="plan-trial">Comece sem compromisso</div><hr class="plan-divider"><ul class="feature-list"><li><span class="feat-check">✓</span>Comparativo de 10 seguradoras</li><li><span class="feat-check">✓</span>Calculadora de risco básica</li><li><span class="feat-check">✓</span>Quiz de perfil de seguros</li><li><span class="feat-check">✓</span>Geolocalização básica</li><li><span class="feat-cross">✗</span>Histórico de sinistralidade</li><li><span class="feat-cross">✗</span>Comparador de franquias avançado</li></ul><button class="plan-btn outline" onclick="openSignupModal('Grátis')">Começar grátis</button></div>
+    <div class="plan-card"><span class="plan-icon">⚡</span><div class="plan-name">Plano Basic</div><div class="plan-desc">Para quem quer comparar e tomar a melhor decisão com dados completos.</div><div class="plan-price"><span class="price-cur">R$</span><span class="price-val">25</span><span class="price-per">/mês</span></div><div class="plan-trial">7 dias grátis</div><hr class="plan-divider"><ul class="feature-list"><li><span class="feat-check">✓</span>Tudo do Grátis</li><li><span class="feat-check">✓</span>20 seguradoras completas</li><li><span class="feat-check">✓</span>Histórico de sinistralidade 5 anos</li><li><span class="feat-check">✓</span>Comparador de franquias completo</li><li><span class="feat-check">✓</span>Simulador de cenários de sinistro</li><li><span class="feat-cross">✗</span>Alertas de renovação automáticos</li></ul><button class="plan-btn dark" onclick="openSignupModal('Basic')">Testar 7 dias grátis</button></div>
+    <div class="plan-card featured"><span class="plan-badge-top">⭐ Mais popular</span><span class="plan-icon" style="margin-top:16px">🚀</span><div class="plan-name">Plano Standard</div><div class="plan-desc">Para quem quer proteção completa e monitoramento ativo das apólices.</div><div class="plan-price"><span class="price-cur">R$</span><span class="price-val">45</span><span class="price-per">/mês</span></div><div class="plan-trial" style="color:var(--orange-dark)">7 dias grátis</div><hr class="plan-divider"><ul class="feature-list"><li><span class="feat-check">✓</span>Tudo do Basic</li><li><span class="feat-check">✓</span>Alertas de renovação antecipados</li><li><span class="feat-check">✓</span>Geolocalização avançada + risco por CEP</li><li><span class="feat-check">✓</span>Score de proteção personalizado</li><li><span class="feat-check">✓</span>Comparativo de portabilidade</li><li><span class="feat-check">✓</span>Suporte humano neutro prioritário</li></ul><button class="plan-btn primary" onclick="openSignupModal('Standard')">Testar o Standard agora</button></div>
+    <div class="plan-card"><span class="plan-icon">💎</span><div class="plan-name">Plano Advanced</div><div class="plan-desc">Para quem quer análise de elite e acompanhamento de sinistros em aberto.</div><div class="plan-price"><span class="price-cur">R$</span><span class="price-val">98</span><span class="price-per">/mês</span></div><div class="plan-trial">7 dias grátis</div><hr class="plan-divider"><ul class="feature-list"><li><span class="feat-check">✓</span>Tudo do Standard</li><li><span class="feat-check">✓</span>Análise personalizada de apólice</li><li><span class="feat-check">✓</span>Acompanhamento de sinistros em aberto</li><li><span class="feat-check">✓</span>Negociação com seguradora inclusa</li><li><span class="feat-check">✓</span>Revisão anual de coberturas</li><li><span class="feat-check">✓</span>Consultoria de portfólio de seguros</li></ul><button class="plan-btn dark" onclick="openSignupModal('Advanced')">Conhecer o Advanced</button></div>
+  </div>
+</div>
+
+<!-- FAQ -->
+<div class="section white">
+  <div class="sec-header" style="text-align:center;margin-bottom:40px">
+    <div class="sec-tag" style="text-align:center">FAQ</div>
+    <h2 class="sec-title" style="text-align:center">Perguntas frequentes sobre seguros</h2>
+  </div>
+  <div style="max-width:680px;margin:0 auto" id="faqList"></div>
+</div>
+
+<footer>
+  <div class="footer-logo">Fin<span>Match</span></div>
+  <p>Plataforma Inteligente de Decisão Financeira — FinMatch © 2026</p>
+  <p style="margin-top:4px">Pablo Henrique Horaguti da Silva · Ciências Econômicas · Universidade Cruzeiro do Sul</p>
+  <div class="footer-links"><a href="#">Política de Privacidade</a><a href="#">Termos de Uso</a><a href="#">LGPD</a><a href="#">Contato</a></div>
+</footer>
+
+<!-- MODALS -->
+<div class="modal-backdrop" id="compareModal">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">⚡ Comparativo Lado a Lado</div><button class="modal-close" onclick="closeModal('compareModal')">✕</button></div>
+    <div class="modal-body" id="compareModalBody"></div>
+  </div>
+</div>
+<div class="modal-backdrop" id="signupModal">
+  <div class="signup-modal">
+    <button class="modal-close" onclick="closeModal('signupModal')" style="position:absolute;top:16px;right:16px">✕</button>
+    <div id="signupForm">
+      <div class="signup-title">Criar conta FinMatch</div>
+      <div class="signup-sub" id="signupSubtitle">Compare seguros gratuitamente.</div>
+      <div class="signup-field"><label>Nome completo</label><input class="signup-input" type="text" placeholder="Seu nome"></div>
+      <div class="signup-field"><label>E-mail</label><input class="signup-input" type="email" placeholder="seu@email.com"></div>
+      <div class="signup-field"><label>CEP</label><input class="signup-input" type="text" placeholder="00000-000"></div>
+      <div class="signup-field"><label>Qual seguro você precisa?</label>
+        <select class="signup-input"><option>Auto</option><option>Vida</option><option>Residencial</option><option>Viagem</option><option>Mais de um</option></select></div>
+      <button class="signup-submit" onclick="submitSignup()">Criar conta grátis →</button>
+      <div class="signup-disclaimer">Sem spam. Dados protegidos pela LGPD.</div>
+    </div>
+    <div class="signup-success" id="signupSuccess">
+      <div class="signup-success-icon">🎉</div>
+      <div class="signup-title">Conta criada!</div>
+      <div class="signup-sub">Bem-vindo ao FinMatch. Verifique seu e-mail.</div>
+      <button class="signup-submit" onclick="closeModal('signupModal')">Explorar agora →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════ DADOS ═══════════════════
+const segColors=['#f97316','#dc2626','#1d4ed8','#16a34a','#7c3aed','#0891b2','#b45309','#be185d','#0f766e','#4338ca','#15803d','#78350f','#6d28d9','#0e7490','#9333ea','#b91c1c','#065f46','#991b1b','#1e3a8a','#134e4a'];
+
+const seguradoras=[
+  {nome:'Porto Seguro',ab:'PS',tipo:'multi',mensalMin:180,franquia:2800,cobertura:95,sinistralidade:71.8,sin5:[72,68,75,71,73],semExame:true,stars:5,rec:true,geo:{SP:'ok',RJ:'ok',MG:'ok',RS:'ok',PR:'ok',BA:'ok',CE:'ok',SC:'ok'}},
+  {nome:'Tokio Marine',ab:'TM',tipo:'auto',mensalMin:210,franquia:2600,cobertura:92,sinistralidade:68.4,sin5:[68,65,70,67,69],semExame:false,stars:5,rec:true,geo:{SP:'ok',RJ:'ok',MG:'ok',RS:'ok',PR:'ok',BA:'partial',CE:'partial',SC:'ok'}},
+  {nome:'Bradesco Seguros',ab:'BD',tipo:'multi',mensalMin:165,franquia:3200,cobertura:88,sinistralidade:65.2,sin5:[65,61,68,64,66],semExame:true,stars:4,rec:true,geo:{SP:'ok',RJ:'ok',MG:'ok',RS:'ok',PR:'ok',BA:'ok',CE:'ok',SC:'ok'}},
+  {nome:'Allianz',ab:'AL',tipo:'multi',mensalMin:195,franquia:2900,cobertura:90,sinistralidade:67.1,sin5:[67,63,70,66,68],semExame:false,stars:4,rec:true,geo:{SP:'ok',RJ:'ok',MG:'ok',RS:'ok',PR:'ok',BA:'partial',CE:'no',SC:'ok'}},
+  {nome:'Zurich Seguros',ab:'ZU',tipo:'multi',mensalMin:220,franquia:2500,cobertura:93,sinistralidade:70.3,sin5:[70,66,73,69,71],semExame:true,stars:5,rec:true,geo:{SP:'ok',RJ:'ok',MG:'ok',RS:'partial',PR:'ok',BA:'partial',CE:'no',SC:'partial'}},
+  {nome:'SulAmérica',ab:'SA',tipo:'multi',mensalMin:175,franquia:3100,cobertura:87,sinistralidade:63.8,sin5:[64,60,67,63,64],semExame:true,stars:4,rec:false,geo:{SP:'ok',RJ:'ok',MG:'ok',RS:'ok',PR:'ok',BA:'partial',CE:'partial',SC:'ok'}},
+  {nome:'Sompo',ab:'SO',tipo:'auto',mensalMin:155,franquia:3400,cobertura:82,sinistralidade:58.9,sin5:[59,56,62,58,59],semExame:false,stars:3,rec:false,geo:{SP:'ok',RJ:'ok',MG:'partial',RS:'partial',PR:'partial',BA:'no',CE:'no',SC:'no'}},
+  {nome:'HDI Seguros',ab:'HD',tipo:'auto',mensalMin:148,franquia:3600,cobertura:80,sinistralidade:55.4,sin5:[55,52,58,55,56],semExame:false,stars:3,rec:false,geo:{SP:'ok',RJ:'ok',MG:'ok',RS:'partial',PR:'partial',BA:'no',CE:'no',SC:'no'}},
+  {nome:'Icatu Seguros',ab:'IC',tipo:'vida',mensalMin:29,franquia:0,cobertura:90,sinistralidade:72.1,sin5:[72,68,75,71,73],semExame:true,stars:5,rec:true,geo:{SP:'ok',RJ:'ok',MG:'ok',RS:'ok',PR:'ok',BA:'ok',CE:'ok',SC:'ok'}},
+  {nome:'Mapfre',ab:'MP',tipo:'multi',mensalMin:168,franquia:3300,cobertura:85,sinistralidade:61.7,sin5:[62,58,65,61,62],semExame:false,stars:3,rec:false,geo:{SP:'ok',RJ:'ok',MG:'ok',RS:'ok',PR:'ok',BA:'partial',CE:'partial',SC:'partial'}},
+  {nome:'Argo Seguros',ab:'AR',tipo:'resid',mensalMin:38,franquia:0,cobertura:83,sinistralidade:64.2,sin5:[64,61,67,63,65],semExame:true,stars:4,rec:false,geo:{SP:'ok',RJ:'ok',MG:'ok',RS:'partial',PR:'ok',BA:'partial',CE:'no',SC:'partial'}},
+  {nome:'Berkley Brasil',ab:'BK',tipo:'multi',mensalMin:185,franquia:2700,cobertura:89,sinistralidade:66.8,sin5:[67,63,70,66,67],semExame:false,stars:4,rec:false,geo:{SP:'ok',RJ:'ok',MG:'ok',RS:'partial',PR:'partial',BA:'no',CE:'no',SC:'no'}},
+  {nome:'Generali',ab:'GE',tipo:'multi',mensalMin:172,franquia:3000,cobertura:86,sinistralidade:62.5,sin5:[63,59,66,62,62],semExame:false,stars:3,rec:false,geo:{SP:'ok',RJ:'ok',MG:'ok',RS:'ok',PR:'ok',BA:'partial',CE:'no',SC:'ok'}},
+  {nome:'Liberty Seguros',ab:'LB',tipo:'auto',mensalMin:160,franquia:3500,cobertura:81,sinistralidade:57.3,sin5:[57,54,60,57,58],semExame:false,stars:3,rec:false,geo:{SP:'ok',RJ:'ok',MG:'ok',RS:'partial',PR:'partial',BA:'no',CE:'no',SC:'no'}},
+  {nome:'Chubb',ab:'CH',tipo:'multi',mensalMin:280,franquia:2200,cobertura:96,sinistralidade:73.4,sin5:[73,70,76,73,74],semExame:true,stars:5,rec:true,geo:{SP:'ok',RJ:'ok',MG:'ok',RS:'ok',PR:'ok',BA:'partial',CE:'no',SC:'ok'}},
+  {nome:'Metlife',ab:'ML',tipo:'vida',mensalMin:35,franquia:0,cobertura:88,sinistralidade:69.5,sin5:[70,66,73,69,69],semExame:true,stars:4,rec:true,geo:{SP:'ok',RJ:'ok',MG:'ok',RS:'ok',PR:'ok',BA:'ok',CE:'ok',SC:'ok'}},
+  {nome:'Itaú Seguros',ab:'IT',tipo:'multi',mensalMin:190,franquia:3100,cobertura:87,sinistralidade:63.1,sin5:[63,60,66,63,64],semExame:true,stars:4,rec:false,geo:{SP:'ok',RJ:'ok',MG:'ok',RS:'ok',PR:'ok',BA:'ok',CE:'ok',SC:'ok'}},
+  {nome:'BB Seguros',ab:'BB',tipo:'multi',mensalMin:158,franquia:3400,cobertura:83,sinistralidade:59.8,sin5:[60,57,63,59,60],semExame:false,stars:3,rec:false,geo:{SP:'ok',RJ:'ok',MG:'ok',RS:'ok',PR:'ok',BA:'ok',CE:'ok',SC:'ok'}},
+  {nome:'Azul Seguros',ab:'AZ',tipo:'resid',mensalMin:42,franquia:0,cobertura:79,sinistralidade:54.1,sin5:[54,51,57,54,55],semExame:true,stars:3,rec:false,geo:{SP:'ok',RJ:'ok',MG:'partial',RS:'no',PR:'partial',BA:'no',CE:'no',SC:'no'}},
+  {nome:'Wiz Seguros',ab:'WZ',tipo:'vida',mensalMin:25,franquia:0,cobertura:76,sinistralidade:51.2,sin5:[51,48,54,51,52],semExame:true,stars:2,rec:false,geo:{SP:'ok',RJ:'partial',MG:'partial',RS:'no',PR:'no',BA:'no',CE:'no',SC:'no'}},
+];
+
+let dados=[...seguradoras];
+let pagina=0;const POR_PAG=10;
+let sortCol='';let sortDir=1;
+let compareList=[];
+let estadoAtivo='SP';
+const fmtR=n=>'R$ '+n.toLocaleString('pt-BR');
+const renderStars=n=>{let s='<div class="star-row">';for(let i=1;i<=5;i++)s+=`<span class="star${i>n?' empty':''}">★</span>`;return s+'</div>'};
+
+function badgeTipo(t){
+  const m={auto:'badge-auto',vida:'badge-vida',resid:'badge-resid',multi:'badge-multi'};
+  const l={auto:'🚗 Auto',vida:'💚 Vida',resid:'🏠 Residencial',multi:'🔀 Multiramo'};
+  return`<span class="badge-tipo ${m[t]}">${l[t]}</span>`;
+}
+
+// ── HERO TIPOS ──
+const heroTiposData=[
+  {icon:'🚗',nome:'Seguro Auto',desc:'Maior rede · menor franquia',badge:'Mais contratado',cor:'linear-gradient(135deg,#7c2d12,#f97316)'},
+  {icon:'💚',nome:'Seguro de Vida',desc:'A partir de R$ 25/mês',badge:'A partir de R$ 25',cor:'linear-gradient(135deg,#064e3b,#059669)'},
+  {icon:'🏠',nome:'Seguro Residencial',desc:'Casa e aparto cobertos',badge:'A partir de R$ 38',cor:'linear-gradient(135deg,#1e1b4b,#4338ca)'},
+  {icon:'✈️',nome:'Seguro Viagem',desc:'Nacional e internacional',badge:'Visto Schengen OK',cor:'linear-gradient(135deg,#0c4a6e,#0891b2)'},
+];
+document.getElementById('heroTiposCol').innerHTML=heroTiposData.map(c=>`
+  <div class="hero-tipo-card" style="background:${c.cor}">
+    <div class="htc-icon">${c.icon}</div>
+    <div class="htc-info"><div class="htc-nome">${c.nome}</div><div class="htc-desc">${c.desc}</div></div>
+    <span class="htc-badge">${c.badge}</span>
+  </div>`).join('');
+
+// ── GEO ──
+function selecionarEstado(el,estado){
+  document.querySelectorAll('.geo-tag').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');estadoAtivo=estado;
+  const nomes={SP:'São Paulo - SP',RJ:'Rio de Janeiro - RJ',MG:'Belo Horizonte - MG',RS:'Porto Alegre - RS',PR:'Curitiba - PR',BA:'Salvador - BA',CE:'Fortaleza - CE',SC:'Florianópolis - SC'};
+  document.getElementById('geoTitle').textContent=`Disponibilidade em ${nomes[estado]}:`;
+  renderGeo(estado);
+}
+function filtrarGeo(v){
+  if(!v){renderGeo(estadoAtivo);return;}
+  const nomes={SP:'São Paulo',RJ:'Rio de Janeiro',MG:'Minas Gerais',RS:'Rio Grande do Sul',PR:'Paraná',BA:'Bahia',CE:'Ceará',SC:'Santa Catarina'};
+  const match=Object.entries(nomes).find(([k,n])=>n.toLowerCase().includes(v.toLowerCase()));
+  if(match){estadoAtivo=match[0];renderGeo(match[0]);}
+}
+function usarLocalizacao(){
+  if(navigator.geolocation){
+    navigator.geolocation.getCurrentPosition(()=>{
+      document.getElementById('geoInput').value='São Paulo - SP (detectado)';
+      selecionarEstado(document.querySelector('.geo-tag'),estadoAtivo);
+    },()=>alert('Não foi possível obter sua localização. Por favor, selecione sua cidade manualmente.'));
+  }else{alert('Geolocalização não suportada neste navegador.');}
+}
+function renderGeo(estado){
+  const div=document.getElementById('geoResults');
+  const descs={
+    ok:{text:'Cobertura completa',sub:'Rede de parceiros credenciados disponível na região'},
+    partial:{text:'Cobertura parcial',sub:'Interior com limitações — verifique sua cidade específica'},
+    no:{text:'Indisponível',sub:'Seguradora não opera nesta região no momento'},
+  };
+  div.innerHTML=seguradoras.map(o=>{
+    const s=o.geo[estado]||'no';
+    const idx=seguradoras.indexOf(o);
+    return`<div class="geo-plan-row">
+      <div class="geo-dot ${s}"></div>
+      <div class="geo-plan-logo" style="background:${segColors[idx]}">${o.ab}</div>
+      <div class="geo-plan-info">
+        <div class="geo-plan-name">${o.nome} · ${badgeTipo(o.tipo)}</div>
+        <div class="geo-plan-cov">${descs[s].sub}</div>
+      </div>
+      <span class="geo-status-badge ${s}">${descs[s].text}</span>
+    </div>`;
+  }).join('');
+}
+renderGeo('SP');
+
+// ── CALCULADORA DE RISCO ──
+const riscoState={};
+function selRisco(el,cat,val){
+  document.querySelectorAll(`.risco-opt[onclick*="'${cat}'"]`).forEach(b=>b.classList.remove('selected'));
+  el.classList.add('selected');
+  riscoState[cat]=val;
+}
+function calcRisco(){
+  const riscoCats=[
+    {cat:'auto',icon:'🚗',nome:'Seguro Auto',getRisco:()=>{
+      if(riscoState.veiculo==='nao')return 0;
+      if(riscoState.veiculo==='frota')return 95;
+      if(riscoState.veiculo==='moto')return 80;
+      return 75;
+    }},
+    {cat:'vida',icon:'💚',nome:'Seguro de Vida',getRisco:()=>{
+      let r=30;
+      if(riscoState.dep==='filhos')r+=40;
+      if(riscoState.dep==='conjuge')r+=20;
+      if(riscoState.dep==='pais')r+=30;
+      return Math.min(r,95);
+    }},
+    {cat:'resid',icon:'🏠',nome:'Seguro Residencial',getRisco:()=>{
+      if(riscoState.moradia==='aluguel')return 55;
+      if(riscoState.moradia==='casa')return 70;
+      if(riscoState.moradia==='cond')return 45;
+      return 60;
+    }},
+    {cat:'viagem',icon:'✈️',nome:'Seguro Viagem',getRisco:()=>{
+      if(riscoState.viagem==='nunca')return 15;
+      if(riscoState.viagem==='dom')return 40;
+      if(riscoState.viagem==='int')return 75;
+      return 90;
+    }},
+  ];
+  let maxRisco=0;let maxCat='auto';
+  riscoCats.forEach(c=>{const r=c.getRisco();if(r>maxRisco){maxRisco=r;maxCat=c.nome;}});
+  const div=document.getElementById('riscoResultDiv');
+  div.innerHTML=riscoCats.map(c=>{
+    const r=c.getRisco();
+    const cls=r>65?'alto':r>40?'medio':'baixo';
+    const label=r>65?'Alto':r>40?'Médio':'Baixo';
+    const cor=r>65?'#fca5a5':r>40?'#fcd34d':'#86efac';
+    return`<div class="risco-cat-row">
+      <div class="risco-cat-left">
+        <div class="risco-cat-icon">${c.icon}</div>
+        <div><div class="risco-cat-nome">${c.nome}</div><div class="risco-cat-desc">Risco estimado ao seu perfil</div></div>
+      </div>
+      <div class="risco-cat-right">
+        <div class="risco-cat-bar"><div class="risco-cat-fill" style="width:${r}%;background:${cor}"></div></div>
+        <div class="risco-cat-pct ${cls}">${label} (${r}%)</div>
+      </div>
+    </div>`;
+  }).join('')+`<div class="risco-urgencia"><div class="risco-urg-label">⚠️ Seguro mais urgente para você</div><div class="risco-urg-val">${maxCat} — prioridade máxima</div></div>`;
+}
+
+// ── QUIZ ──
+const quizData=[
+  {q:'O que você mais precisa proteger?',hint:'Isso define o tipo de seguro mais adequado para o seu momento de vida',opts:[{icon:'🚗',l:'Meu veículo'},{icon:'💚',l:'Minha família e dependentes'},{icon:'🏠',l:'Minha casa ou apartamento'},{icon:'✈️',l:'Minhas viagens'}]},
+  {q:'Qual é o seu maior medo em relação a imprevistos?',hint:'Isso ajuda a calibrar cobertura vs. preço',opts:[{icon:'💸',l:'Perda financeira total'},{icon:'🏥',l:'Custos médicos altos'},{icon:'🔧',l:'Reparos e danos materiais'},{icon:'👨‍👩‍👧',l:'Deixar dependentes desamparados'}]},
+  {q:'Qual é o seu orçamento mensal para seguros?',hint:'Existem opções para todos os perfis — desde R$ 25/mês',opts:[{icon:'🪙',l:'Até R$ 100/mês'},{icon:'💵',l:'R$ 100 – R$ 300/mês'},{icon:'💰',l:'R$ 300 – R$ 600/mês'},{icon:'🏦',l:'Acima de R$ 600/mês'}]},
+  {q:'Você já teve algum sinistro nos últimos 3 anos?',hint:'Histórico impacta prêmios e bônus de fidelidade',opts:[{icon:'✅',l:'Não, nunca acidentei'},{icon:'⚠️',l:'1 sinistro pequeno'},{icon:'🚨',l:'2 ou mais sinistros'},{icon:'🤷',l:'Não tenho seguro ainda'}]},
+];
+let quizStep=0,quizAnswers=[],quizSelected=null;
+function renderQuiz(){
+  const content=document.getElementById('quizContent');const result=document.getElementById('quizResult');
+  const nav=document.getElementById('quizNav');const back=document.getElementById('quizBack');const next=document.getElementById('quizNext');
+  result.classList.remove('show');result.style.display='none';content.style.display='';nav.style.display='flex';
+  if(quizStep>=quizData.length){showQuizResult();return;}
+  const q=quizData[quizStep];quizSelected=null;next.disabled=true;
+  back.style.display=quizStep>0?'':'none';
+  next.textContent=quizStep===quizData.length-1?'Ver Resultado →':'Próxima →';
+  content.innerHTML=`<div class="quiz-q">${q.q}</div><div class="quiz-hint">${q.hint}</div>
+    <div class="quiz-opts">${q.opts.map((o,i)=>`<button class="quiz-opt" onclick="selectOpt(${i})"><span class="opt-icon">${o.icon}</span>${o.l}</button>`).join('')}</div>`;
+  for(let i=0;i<4;i++){const s=document.getElementById('qs'+i);if(s)s.className='quiz-step'+(i<quizStep?' done':i===quizStep?' active':'');}
+}
+function selectOpt(i){quizSelected=i;document.querySelectorAll('.quiz-opt').forEach((b,j)=>b.classList.toggle('selected',j===i));document.getElementById('quizNext').disabled=false;}
+function quizNext(){if(quizSelected===null)return;quizAnswers[quizStep]=quizSelected;quizStep++;renderQuiz();}
+function quizPrev(){quizStep--;renderQuiz();}
+function showQuizResult(){
+  const content=document.getElementById('quizContent');const result=document.getElementById('quizResult');const nav=document.getElementById('quizNav');
+  content.style.display='none';nav.style.display='none';
+  const prioridade=quizAnswers[0];const medo=quizAnswers[1];const orcamento=quizAnswers[2];const historico=quizAnswers[3];
+  let icon,title,desc,recs,notRecs,recSegs;
+  if(prioridade===0){icon='🚗';title='Perfil Seguro Auto';desc='Seu veículo é sua maior prioridade. Com o índice de furtos nas capitais em alta, escolher um seguro com franquia adequada ao valor do seu carro e boa sinistralidade histórica é fundamental.';recs=['Franquia compatível com FIPE','Boa sinistralidade (>65%)','Carro reserva incluso'];notRecs=['Planos com franquia acima de 40% do FIPE'];recSegs=seguradoras.filter(s=>s.tipo==='auto'&&s.rec).concat(seguradoras.filter(s=>s.tipo==='multi'&&s.rec)).slice(0,3);}
+  else if(prioridade===1){icon='💚';title='Perfil Seguro de Vida';desc='Proteger sua família é a prioridade certa. Com seguros de vida a partir de R$ 25/mês e cobertura de até R$ 1 milhão sem exame médico, você pode garantir o futuro dos seus dependentes com pouco.';recs=['Cobertura alta com prêmio baixo','Sem exame médico até R$ 500 mil','Cobertura por invalidez inclusa'];notRecs=['Planos sem cobertura de invalidez permanente'];recSegs=seguradoras.filter(s=>s.tipo==='vida'&&s.rec);}
+  else if(prioridade===2){icon='🏠';title='Perfil Seguro Residencial';desc='Seu imóvel merece proteção. Incêndio, roubo de conteúdo, danos elétricos e responsabilidade civil com vizinhos são coberturas essenciais que um bom seguro residencial oferece por menos de R$ 50/mês.';recs=['Cobertura de conteúdo inclusa','Responsabilidade civil com vizinhos','Roubo e furto qualificado'];notRecs=['Planos sem cobertura de danos elétricos'];recSegs=seguradoras.filter(s=>s.tipo==='resid');}
+  else{icon='✈️';title='Perfil Seguro Viagem';desc='Viajar protegido é viajar tranquilo. Para visto Schengen e americano, a cobertura mínima exigida aumentou em 2026. Escolha um seguro que atenda os requisitos e ofereça assistência 24h em português.';recs=['Cobertura mínima €30.000 (Schengen)','Assistência 24h em português','Cobertura de cancelamento de voo'];notRecs=['Planos sem cobertura de cancelamento'];recSegs=seguradoras.filter(s=>s.rec).slice(0,3);}
+  const recNames=(recSegs||[]).slice(0,3).map(s=>s.nome).join(', ');
+  result.innerHTML=`<div class="result-icon">${icon}</div><div class="result-title">${title}</div>
+    <div class="result-desc">${desc}<br><br><strong style="color:#fff">Seguradoras recomendadas:</strong><br><span style="color:rgba(255,255,255,0.65)">${recNames}</span></div>
+    <div class="result-tags">${recs.map(r=>`<span class="result-tag">✓ ${r}</span>`).join('')}${notRecs.map(r=>`<span class="result-tag bad">✗ ${r}</span>`).join('')}</div>
+    <div style="display:flex;gap:12px;justify-content:center;margin-top:24px;flex-wrap:wrap">
+      <button class="quiz-btn pri" onclick="document.getElementById('comparativo').scrollIntoView({behavior:'smooth'})">Ver comparativo →</button>
+      <button class="quiz-btn sec" onclick="refazerQuiz()">Refazer quiz</button>
+    </div>`;
+  result.style.display='block';result.classList.add('show');
+  for(let i=0;i<4;i++){const s=document.getElementById('qs'+i);if(s)s.className='quiz-step done';}
+}
+function refazerQuiz(){quizStep=0;quizAnswers=[];renderQuiz();}
+renderQuiz();
+
+// ── TABELA ──
+function renderTabela(){
+  const tbody=document.getElementById('tbody');tbody.innerHTML='';
+  const slice=dados.slice(pagina*POR_PAG,pagina*POR_PAG+POR_PAG);
+  slice.forEach(d=>{
+    const idx=seguradoras.indexOf(d);const bg=segColors[idx];
+    const inComp=compareList.includes(idx);
+    const sinCls=d.sinistralidade>65?'green':d.sinistralidade>50?'amber':'red';
+    const cobCls=d.cobertura>=90?'green':d.cobertura>=80?'':' red';
+    tbody.innerHTML+=`<tr>
+      <td><div style="display:flex;align-items:center">
+        <span class="inst-logo" style="background:${bg}">${d.ab}</span>
+        <div><div class="inst-name">${d.nome}</div><div class="inst-sub">${d.tipo==='vida'||d.tipo==='resid'?'Sem auto-franquia':fmtR(d.franquia)+' franquia'}</div>
+        <button class="${inComp?'add-compare-btn active':'add-compare-btn'}" onclick="toggleCompare(${idx})" id="cmpBtn${idx}">${inComp?'✓ Selecionado':'+ Comparar'}</button></div>
+      </div></td>
+      <td>${badgeTipo(d.tipo)}</td>
+      <td><span class="cell-val orange">A partir de ${fmtR(d.mensalMin)}/mês</span></td>
+      <td>${d.franquia>0?`<span class="cell-val ${d.franquia<=2800?'green':d.franquia<=3200?'amber':'red'}">${fmtR(d.franquia)}</span>`:'<span class="cell-val green">N/A</span>'}</td>
+      <td><span class="cell-val${cobCls}">${d.cobertura}%</span></td>
+      <td><span class="cell-val ${sinCls}">${d.sinistralidade.toFixed(1)}%</span></td>
+      <td>${d.semExame?'<span style="color:var(--green-dark);font-weight:700">✓ Sim</span>':'<span style="color:var(--red);font-weight:700">✗ Não</span>'}</td>
+      <td>${renderStars(d.stars)}</td>
+      <td>${d.rec?'<span class="rec-badge">✓ Indicado</span>':'<span style="color:var(--g300);font-size:0.8rem">—</span>'}</td>
+    </tr>`;
+  });
+  const total=dados.length;const ini=pagina*POR_PAG+1;const fim=Math.min(ini+POR_PAG-1,total);
+  document.getElementById('pagInfo').textContent=`Mostrando ${ini}–${fim} de ${total} seguradoras`;
+  renderMobileCards(slice);renderPag();
+}
+function renderMobileCards(slice){
+  const mc=document.getElementById('mobileCards');mc.innerHTML='';
+  slice.forEach(d=>{
+    const idx=seguradoras.indexOf(d);const bg=segColors[idx];
+    mc.innerHTML+=`<div class="mob-card">
+      <div class="mob-card-top">
+        <div class="mob-logo" style="background:${bg}">${d.ab}</div>
+        <div><div style="font-size:0.92rem;font-weight:700;color:var(--navy)">${d.nome}</div>
+        <div style="font-size:0.72rem;color:var(--g300)">${badgeTipo(d.tipo)}</div></div>
+      </div>
+      <div class="mob-stats">
+        <div class="mob-stat"><div class="mob-stat-val">${fmtR(d.mensalMin)}</div><div class="mob-stat-label">A partir</div></div>
+        <div class="mob-stat"><div class="mob-stat-val">${d.sinistralidade.toFixed(0)}%</div><div class="mob-stat-label">Sinistr.</div></div>
+        <div class="mob-stat"><div class="mob-stat-val">${d.cobertura}%</div><div class="mob-stat-label">Cobertura</div></div>
+      </div>
+    </div>`;
+  });
+}
+function renderPag(){
+  const total=Math.ceil(dados.length/POR_PAG);const pb=document.getElementById('pagBtns');pb.innerHTML='';
+  if(pagina>0){const b=document.createElement('button');b.className='pag-btn';b.textContent='← Anterior';b.onclick=()=>{pagina--;renderTabela()};pb.appendChild(b);}
+  for(let i=0;i<total;i++){const b=document.createElement('button');b.className='pag-btn'+(i===pagina?' active':'');b.textContent=i+1;b.onclick=(()=>{const p=i;return()=>{pagina=p;renderTabela();}})();pb.appendChild(b);}
+  if(pagina<total-1){const b=document.createElement('button');b.className='pag-btn';b.textContent='Próxima →';b.onclick=()=>{pagina++;renderTabela()};pb.appendChild(b);}
+}
+function filtrar(el,tipo){
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');
+  if(tipo==='todos')dados=[...seguradoras];
+  else if(tipo==='semFranq')dados=seguradoras.filter(d=>d.franquia<=2800);
+  else dados=seguradoras.filter(d=>d.tipo===tipo);
+  pagina=0;renderTabela();
+}
+function buscar(q){dados=seguradoras.filter(d=>d.nome.toLowerCase().includes(q.toLowerCase()));pagina=0;renderTabela();}
+function sortBy(v){
+  if(!v){dados=[...seguradoras];renderTabela();return;}
+  const[col,dir]=v.split('_');const mult=dir==='asc'?1:-1;
+  dados=[...dados].sort((a,b)=>mult*(a[col]-b[col]));pagina=0;renderTabela();
+}
+function sortByCol(col){
+  if(sortCol===col)sortDir*=-1;else{sortCol=col;sortDir=1;}
+  dados=[...dados].sort((a,b)=>{const va=a[col],vb=b[col];return sortDir*(typeof va==='string'?va.localeCompare(vb):va-vb);});
+  pagina=0;renderTabela();
+}
+
+// ── COMPARE ──
+function toggleCompare(idx){
+  const pos=compareList.indexOf(idx);
+  if(pos>-1)compareList.splice(pos,1);
+  else{if(compareList.length>=3){alert('Selecione no máximo 3.');return;}compareList.push(idx);}
+  renderCompareBar();renderTabela();
+}
+function renderCompareBar(){
+  const chips=document.getElementById('compareChips');chips.innerHTML='';
+  const ph=document.getElementById('comparePlaceholder');
+  if(compareList.length===0){ph.style.display='';chips.appendChild(ph);}
+  else{ph.style.display='none';compareList.forEach(idx=>{const d=seguradoras[idx];const chip=document.createElement('div');chip.className='compare-chip';chip.innerHTML=`${d.nome} <span class="compare-chip-rm" onclick="toggleCompare(${idx})">✕</span>`;chips.appendChild(chip);});}
+  document.getElementById('compareGoBtn').disabled=compareList.length<2;
+}
+function openCompareModal(){
+  if(compareList.length<2)return;
+  const body=document.getElementById('compareModalBody');
+  const ops=compareList.map(i=>seguradoras[i]);
+  const minFranq=Math.min(...ops.filter(o=>o.franquia>0).map(o=>o.franquia),Infinity);
+  const maxSin=Math.max(...ops.map(o=>o.sinistralidade));
+  const maxCob=Math.max(...ops.map(o=>o.cobertura));
+  let html=`<div class="comp-grid-modal" style="grid-template-columns:repeat(${ops.length},1fr)">`;
+  ops.forEach((d,i)=>{
+    const idx=compareList[i];const bg=segColors[idx];
+    const isBest=d.franquia===minFranq||d.sinistralidade===maxSin;
+    html+=`<div class="comp-col${isBest?' best':''}">
+      <div class="comp-col-header"><span class="inst-logo" style="background:${bg};width:38px;height:38px;flex-shrink:0">${d.ab}</span>
+      <div><h3>${d.nome}</h3>${isBest?'<span class="comp-best-badge">⭐ Destaque</span>':''}</div></div>
+      <div class="comp-row"><span class="comp-row-label">Tipo</span><span class="comp-row-val">${badgeTipo(d.tipo)}</span></div>
+      <div class="comp-row"><span class="comp-row-label">Mensalidade a partir</span><span class="comp-row-val">${fmtR(d.mensalMin)}/mês</span></div>
+      <div class="comp-row"><span class="comp-row-label">Franquia auto</span><span class="comp-row-val ${d.franquia===minFranq&&d.franquia>0?'win':d.franquia>3200?'lose':''}">${d.franquia>0?fmtR(d.franquia):'N/A'}</span></div>
+      <div class="comp-row"><span class="comp-row-label">Cobertura</span><span class="comp-row-val ${d.cobertura===maxCob?'win':''}">${d.cobertura}%</span></div>
+      <div class="comp-row"><span class="comp-row-label">Sinistralidade</span><span class="comp-row-val ${d.sinistralidade===maxSin?'win':d.sinistralidade<50?'lose':''}">${d.sinistralidade.toFixed(1)}%</span></div>
+      <div class="comp-row"><span class="comp-row-label">Sem exame médico</span><span class="comp-row-val ${d.semExame?'win':'lose'}">${d.semExame?'✓ Sim':'✗ Não'}</span></div>
+      <div class="comp-row"><span class="comp-row-label">FinMatch Indica</span><span class="comp-row-val ${d.rec?'win':'lose'}">${d.rec?'✓ Sim':'—'}</span></div>
+      <div class="comp-row"><span class="comp-row-label">Avaliação</span><span class="comp-row-val">${'★'.repeat(d.stars)}${'☆'.repeat(5-d.stars)}</span></div>
+    </div>`;
+  });
+  html+='</div>';
+  const maxSinBar=Math.max(...ops.map(d=>d.sinistralidade));
+  html+=`<div style="margin-top:24px"><div style="font-size:0.8rem;font-weight:700;color:var(--g500);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">Sinistralidade histórica média (quem paga mais)</div>`;
+  ops.forEach((d,i)=>{const bg=segColors[compareList[i]];const pct=Math.round(d.sinistralidade/maxSinBar*100);html+=`<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;font-size:0.78rem;margin-bottom:4px"><span style="font-weight:600;color:var(--navy)">${d.nome}</span><span style="color:var(--g500)">${d.sinistralidade.toFixed(1)}%</span></div><div style="height:8px;background:var(--g100);border-radius:8px;overflow:hidden"><div style="width:${pct}%;height:100%;border-radius:8px;background:${bg};transition:width 0.9s"></div></div></div>`;});
+  html+='</div>';
+  body.innerHTML=html;
+  document.getElementById('compareModal').classList.add('open');
+}
+
+// ── COMPARADOR DE FRANQUIAS (exclusiva) ──
+const franquiaSegs=[
+  {nome:'Porto Seguro',ab:'PS',bg:'#f97316',fipeRatio:0.035,franquiaRatio:0.032,carro_reserva:true},
+  {nome:'Tokio Marine',ab:'TM',bg:'#dc2626',fipeRatio:0.032,franquiaRatio:0.028,carro_reserva:true},
+  {nome:'Bradesco Seguros',ab:'BD',bg:'#1d4ed8',fipeRatio:0.028,franquiaRatio:0.042,carro_reserva:false},
+  {nome:'Allianz',ab:'AL',bg:'#16a34a',fipeRatio:0.033,franquiaRatio:0.038,carro_reserva:true},
+  {nome:'Chubb',ab:'CH',bg:'#7c3aed',fipeRatio:0.042,franquiaRatio:0.026,carro_reserva:true},
+];
+function calcFranquia(){
+  const fipe=+document.getElementById('simFipe').value;
+  const uso=+document.getElementById('simUso').value;
+  const periodo=+document.getElementById('simPeriodoF').value;
+  document.getElementById('fipeVal').textContent='R$ '+fipe.toLocaleString('pt-BR');
+  const usoLabels={1:'Baixa (fim de semana)',2:'Alta (diário)',3:'Muito alta (profissional)'};
+  document.getElementById('usoVal').textContent=usoLabels[uso]||'Alta (diário)';
+  document.getElementById('periodoFVal').textContent=`${periodo} ${periodo===1?'ano':'anos'}`;
+  const sinistrosMedio=uso===1?0.15:uso===2?0.25:0.4;
+  const results=franquiaSegs.map(s=>{
+    const mensalBase=Math.round(fipe*s.fipeRatio/12);
+    const mensalidade=mensalBase*(1+sinistrosMedio*0.1);
+    const franquiaVal=Math.round(fipe*s.franquiaRatio);
+    const sinistrosEsperados=Math.ceil(periodo*sinistrosMedio);
+    const custoMens=mensalidade*12*periodo;
+    const custoFranq=franquiaVal*sinistrosEsperados;
+    const total=custoMens+custoFranq;
+    return{...s,mensalidade:Math.round(mensalidade),franquiaVal,sinistrosEsperados,custoMens:Math.round(custoMens),custoFranq,total:Math.round(total)};
+  }).sort((a,b)=>a.total-b.total);
+  const winner=results[0];
+  document.getElementById('franquiaResults').innerHTML=results.map((r,i)=>`
+    <div class="franquia-result-card${i===0?' winner':''}">
+      <div class="fr-head">
+        <div class="fr-logo" style="background:${r.bg}">${r.ab}</div>
+        <div><div class="fr-name">${r.nome}</div></div>
+        ${i===0?'<span class="fr-winner-badge">🏆 Melhor custo</span>':''}
+      </div>
+      <div class="fr-line"><span class="fr-label">Mensalidade estimada</span><span class="fr-val">${fmtR(r.mensalidade)}/mês</span></div>
+      <div class="fr-line"><span class="fr-label">Franquia estimada</span><span class="fr-val ${r.franquiaVal<=fipe*0.03?'green':r.franquiaVal>=fipe*0.04?'red':'amber'}">${fmtR(r.franquiaVal)}</span></div>
+      <div class="fr-line"><span class="fr-label">Sinistros esperados (${periodo}a)</span><span class="fr-val">${r.sinistrosEsperados}x</span></div>
+      <div class="fr-line"><span class="fr-label">Carro reserva</span><span class="fr-val ${r.carro_reserva?'green':'red'}">${r.carro_reserva?'✓ Incluso':'✗ Não incluso'}</span></div>
+      <div class="fr-total"><span>Custo total ${periodo}a</span><span class="fr-val ${i===0?'green':''}">${fmtR(r.total)}</span></div>
+    </div>`).join('');
+}
+calcFranquia();
+
+// ── SINISTRALIDADE HISTÓRICA ──
+const sinistralCols={top:'#22c55e',mid:'#f59e0b',low:'#ef4444'};
+document.getElementById('sinistralGrid').innerHTML=seguradoras.slice(0,8).map(d=>{
+  const cls=d.sinistralidade>65?'top':d.sinistralidade>50?'mid':'low';
+  const label=d.sinistralidade>65?'Excelente':d.sinistralidade>50?'Razoável':'Atenção!';
+  const maxBar=Math.max(...d.sin5);
+  return`<div class="sin-card ${cls}">
+    <div class="sin-head"><span class="sin-name">${d.nome}</span><span class="sin-badge ${cls}">${label}</span></div>
+    <div class="sin-chart">${d.sin5.map(v=>`<div class="sin-bar" style="height:${Math.round(v/maxBar*100)}%;background:${sinistralCols[cls]}">${v.toFixed(0)}%</div>`).join('')}</div>
+    <div class="sin-anos"><span class="sin-ano">2020</span><span class="sin-ano">2021</span><span class="sin-ano">2022</span><span class="sin-ano">2023</span><span class="sin-ano">2024</span></div>
+    <div class="sin-media-row"><span style="color:var(--g500);font-size:0.8rem">Média 5 anos</span><span class="sin-badge ${cls}" style="font-size:0.8rem">${d.sinistralidade.toFixed(1)}%</span></div>
+    <div class="sin-ref">Ideal SUSEP: 55%–75%</div>
+  </div>`;
+}).join('');
+
+// ── CENÁRIOS ──
+const cenarios=[
+  {label:'🚗 Batida traseira (R$ 8.000)',nome:'batida'},
+  {label:'🔥 Incêndio residencial',nome:'incendio'},
+  {label:'🦠 Doença grave — seguro vida',nome:'doenca'},
+  {label:'🌊 Enchente / alagamento',nome:'enchente'},
+  {label:'✈️ Cancelamento de voo',nome:'voo'},
+  {label:'🔓 Furto do veículo',nome:'furto'},
+];
+const cenarioResultados={
+  batida:[
+    {op:'Porto Seguro',bg:'#f97316',ab:'PS',status:'ok',desc:'Colisão coberta integralmente. Franquia de R$ 2.800 sobre o sinistro de R$ 8.000. Carro reserva disponível por 15 dias. Aprovação em 24h úteis pelo app.',resultado:'Você paga: R$ 2.800 · Seguradora cobre: R$ 5.200'},
+    {op:'Chubb Premium',bg:'#7c3aed',ab:'CH',status:'ok',desc:'Cobertura total com menor franquia do mercado (R$ 2.200). Peças originais garantidas. Aprovação express em 4h. Carro reserva categoria equivalente.',resultado:'Você paga: R$ 2.200 · Seguradora cobre: R$ 5.800'},
+    {op:'HDI Seguros',bg:'#0891b2',ab:'HD',status:'danger',desc:'Franquia de R$ 3.600 sobre sinistro de R$ 8.000. Sem carro reserva no plano básico. Processo de aprovação pode levar até 5 dias úteis.',resultado:'Você paga: R$ 3.600 · Poupa R$ 1.400 vs. Porto Seguro'},
+  ],
+  incendio:[
+    {op:'Allianz Residencial',bg:'#16a34a',ab:'AL',status:'ok',desc:'Incêndio coberto integralmente — estrutura, conteúdo e despesas temporárias de alojamento por até 90 dias. Sem franquia para incêndio total.',resultado:'R$ 0 de custo · Cobertura total inclusa'},
+    {op:'SulAmérica Casa',bg:'#be185d',ab:'SA',status:'ok',desc:'Cobertura de incêndio e explosão inclusa. Rebuild assistance (apoio na reconstrução) disponível. Cobertura de conteúdo até R$ 50.000.',resultado:'R$ 0 de custo para incêndio estrutural'},
+    {op:'Azul Seguros',bg:'#6d28d9',ab:'AZ',status:'danger',desc:'Plano básico não inclui cobertura de conteúdo em caso de incêndio. Apenas estrutura do imóvel coberta. Limite de R$ 200.000 para reconstrução.',resultado:'Risco: conteúdo não coberto — prejuízo do próprio bolso'},
+  ],
+  doenca:[
+    {op:'Icatu Seguros Vida',bg:'#0f766e',ab:'IC',status:'ok',desc:'Seguro de vida com cobertura de doenças graves (câncer, infarto, AVC). Indenização de R$ 300.000 paga em até 30 dias após diagnóstico confirmado, sem necessidade de internação.',resultado:'Indenização de R$ 300.000 em até 30 dias'},
+    {op:'Metlife Vida',bg:'#f97316',ab:'ML',status:'ok',desc:'Cobertura ampla de doenças graves — 56 condições cobertas. Diária de incapacidade temporária inclusa (R$ 200/dia por até 365 dias). Sem carência para acidentes.',resultado:'R$ 300k + R$ 200/dia por incapacidade'},
+    {op:'Wiz Seguros',bg:'#374151',ab:'WZ',status:'danger',desc:'Cobertura básica de vida — não inclui indenização antecipada por doença grave. Pagamento apenas em caso de morte ou invalidez permanente total.',resultado:'Sem cobertura por doença grave ativa — só pós-óbito'},
+  ],
+  enchente:[
+    {op:'Porto Seguro Auto',bg:'#f97316',ab:'PS',status:'ok',desc:'Danos por enchente e alagamento cobertos na modalidade compreensivo. Inclui guincho, carro reserva e perda total se o veículo ficar submerso. Sem franquia adicional.',resultado:'Cobertura completa · R$ 0 além da franquia padrão'},
+    {op:'Allianz Residencial',bg:'#16a34a',ab:'AL',status:'warn',desc:'Danos por alagamento cobertos na cobertura adicional (não incluída no básico). Franquia especial de R$ 1.500 para eventos climáticos. Verifique se sua cidade está em zona de risco listada.',resultado:'Verifique: cobertura climática pode ser adicional'},
+    {op:'Tokio Marine',bg:'#dc2626',ab:'TM',status:'danger',desc:'Cobertura de enchente exclui regiões catalogadas pela SUSEP como zona de alto risco climático. Se seu CEP estiver na lista, sinistro por alagamento pode ser negado.',resultado:'Atenção: verifique se seu CEP está em zona de risco'},
+  ],
+  voo:[
+    {op:'Zurich Viagem',bg:'#0891b2',ab:'ZU',status:'ok',desc:'Cancelamento de voo coberto a partir de 2h de atraso. Reembolso de hospedagem, alimentação e novo bilhete. Cobertura máxima de R$ 8.000 por evento de cancelamento.',resultado:'Reembolso total · A partir de 2h de atraso'},
+    {op:'Generali Viagem',bg:'#6d28d9',ab:'GE',status:'warn',desc:'Cancelamento coberto apenas para voos internacionais e a partir de 4h de atraso. Reembolso de R$ 150/h de atraso (máx. R$ 3.000). Sem cobertura para voos domésticos.',resultado:'Apenas voos internacionais · Máx. R$ 3.000'},
+    {op:'Seguro sem viagem',bg:'#dc2626',ab:'XX',status:'danger',desc:'Sem seguro viagem: você arca com 100% dos custos de cancelamento, novas passagens, hospedagem e alimentação no aeroporto. Em alta temporada, pode superar R$ 15.000.',resultado:'Risco total para o próprio bolso'},
+  ],
+  furto:[
+    {op:'Porto Seguro',bg:'#f97316',ab:'PS',status:'ok',desc:'Furto qualificado e roubo cobertos integralmente. Indenização pelo valor FIPE na data do sinistro. Documentos e pertences pessoais cobertos até R$ 3.000. Processo de 5 a 10 dias.',resultado:'Indenização FIPE · Pertences até R$ 3.000'},
+    {op:'Sompo',bg:'#92400e',ab:'SO',status:'warn',desc:'Cobertura de roubo presente, mas indenização limitada a 80% do valor FIPE. Os 20% restantes ficam por conta do segurado. Não cobre pertences pessoais no veículo.',resultado:'20% do FIPE por sua conta · Sem cobertura de pertences'},
+    {op:'HDI Econômico',bg:'#0891b2',ab:'HD',status:'danger',desc:'Plano econômico cobre apenas colisão. Roubo e furto requerem cobertura adicional (+ R$ 80/mês). Sem a cobertura adicional, o sinistro por furto não é pago.',resultado:'Furto não coberto no plano básico'},
+  ],
+};
+let cenarioAtivo='batida';
+function renderCenario(){
+  document.getElementById('cenarioToggle').innerHTML=cenarios.map(c=>`<button class="cenario-btn${c.nome===cenarioAtivo?' active':''}" onclick="setCenario('${c.nome}')">${c.label}</button>`).join('');
+  const res=cenarioResultados[cenarioAtivo]||[];
+  document.getElementById('cenarioResults').innerHTML=res.map(r=>`<div class="cenario-card ${r.status}">
+    <div class="cenario-card-head"><div class="cenario-card-logo" style="background:${r.bg}">${r.ab}</div><span class="cenario-card-name">${r.op}</span></div>
+    <div class="cenario-status ${r.status}">${{ok:'✅ Bem coberto',warn:'⚠️ Cobertura com ressalvas',danger:'🚨 Cobertura limitada'}[r.status]}</div>
+    <div class="cenario-desc">${r.desc}</div>
+    <div class="cenario-resultado ${r.status}">${r.resultado}</div>
+  </div>`).join('');
+}
+function setCenario(nome){cenarioAtivo=nome;renderCenario();}
+renderCenario();
+
+// ── SCORE DE PROTEÇÃO ──
+const scoreCatData=[
+  {icon:'🚗',nome:'Auto',pct:0,cor:'#ef4444',desc:'Nenhum seguro ativo'},
+  {icon:'💚',nome:'Vida',pct:0,cor:'#ef4444',desc:'Sem cobertura'},
+  {icon:'🏠',nome:'Residência',pct:0,cor:'#ef4444',desc:'Descoberto'},
+  {icon:'✈️',nome:'Viagem',pct:0,cor:'#ef4444',desc:'Sem seguro viagem'},
+];
+document.getElementById('scoreCats').innerHTML=scoreCatData.map((c,i)=>{
+  const pctSimulado=[75,0,0,55][i];
+  const corSimulada=pctSimulado>65?'var(--green)':pctSimulado>40?'var(--amber)':'var(--red)';
+  return`<div class="score-cat">
+    <div class="score-cat-head"><span class="score-cat-name">${c.icon} ${c.nome}</span><span class="score-cat-pct" style="color:${corSimulada}">${pctSimulado}%</span></div>
+    <div class="score-cat-bar"><div class="score-cat-fill" style="width:${pctSimulado}%;background:${corSimulada}"></div></div>
+  </div>`;
+}).join('');
+document.getElementById('scoreTotal').innerHTML=`<div class="score-total-num">3<span style="font-size:1rem;color:rgba(255,255,255,0.4)">/10</span></div><div class="score-total-label">Apenas 30% protegido — veja o que está faltando</div>`;
+
+// ── COBERTURAS ──
+const cobObrig=[
+  {nome:'DPVAT / SPVAT',sub:'Obrigatório — danos corporais a terceiros em acidentes'},
+  {nome:'Responsabilidade Civil',sub:'Obrigatório em seguros auto — danos a terceiros'},
+  {nome:'Assistência 24h básica',sub:'Guincho emergencial — obrigatório pela SUSEP'},
+  {nome:'Transparência de exclusões',sub:'Resolução SUSEP 406/2026 — linguagem clara'},
+  {nome:'Cancelamento sem multa em 7 dias',sub:'Direito de arrependimento garantido por lei'},
+  {nome:'Portabilidade de apólice',sub:'Sem perda de histórico de bônus por sinistro'},
+];
+const cobDif=[
+  {nome:'Carro reserva por sinistro',n:14,cor:'#f97316'},
+  {nome:'Peças originais garantidas',n:10,cor:'#dc2626'},
+  {nome:'Cobertura de pertences pessoais',n:9,cor:'#1d4ed8'},
+  {nome:'Vidros sem franquia',n:12,cor:'#16a34a'},
+  {nome:'Pane seca / elétrica',n:8,cor:'#7c3aed'},
+  {nome:'Cobertura de alagamento',n:11,cor:'#0891b2'},
+  {nome:'Doenças graves (vida)',n:15,cor:'#be185d'},
+  {nome:'Sem exame médico (vida)',n:13,cor:'#0f766e'},
+];
+document.getElementById('cobObrigList').innerHTML=cobObrig.map(c=>`<div class="cob-obrig-item"><div class="cob-check">✓</div><div><div class="cob-item-name">${c.nome}</div><div class="cob-item-sub">${c.sub}</div></div></div>`).join('');
+document.getElementById('cobDifList').innerHTML=cobDif.map((c,i)=>`<div class="cob-dif-row"><span class="cob-dif-rank">${i+1}</span><span class="cob-dif-name">${c.nome}</span><div class="cob-dif-bar"><div class="cob-dif-fill" style="width:${Math.round(c.n/20*100)}%;background:${c.cor}"></div></div><span class="cob-dif-num">${c.n}/20</span></div>`).join('');
+
+// ── INNER NAV ──
+function goTo(id,btn){
+  document.getElementById(id).scrollIntoView({behavior:'smooth'});
+  document.querySelectorAll('.inl').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+}
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement.scrollHeight-window.innerHeight;
+  const pct=Math.max(3,Math.round(window.scrollY/h*100));
+  document.getElementById('progressFill').style.width=pct+'%';
+  document.getElementById('progressLabel').textContent=pct+'%';
+  const sections=[['secNoticias',0],['secAlertas',1],['secRisco',2],['secGeo',3],['quizSection',4],['comparativo',5],['secFranquia',6],['secSinistralidade',7],['secCenario',8],['secScore',9],['secCoberturas',10],['secPlanos',11]];
+  const links=document.querySelectorAll('.inl');
+  sections.forEach(([id,i])=>{const el=document.getElementById(id);if(!el)return;const r=el.getBoundingClientRect();if(r.top<=110&&r.bottom>110){links.forEach(l=>l.classList.remove('active'));if(links[i])links[i].classList.add('active');}});
+});
+
+// ── MODALS ──
+function closeModal(id){document.getElementById(id).classList.remove('open')}
+function openSignupModal(plan){document.getElementById('signupSubtitle').textContent=`Plano ${plan} — Compare seguros gratuitamente.`;document.getElementById('signupForm').style.display='';document.getElementById('signupSuccess').classList.remove('show');document.getElementById('signupModal').classList.add('open');}
+function submitSignup(){document.getElementById('signupForm').style.display='none';document.getElementById('signupSuccess').classList.add('show');}
+document.getElementById('compareModal').addEventListener('click',function(e){if(e.target===this)closeModal('compareModal')});
+document.getElementById('signupModal').addEventListener('click',function(e){if(e.target===this)closeModal('signupModal')});
+
+// ── FAQ ──
+const faqs=[
+  {q:'Qual a diferença entre franquia e prêmio?',a:'O prêmio é o valor que você paga mensalmente (sua "mensalidade"). A franquia é o valor que você paga do próprio bolso quando aciona o seguro em caso de sinistro. Um prêmio menor geralmente vem com franquia maior — por isso é fundamental comparar os dois juntos, não só a mensalidade.'},
+  {q:'O que é sinistralidade e por que importa?',a:'Sinistralidade é a porcentagem dos prêmios arrecadados que a seguradora efetivamente pagou em indenizações. Uma taxa de 65–75% é saudável: significa que a empresa paga sinistros com frequência. Taxa abaixo de 40% pode indicar alto índice de negativas de sinistros — um sinal de alerta importante que nenhum comparador convencional mostra.'},
+  {q:'Posso contratar seguro de vida sem exame médico?',a:'Sim. Atualmente, 13 das 20 maiores seguradoras oferecem seguro de vida sem exame médico para coberturas de até R$ 500.000 (algumas até R$ 1 milhão), desde que o segurado tenha perfil de baixo risco (não tabagista, sem doenças preexistentes declaradas). A contratação pode ser feita 100% online em minutos.'},
+  {q:'O que acontece se eu acionar o seguro com frequência?',a:'Acionar o seguro influencia seu histórico de sinistros e pode impactar o prêmio na renovação. Muitas seguradoras oferecem bônus de fidelidade (desconto progressivo) para quem não aciona o seguro. Analise se vale acionar para sinistros pequenos (próximos ao valor da franquia) ou se é melhor arcar com o próprio custo.'},
+  {q:'Como funciona a geolocalização no FinMatch?',a:'Você informa seu CEP ou cidade e o sistema verifica quais seguradoras operam na sua região, se há tarifas especiais por risco local (ex: alto índice de furtos ou zona climática de risco) e se há restrições de cobertura. Isso é fundamental para evitar contratar um plano que não atende sua região ou que aplica franquia diferenciada no seu CEP.'},
+  {q:'O que é o Simulador de Cenários do FinMatch?',a:'É a feature que permite escolher um sinistro real (batida, furto, enchente, incêndio) e ver exatamente o que cada seguradora cobre — incluindo o valor que você pagaria do próprio bolso (franquia), limitações de rede e restrições de cobertura. É a única ferramenta desse tipo disponível no Brasil para o consumidor final.'},
+  {q:'Garantia de 7 dias do FinMatch',a:'Todo plano pago tem 7 dias de garantia incondicional. Se você não ficar satisfeito por qualquer motivo, basta solicitar o reembolso e devolvemos 100% sem perguntas.'},
+  {q:'Como a FinMatch ganha dinheiro sem conflito de interesse?',a:'O FinMatch ganha uma comissão de afiliação de aproximadamente 5% quando um usuário contrata um produto via nossa plataforma. Esse modelo é transparente e divulgado. Nossa equipe de análise e suporte é remunerada de forma fixa — sem comissão extra por indicar uma seguradora específica — garantindo recomendações genuinamente neutras.'},
+];
+const faqList=document.getElementById('faqList');
+faqs.forEach(f=>{
+  const d=document.createElement('div');d.className='faq-item';
+  d.innerHTML=`<div class="faq-q">${f.q}<span class="faq-icon">+</span></div><div class="faq-a">${f.a}</div>`;
+  d.onclick=()=>{document.querySelectorAll('.faq-item').forEach(x=>{if(x!==d)x.classList.remove('open');});d.classList.toggle('open');};
+  faqList.appendChild(d);
+});
+
+renderTabela();renderCompareBar();
+</script>
+<script src="assets/js/global.js"></script>
+</body>
+</html>
