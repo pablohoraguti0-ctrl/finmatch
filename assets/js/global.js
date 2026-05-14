@@ -1,16 +1,16 @@
 (function(){
   const pages = [
-    { key:'home', label:'Home', href:'HOME.html' },
+    { key:'home', label:'Home', href:'index.html' },
     { key:'previdencia', label:'Previdencia', href:'previdencia.html' },
     { key:'cartoes', label:'Cartoes', href:'cartoes.html' },
     { key:'seguros', label:'Seguros', href:'seguros.html' },
     { key:'saude', label:'Saude', href:'saude.html' },
-    { key:'educacao', label:'Educacao Financeira', href:'HOME.html#educacao' }
+    { key:'educacao', label:'Educacao Financeira', href:'index.html#educacao' }
   ];
 
   const aliases = {
-    'finmatch-home-v4.html':'home',
-    'home.html':'home',
+    
+    'index.html':'home',
     'finmatch-previdencia-v3 (1).html':'previdencia',
     'previdencia.html':'previdencia',
     'finmatch-cartoes-v2 (1).html':'cartoes',
@@ -35,10 +35,10 @@
   ];
 
   const education = [
-    { title:'Como escolher previdencia', href:'HOME.html#educacao', text:'Entenda PGBL, VGBL, taxas e regime tributario.' },
-    { title:'Cashback ou milhas', href:'HOME.html#educacao', text:'Compare beneficios pelo seu padrao real de consumo.' },
-    { title:'Seguro sem excesso', href:'HOME.html#educacao', text:'Aprenda a escolher cobertura sem pagar por itens irrelevantes.' },
-    { title:'Reajuste de planos de saude', href:'HOME.html#educacao', text:'Veja como avaliar custo anual e rede credenciada.' },
+    { title:'Como escolher previdencia', href:'index.html#educacao', text:'Entenda PGBL, VGBL, taxas e regime tributario.' },
+    { title:'Cashback ou milhas', href:'index.html#educacao', text:'Compare beneficios pelo seu padrao real de consumo.' },
+    { title:'Seguro sem excesso', href:'index.html#educacao', text:'Aprenda a escolher cobertura sem pagar por itens irrelevantes.' },
+    { title:'Reajuste de planos de saude', href:'index.html#educacao', text:'Veja como avaliar custo anual e rede credenciada.' },
     { title:'Metodologia FinMatch', href:'metodologia.html', text:'Conheca pesos, criterios, limites e transparencia do score.' },
     { title:'Minha estrategia', href:'estrategia.html', text:'Monte um plano financeiro por jornada, categoria e prioridade.' }
   ];
@@ -51,7 +51,7 @@
   };
 
   function currentKey(){
-    const file = decodeURIComponent(location.pathname.split('/').pop() || 'HOME.html').toLowerCase();
+    const file = decodeURIComponent(location.pathname.split('/').pop() || 'index.html').toLowerCase();
     if(location.hash === '#educacao') return 'educacao';
     return aliases[file] || 'home';
   }
@@ -72,7 +72,7 @@
 
     return `
       <nav id="nav" class="fm-global-nav" aria-label="Navegacao principal">
-        <a class="fm-brand" href="HOME.html">Fin<span>Match</span></a>
+        <a class="fm-brand" href="index.html">Fin<span>Match</span></a>
         <button class="fm-menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false">Menu</button>
         <ul class="fm-nav-links">${links}</ul>
         <div class="fm-nav-actions">
@@ -83,7 +83,7 @@
               <div class="fm-mega-panel">
                 <h3>Comparador unificado</h3>
                 <p>Analise score, custo anual, beneficios e aderencia ao perfil antes de decidir.</p>
-                <a class="fm-secondary-btn" href="HOME.html#fm-lab">Abrir plataforma</a>
+                <a class="fm-secondary-btn" href="index.html#fm-lab">Abrir plataforma</a>
               </div>
             </div>
           </div>
@@ -100,7 +100,7 @@
       <footer class="fm-global-footer">
         <div class="fm-footer-grid">
           <div class="fm-footer-brand">
-            <a class="fm-brand" href="HOME.html">Fin<span>Match</span></a>
+            <a class="fm-brand" href="index.html">Fin<span>Match</span></a>
             <p>Uma plataforma financeira inteligente para comparar produtos, acompanhar rankings, salvar favoritos e tomar melhores decisoes.</p>
           </div>
           <div class="fm-footer-col">
@@ -112,16 +112,16 @@
           </div>
           <div class="fm-footer-col">
             <h4>Plataforma</h4>
-            <a href="HOME.html#fm-lab">Comparador unificado</a>
-            <a href="HOME.html#rankings">Rankings</a>
-            <a href="HOME.html#painel">Painel</a>
-            <a href="HOME.html#simulador">Simuladores</a>
+            <a href="index.html#fm-lab">Comparador unificado</a>
+            <a href="index.html#rankings">Rankings</a>
+            <a href="index.html#painel">Painel</a>
+            <a href="index.html#simulador">Simuladores</a>
           </div>
           <div class="fm-footer-col">
             <h4>Conteudo</h4>
-            <a href="HOME.html#educacao">Educacao Financeira</a>
-            <a href="HOME.html#fm-glossario">Glossario financeiro</a>
-            <a href="HOME.html#fm-metodologia">Metodologia do score</a>
+            <a href="index.html#educacao">Educacao Financeira</a>
+            <a href="index.html#fm-glossario">Glossario financeiro</a>
+            <a href="index.html#fm-metodologia">Metodologia do score</a>
             <a href="metodologia.html">Transparencia</a>
             <a href="estrategia.html">Minha estrategia</a>
           </div>
@@ -507,11 +507,11 @@
     const active = currentKey();
     document.body.insertAdjacentHTML('beforeend', `
       <div class="fm-mobile-bottom">
-        <a class="${active === 'home' ? 'is-active' : ''}" href="HOME.html">Home</a>
-        <a href="HOME.html#fm-lab">Comparar</a>
-        <a href="HOME.html#rankings">Ranking</a>
-        <a href="HOME.html#educacao">Educacao</a>
-        <a href="HOME.html#fm-dashboard">Perfil</a>
+        <a class="${active === 'home' ? 'is-active' : ''}" href="index.html">Home</a>
+        <a href="index.html#fm-lab">Comparar</a>
+        <a href="index.html#rankings">Ranking</a>
+        <a href="index.html#educacao">Educacao</a>
+        <a href="index.html#fm-dashboard">Perfil</a>
       </div>
     `);
   }
@@ -616,7 +616,7 @@
           <div class="fm-kicker">Ecossistema conectado</div>
           <h2 class="fm-platform-title" style="font-size:clamp(1.6rem,2.4vw,2.4rem)">Continue comparando em outras categorias</h2>
           <p class="fm-platform-lead">As melhores decisoes financeiras normalmente cruzam protecao, credito, saude e longo prazo.</p>
-          <div class="fm-cross-grid">${cards}<a class="fm-cross-card" href="HOME.html#fm-lab"><strong>Comparador unificado</strong><span>Voltar ao hub e comparar lado a lado.</span></a></div>
+          <div class="fm-cross-grid">${cards}<a class="fm-cross-card" href="index.html#fm-lab"><strong>Comparador unificado</strong><span>Voltar ao hub e comparar lado a lado.</span></a></div>
         </div>
       </section>
     `;
